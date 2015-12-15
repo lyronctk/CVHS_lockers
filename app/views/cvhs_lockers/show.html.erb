@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name1:</strong>
+  <%= @cvhs_locker.name1 %>
+</p>
+
+<p>
+  <strong>Name2:</strong>
+  <%= @cvhs_locker.name2 %>
+</p>
+
+<p>
+  <strong>Studentid1:</strong>
+  <%= @cvhs_locker.studentID1 %>
+</p>
+
+<p>
+  <strong>Studentid2:</strong>
+  <%= @cvhs_locker.studentID2 %>
+</p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @cvhs_locker.number %>
+</p>
+
+<%= link_to 'Edit', edit_cvhs_locker_path(@cvhs_locker) %> |
+<%= link_to 'Back', cvhs_lockers_path %>
