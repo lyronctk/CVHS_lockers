@@ -19,14 +19,14 @@ body {
 
 strong { font-weight: 700; }
 .red { color: #eb4141; }
-.blue {color: #00B4D2;}
+.blue {color: #00a2bd;}
 a:hover { text-decoration: none; }
 
 .header {
     margin: 0 auto;
     padding-bottom: 5px;
     background: #f8f8f8 url(../img/pattern.jpg) left top repeat;
-    border-top: 3px solid #00B4D2;
+    border-top: 3px solid #00a2bd;
     -moz-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
     -webkit-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
     box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
@@ -95,7 +95,7 @@ form h2 {
     text-align: center;
 }
 
-input, textarea, select {
+form input[type='text']{
     width: 95%;
     height: 30px;
     background: #fcfcfc;
@@ -107,38 +107,39 @@ input, textarea, select {
     -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,.1) inset;
     box-shadow: 0 1px 3px 0 rgba(0,0,0,.1) inset;
     font-family: 'PT Sans', Helvetica, Arial, sans-serif;
-    color: #888;
+    color: #888;            
     font-size: 16px;
+    margin: 10px 0;
 }
 
-form input:focus {
+form input[class="right"]{
+    width:35%;
+    float: right;
+}
+
+form input[class="left"]{
+    width:60%;
+    float: left;
+}
+
+form input[type='text']{
     border: 1px solid #ccc;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
-form label {
-    margin: 7px 0 10px 5px;
-    font-size: 16px;
-    text-align: left;
-}
-
-form label span {
-    font-style: italic;
+    -moz-box-shadow: 0 1px 3px 0 rgba(0,0,0,.1) inset;
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,.1) inset;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1) inset;
 }
 
 form input:-moz-placeholder { color: #aaa; }
 form input:-ms-input-placeholder { color: #aaa; }
 form input::-webkit-input-placeholder { color: #aaa; }
 
-form button {
+form input[class='input-submit'] {
     cursor: pointer;
     width: 60%;
     height: 42px;
     margin-top: 25px;
     padding: 0;
-    background: #00B4D2;
+    background: #00a2bd;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
@@ -157,13 +158,13 @@ form button {
     -ms-transition: all .2s;
 }
 
-form button:hover {
+form input:hover[class='input-submit'] {
     -moz-box-shadow: 0 -15px 30px 0 rgba(255,255,255,.05) inset;
     -webkit-box-shadow: 0 -15px 30px 0 rgba(255,255,255,.05) inset;
     box-shadow: 0 -15px 30px 0 rgba(255,255,255,.05) inset;
 }
 
-form button:active {
+form button:active[class='input-submit'] {
     -moz-box-shadow:
         0 -15px 30px 0 rgba(255,255,255,.05) inset,       
         0 5px 8px 0 rgba(0,0,0,.1) inset;
@@ -173,6 +174,37 @@ form button:active {
     box-shadow:
         0 -15px 30px 0 rgba(255,255,255,.05) inset,       
         0 5px 8px 0 rgba(0,0,0,.1) inset;
+}
+
+form label[class='select-label']{
+    margin: 5px 0 15px 5px;
+    padding-top: 10px;
+    font-size: 16px;
+    float: left;
+    font-weight: normal;
+}
+
+form select{
+    margin: 10px 0;
+    width: 60%;
+    float: right;
+}
+
+/* Index */
+
+.index{
+    margin: 40px 40px;
+    color: white;
+
+}
+
+.index th{
+    padding: 0 100px 20px 0;
+    font-size: 25px;
+}
+
+.index td{
+    padding-bottom: 10px;
 }
 
 

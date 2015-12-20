@@ -69,6 +69,6 @@ class CvhsLockersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cvhs_locker_params
-      params.require(:cvhs_locker).permit(:name1, :name2, :studentID1, :studentID2, :number)
+      params.require(:cvhs_locker).permit(:name1, :name2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :pref4, :pref5)
     end
 end

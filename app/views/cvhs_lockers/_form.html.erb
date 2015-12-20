@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="assets/stylesheets/js/scripts.js"></script>
 
 <body>
     <div class="register-container container">
@@ -22,29 +23,32 @@
 
                   <h2><span class="glyphicon glyphicon-pencil grey"></span>  REGISTER FOR A <span class="blue">
                       <strong> LOCKER</strong></span></h2>
-                  <div class="field">
-                    <%= f.label :name1, "Student 1 Name" %><br>
-                    <%= f.text_field :name1, :required => true %>
-                  </div>
-                  <div class="field">
-                    <%= f.label :name2, "Student 2 Name" %><br> 
-                    <%= f.text_field :name2, :required => true  %>
-                  </div>
-                  <div class="field">
-                    <%= f.label :studentID1, "Student 1 ID" %><br>
-                    <%= f.text_field :studentID1, :required => true  %>
-                  </div>
-                  <div class="field">
-                    <%= f.label :studentID2, "Student 2 ID" %><br>
-                    <%= f.text_field :studentID2, :required => true  %>
-                  </div>
-                  <div class="field">
-                    <%= f.label :number, "Locker Preference" %><br>
-                    <%= f.text_field :number, :required => true  %>
-                  </div>
-                  <div class="actions">
-                    <%= f.submit %>
-                  </div>
+
+                  <%= f.text_field :name1, :required => true, :class => 'left', :placeholder => "Full name..."%>
+
+                  <%= f.text_field :studentID1, :required => true, :class => 'right', :placeholder => "ID"%>
+
+                  <%= f.text_field :name2, :required => true, :class => 'left', :placeholder => "Partner's full name..."%>
+
+                  <%= f.text_field :studentID2, :required => true, :placeholder => "ID", :class => "right"%>
+
+                  <%= f.label :pref1, "First Choice: ", :class => "select-label"%>
+                  <%= f.select :pref1, [5100, 5200, 5300], {include_blank: true}%>
+
+                  <%= f.label :pref2, "Second Choice: ", :class => "select-label"%>
+                  <%= f.select :pref2, [5100, 5200, 5300], {include_blank: true}%>
+
+                  <%= f.label :pref3, "Thrid Choice: ", :class => "select-label"%>
+                  <%= f.select :pref3, [5100, 5200, 5300], {include_blank: true}%>
+
+                  <%= f.label :pref4, "Fourth Choice: ", :class => "select-label"%>
+                  <%= f.select :pref4, [5100, 5200, 5300], {include_blank: true}%>
+
+                  <%= f.label :pref5, "Fifth Choice: ", :class => "select-label"%>
+                  <%= f.select :pref5, [5100, 5200, 5300], {include_blank: true}%>
+
+                  <%= f.submit 'REGISTER', :class => "input-submit" %>
+                  
                   <% end %>
 
               </div>

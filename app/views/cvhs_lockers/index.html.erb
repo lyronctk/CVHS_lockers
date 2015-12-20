@@ -1,35 +1,34 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Cvhs Lockers</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Name1</th>
-      <th>Name2</th>
-      <th>Studentid1</th>
-      <th>Studentid2</th>
-      <th>Number</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @cvhs_lockers.each do |cvhs_locker| %>
+<div class="index">
+  <table>
+    <thead>
       <tr>
-        <td><%= cvhs_locker.name1 %></td>
-        <td><%= cvhs_locker.name2 %></td>
-        <td><%= cvhs_locker.studentID1 %></td>
-        <td><%= cvhs_locker.studentID2 %></td>
-        <td><%= cvhs_locker.number %></td>
-        <td><%= link_to 'Show', cvhs_locker %></td>
-        <td><%= link_to 'Edit', edit_cvhs_locker_path(cvhs_locker) %></td>
-        <td><%= link_to 'Delete', cvhs_locker, :method => :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th>Student 1</th>
+        <th>ID 1</th>
+        <th>Student 2</th>
+        <th>ID 2</th>
+        <th>Locker Number</th>
+        <th colspan="3"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
 
-<%= link_to 'New Cvhs locker', new_cvhs_locker_path %>
+    <tbody>
+      <% @cvhs_lockers.each do |cvhs_locker| %>
+        <tr>
+          <td><%= cvhs_locker.name1 %></td>
+          <td><%= cvhs_locker.studentID1 %></td>
+          <td><%= cvhs_locker.name2 %></td>
+          <td><%= cvhs_locker.studentID2 %></td>
+          <td><%= cvhs_locker.pref1 %></td>
+          <td><%= link_to 'Show', cvhs_locker %>-</td>
+          <td><%= link_to 'Edit', edit_cvhs_locker_path(cvhs_locker) %>-</td>
+          <td><%= link_to 'Delete', cvhs_locker, :method => :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    </table>
+    <br>
+
+</div>

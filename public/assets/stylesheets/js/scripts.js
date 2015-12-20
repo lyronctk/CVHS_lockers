@@ -32,27 +32,27 @@ jQuery(document).ready(function() {
         var email = $(this).find('input#email').val();
         var password = $(this).find('input#password').val();
         if(firstname == '') {
-            $(this).find("label[for='firstname']").append("<span style='display:none' class='red'> - Please enter your first name.</span>");
+            $(this).find("label[for='firstname']").append("<span style='display:none' class='blue'> - Please enter your first name.</span>");
             $(this).find("label[for='firstname'] span").fadeIn('medium');
             return false;
         }
         if(lastname == '') {
-            $(this).find("label[for='lastname']").append("<span style='display:none' class='red'> - Please enter your last name.</span>");
+            $(this).find("label[for='lastname']").append("<span style='display:none' class='blue'> - Please enter your last name.</span>");
             $(this).find("label[for='lastname'] span").fadeIn('medium');
             return false;
         }
         if(username == '') {
-            $(this).find("label[for='username']").append("<span style='display:none' class='red'> - Please enter a valid username.</span>");
+            $(this).find("label[for='username']").append("<span style='display:none' class='blue'> - Please enter a valid username.</span>");
             $(this).find("label[for='username'] span").fadeIn('medium');
             return false;
         }
         if(email == '') {
-            $(this).find("label[for='email']").append("<span style='display:none' class='red'> - Please enter a valid email.</span>");
+            $(this).find("label[for='email']").append("<span style='display:none' class='blue'> - Please enter a valid email.</span>");
             $(this).find("label[for='email'] span").fadeIn('medium');
             return false;
         }
         if(password == '') {
-            $(this).find("label[for='password']").append("<span style='display:none' class='red'> - Please enter a valid password.</span>");
+            $(this).find("label[for='password']").append("<span style='display:none' class='blue'> - Please enter a valid password.</span>");
             $(this).find("label[for='password'] span").fadeIn('medium');
             return false;
         }
