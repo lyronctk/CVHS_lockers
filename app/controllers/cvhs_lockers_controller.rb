@@ -59,7 +59,7 @@ class CvhsLockersController < ApplicationController
   def destroy
     @cvhs_locker.destroy
     respond_to do |format|
-      format.html { redirect_to cvhs_lockers_url, notice: 'Cvhs locker was successfully destroyed.' }
+      format.html { redirect_to cvhs_lockers_url, notice: 'Locker was successfully deleted.' }
       format.json { head :no_content }
     end
   end
