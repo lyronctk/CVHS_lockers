@@ -13,6 +13,9 @@
       </tr>
     </thead>
 
+    <%= will_paginate %>
+    <br>
+
     <tbody>
         <% @cvhs_lockers.each do |cvhs_locker| %> 
         <tr>
@@ -21,12 +24,16 @@
           <td><%= cvhs_locker.name2 %></td>
           <td><%= cvhs_locker.studentID2 %></td>
           <td><%= cvhs_locker.pref1 %></td>
-          <td><%= link_to 'Edit', edit_cvhs_locker_path(cvhs_locker) %>-</td>
+          <td><%= link_to 'Edit', edit_cvhs_locker_path(cvhs_locker) %></td>
+          <td>- </td>
           <td><%= link_to 'Delete', cvhs_locker, :method => :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
       <% end %>
     </tbody>
     </table>
+    <br>
+
+    <%= will_paginate %>
     <br>
 
 </div>

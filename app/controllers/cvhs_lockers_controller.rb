@@ -4,7 +4,7 @@ class CvhsLockersController < ApplicationController
   # GET /cvhs_lockers
   # GET /cvhs_lockers.json
   def index
-    @cvhs_lockers = CvhsLocker.all
+    @cvhs_lockers = CvhsLocker.paginate(page: params[:page])
   end
 
   # GET /cvhs_lockers/1 
