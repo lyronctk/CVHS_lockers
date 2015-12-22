@@ -7,9 +7,12 @@ class CvhsLockersController < ApplicationController
     @cvhs_lockers = CvhsLocker.all
   end
 
-  # GET /cvhs_lockers/1
+  # GET /cvhs_lockers/1 
   # GET /cvhs_lockers/1.json
   def show
+  end
+
+  def success
   end
 
   # GET /cvhs_lockers/new
@@ -28,8 +31,8 @@ class CvhsLockersController < ApplicationController
 
     respond_to do |format|
       if @cvhs_locker.save
-        format.html { redirect_to @cvhs_locker, notice: 'Cvhs locker was successfully created.' }
-        format.json { render :show, status: :created, location: @cvhs_locker }
+        format.html { redirect_to '/success'}
+        format.json { render :new, status: :created, location: @cvhs_locker }
       else
         format.html { render :new }
         format.json { render json: @cvhs_locker.errors, status: :unprocessable_entity }
@@ -49,7 +52,7 @@ class CvhsLockersController < ApplicationController
         format.json { render json: @cvhs_locker.errors, status: :unprocessable_entity }
       end
     end
-  end
+  end       
 
   # DELETE /cvhs_lockers/1
   # DELETE /cvhs_lockers/1.json
@@ -62,7 +65,7 @@ class CvhsLockersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    # Use callbacks to  share common setup or constraints between actions.
     def set_cvhs_locker
       @cvhs_locker = CvhsLocker.find(params[:id])
     end

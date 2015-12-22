@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   root "cvhs_lockers#new"
 
+  get 'success' => "cvhs_lockers#success"
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
