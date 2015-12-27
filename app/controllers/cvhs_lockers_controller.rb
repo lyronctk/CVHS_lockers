@@ -1,5 +1,6 @@
 class CvhsLockersController < ApplicationController
   before_action :set_cvhs_locker, only: [:show, :edit, :update, :destroy]
+  before_filter :check_for_mobile, only: :new
 
   # GET /cvhs_lockers
   # GET /cvhs_lockers.json
