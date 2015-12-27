@@ -95,7 +95,7 @@ a:hover { text-decoration: none; }
 /* ----- Registration Form ----- */
 
 .main form {
-    padding: 20px 50px 40px 50px;
+    padding: 4% 8% 8% 8%;
     background: #f8f8f8 url(../img/pattern.jpg) left top repeat;
     -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
