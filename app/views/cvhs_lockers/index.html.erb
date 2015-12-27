@@ -1,7 +1,18 @@
-<p id="notice"><%= notice %></p>
+<% if flash[:notice] -%>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% end %>
 
 <div class="index">
   <table>
+
+    <!-- Search Box -->
+    <%= form_tag cvhs_lockers_path, method: 'get' do %>
+      <p>
+        <%= text_field_tag  :search, params[:search], :placeholder => "Search By ID..", id:"search-box" %>
+        <%= submit_tag  "Search", id: "search-submit"%>
+      </p>
+    <% end %>
+        
     <thead>
       <tr>
         <th>Student 1</th>
@@ -13,27 +24,66 @@
       </tr>
     </thead>
 
-    <%= will_paginate %>
-    <br>
+    <!-- NO SEARCH INPUTED -->
+    <% if params[:search] == nil %>
+      <%= will_paginate %>
 
-    <tbody>
-        <% @cvhs_lockers.each do |cvhs_locker| %> 
-        <tr>
-          <td><%= cvhs_locker.name1 %></td>
-          <td><%= cvhs_locker.studentID1 %></td>
-          <td><%= cvhs_locker.name2 %></td>
-          <td><%= cvhs_locker.studentID2 %></td>
-          <td><%= cvhs_locker.pref1 %></td>
-          <td><%= link_to 'Edit', edit_cvhs_locker_path(cvhs_locker) %></td>
-          <td>-</td>
-          <td><%= link_to 'Delete', cvhs_locker, :method => :delete, data: { confirm: 'Are you sure?' } %></td>
-        </tr>
+      <br>
+
+      <tbody>
+          <% @cvhs_lockers.each do |cvhs_locker| %> 
+          <tr>
+            <td><%= cvhs_locker.name1 %></td>
+            <td><%= cvhs_locker.studentID1 %></td>
+            <td><%= cvhs_locker.name2 %></td>
+            <td><%= cvhs_locker.studentID2 %></td>
+            <td><%= cvhs_locker.pref1 %></td>
+            <td><%= link_to 'Edit', edit_cvhs_locker_path(cvhs_locker) %></td>
+            <td>-</td>
+            <td><%= link_to 'Delete', cvhs_locker, :method => :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+      </table>
+      <br>
+
+      <%= will_paginate %>
+      <br>
+
+    <!-- SEARCH INPUTED -->
+    <% else %>
+
+      <br>
+
+      <!-- INVALID -->
+      <% if @cvhs_lockers == nil %>
+          <tbody>
+              <tr>
+                <td><h4 style="color: red">STUDENT NOT FOUND</h1></td>
+              </tr>
+          </tbody>
+          </table>
+          <br>
+
+      <!-- VALID -->
+      <% else %>
+          <br>
+          <tbody>
+              <tr>
+                <td><%= @cvhs_lockers.name1 %></td>
+                <td><%= @cvhs_lockers.studentID1 %></td>
+                <td><%= @cvhs_lockers.name2 %></td>
+                <td><%= @cvhs_lockers.studentID2 %></td>
+                <td><%= @cvhs_lockers.pref1 %></td>
+                <td><%= link_to 'Edit', edit_cvhs_locker_path(@cvhs_lockers) %></td>
+                <td>-</td>
+                <td><%= link_to 'Delete', @cvhs_lockers, :method => :delete, data: { confirm: 'Are you sure?' } %></td>
+              </tr>
+          </tbody>
+          </table>
+          <br>
       <% end %>
-    </tbody>
-    </table>
-    <br>
 
-    <%= will_paginate %>
-    <br>
+    <% end %>
 
 </div>

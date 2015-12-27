@@ -4,7 +4,16 @@ class CvhsLockersController < ApplicationController
   # GET /cvhs_lockers
   # GET /cvhs_lockers.json
   def index
-    @cvhs_lockers = CvhsLocker.paginate(page: params[:page])
+      if params[:search] == nil
+         @cvhs_lockers = CvhsLocker.paginate(page: params[:page])
+      else
+         puts 'GOT TO ELSE STATEMENT'
+         @cvhs_lockers = CvhsLocker.find_by studentID1: params[:search]
+
+         if @cvhs_lockers == nil
+            @cvhs_lockers = CvhsLocker.find_by studentID2: params[:search]
+         end
+      end
   end
 
   # GET /cvhs_lockers/1 
