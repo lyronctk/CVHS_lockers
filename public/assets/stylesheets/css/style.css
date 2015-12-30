@@ -190,6 +190,7 @@ form input[class='input-submit'] {
     -ms-transition: all .2s;
 }
 
+
 form input:hover[class='input-submit'] {
     -moz-box-shadow: 0 -15px 30px 0 rgba(255,255,255,.05) inset;
     -webkit-box-shadow: 0 -15px 30px 0 rgba(255,255,255,.05) inset;
@@ -224,10 +225,17 @@ form label[class='select-label']{
 
 form select{
     margin: 10px 0;
-    width: 60%;
+    width: 50%;
     float: right;
 }
 
+.one-line{
+    float: left;
+    width: 100%;
+}
+
+
+/* Search */
 #search-box{
     margin-bottom: -20px;
 }
