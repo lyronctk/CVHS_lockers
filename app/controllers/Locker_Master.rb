@@ -47,12 +47,12 @@ class Locker_Master
 			
 			@@workbook.write("Lockers.xlsx");
 			
-			puts "#{@@worksheet.nil?} dd"
 		end
 	end
 	
-	#public takes in array locker, array of student1, array of student2
-	public
+	#public takes in array locker, array of student1, array of student2 
+	#EVERY VALUE MUST BE ENTERED AS A STRING
+	public 
 	def createLocker (l, s1, s2)
 		@locker=l;
 		@student1=s1;
@@ -69,14 +69,18 @@ class Locker_Master
 					@@worksheet.add_cell(@rownum, i, "#{checkLockerAvaliable(@locker)}");
 				end
 			end
-		@@workbook.write("Lockers.xlsx");	
+			@@workbook.write("Lockers.xlsx");	
+			return true;
 		else
+			reasonNotAllowed(s1);
+			reasonNotAllowed(s2);
 			return false
 		end
 	end
 
 	
 	#public  this is an alternate method; takes in array locker, array of student1
+	#EVERY VALUE MUST BE ENTERED AS A STRING
 	public
 	def createSoloLocker (l, s1)
 		@locker=l;
@@ -92,20 +96,47 @@ class Locker_Master
 					@@worksheet.add_cell(@rownum, i, "#{checkLockerAvaliable(@locker)}");
 				end
 			end	
-		@@workbook.write("Lockers.xlsx");
+			@@workbook.write("Lockers.xlsx");
+			return true;
 		else
-			return false
+			reasonNotAllowed(s1);
+			if(!soloAllowed)
+				puts "#{s1[0]} #{s1[1]} cannot have a locker by themself";
+			end
+			return false;
 		end
 	end
 	#private checks if name matches up to id on database provided
 	private
 	def checkRealPerson (stu)
+			#workbook22 = RubyXL::Parser.parse("");
+			#worksheet22 = workbook2.worksheets[0]
+			
+		#### #   # ##### #### ####      ## #### ##    ####
+		#    ##  #   #   #    #  #     #   #  # #  #  #
+		###  # # #   #   ###  ####    #    #  # #   # ###
+		#    #  ##   #   #    ##       #   #  # #  #  #
+		#### #   #   #   #### # ##      ## #### ##    ####
+	
 		return true;
 	end
 	
-	#private enter id num, checks if the person has been entered o spreadshhet
+	#private enter id num, checks if the person has been entered on spreadsheet
 	def personNotUsed (stu)
-		return true;
+		
+		notUsed = true;
+		rr = findNextAvaliableRow() - 1;
+		
+		for xc in 0..(rr)
+			if(@@worksheet[xc][2].value == stu[2])
+				notUsed = false;
+			elsif (@@worksheet[xc][5].value == stu[2])
+				notUsed = false;
+			else
+				;
+			end
+		end
+		return notUsed;
 	end
 	
 	def personCombo(stu)
@@ -121,16 +152,32 @@ class Locker_Master
 	#$$change to locker num return$$
 	def checkLockerAvaliable (lock)
 		x=0;
+		
+		#### #   # ##### #### ####      ## #### ##    ####
+		#    ##  #   #   #    #  #     #   #  # #  #  #
+		###  # # #   #   ###  ####    #    #  # #   # ###
+		#    #  ##   #   #    ##       #   #  # #  #  #
+		#### #   #   #   #### # ##      ## #### ##    ####
+		
 		if(true)
 			return lock[x];
 		else
 			return false;
 		end
 	end
+	
 	# the special exception list of people get alternate locker constructor
 	def soloAllowed (stu)
+		
+		#### #   # ##### #### ####      ## #### ##    ####
+		#    ##  #   #   #    #  #     #   #  # #  #  #
+		###  # # #   #   ###  ####    #    #  # #   # ###
+		#    #  ##   #   #    ##       #   #  # #  #  #
+		#### #   #   #   #### # ##      ## #### ##    ####
+		
 		return true;
 	end
+	
 	def findNextAvaliableRow()
 		y=0;
 		while (@@worksheet.sheet_data[y][0].value != nil)
@@ -138,5 +185,17 @@ class Locker_Master
 		end
 		rescue Exception
 			return y;
+	end
+	
+	def reasonNotAllowed (stu)
+		if (!personNotUsed (stu))
+			puts "#{stu[0]} #{stu[1]} already has a locker";
+		elsif (!checkRealPerson (stu))
+			puts "#{stu[0]} #{stu[1]} is not a student"
+		elsif (!checkLockerAvaliable (lock))
+			puts "There are no preferred lockers avaliable";
+		else
+			puts "Something's wrong";
+		end
 	end
 end
