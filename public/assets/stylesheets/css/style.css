@@ -59,6 +59,31 @@ a:hover { text-decoration: none; }
     margin-top: 50px;
 }
 
+.back{
+    cursor: pointer;
+    width: 5%;
+    height: 29px;
+    margin-top: -5px;
+    padding: 0;
+    background: #0088CC;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: 0;
+    -moz-box-shadow: 0 15px 30px 0 rgba(255,255,255,.1) inset;
+    -webkit-box-shadow: 0 15px 30px 0 rgba(255,255,255,.1) inset;
+    box-shadow: 0 15px 30px 0 rgba(255,255,255,.1) inset;
+    font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,.1);
+    -o-transition: all .2s;
+    -moz-transition: all .2s;
+    -webkit-transition: all .2s;
+    -ms-transition: all .2s;
+}
+
 /* ----- iPhone ----- */
 
 .iphone {
@@ -74,22 +99,12 @@ a:hover { text-decoration: none; }
 
 .alert{
    font-weight: bold;
-   -moz-border-radius: 4px 4px 4px 4px;
-   -webkit-border-radius: 4px 4px 4px 4px;
-   border-radius: 4px 4px 4px 4px;
-   margin: 40px;
+   margin: 40px 40px -30px 40px;
+   width: 330   px;
    padding: 12px 25px 12px 24px;
-   -moz-box-shadow: 3px 3px 1px 1px #CCCCCC;
-   -webkit-box-shadow: 3px 3px 1px 1px #CCCCCC;
-   box-shadow: 3px 3px 1px 1px #CCCCCC;
-}
-
-.alert-success {
-   background-color: #66E167;
-   border-color: #D6E9C6;
-   width: 280px;
-   color: black;
-   padding-top: 10px;
+   text-align: center;
+   border-radius: 3px;
+   font-family: 'PT Sans', Helvetica, Arial, sans-serif;
 }
 
 /* ----- Registration Form ----- */
