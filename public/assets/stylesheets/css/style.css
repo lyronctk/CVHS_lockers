@@ -100,7 +100,7 @@ a:hover { text-decoration: none; }
 .alert{
    font-weight: bold;
    margin: 40px 40px -30px 40px;
-   width: 330   px;
+   width: 1000px;
    padding: 12px 25px 12px 24px;
    text-align: center;
    border-radius: 3px;
