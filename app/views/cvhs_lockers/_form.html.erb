@@ -23,11 +23,15 @@
 
                   <h2>REGISTER FOR A <span class="blue"> <strong> LOCKER</strong></span></h2>
 
-                  <%= f.text_field :name1, :required => true, :class => 'left', :placeholder => "Full name..."%>
+                  <%= f.text_field :name1, :required => true, :class => 'left', :placeholder => "First name"%>
+
+                  <%= f.text_field :lastName1, :required => true, :class => 'middle', :placeholder => "Last name"%>
 
                   <%= f.text_field :studentID1, :required => true, :class => 'right', :placeholder => "ID"%>
 
-                  <%= f.text_field :name2, :required => true, :class => 'left', :placeholder => "Partner's full name..."%>
+                  <%= f.text_field :name2, :required => true, :class => 'left', :placeholder => "Partner's first name"%>
+
+                  <%= f.text_field :lastName2, :required => true, :class => 'middle', :placeholder => "Partner's last name"%>
 
                   <%= f.text_field :studentID2, :required => true, :placeholder => "ID", :class => "right"%>
 
@@ -47,13 +51,8 @@
                   </div>
 
                   <div class="one-line">
-                  <%= f.label :pref4, "Fourth Choice: ", :class => "select-label"%>
-                  <%= f.select :pref4, [5100, 5200, 5300], {include_blank: true}%>
-                  </div>
-
-                  <div class="one-line">
-                  <%= f.label :pref5, "Fifth Choice: ", :class => "select-label"%>
-                  <%= f.select :pref5, [5100, 5200, 5300], {include_blank: true}%>
+                  <%= f.label :position, "Position Preference: ", :class => "select-label"%>
+                  <%= f.select :position, ["Top", "Bottom"], {include_blank: true}%>
                   </div>
 
                   <%= f.submit 'REGISTER', :class => "input-submit" %>

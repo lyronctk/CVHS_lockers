@@ -16,8 +16,10 @@
     <thead>
       <tr>
         <th>Student 1</th>
+        <th>Last Name</th>
         <th>ID 1</th>
         <th>Student 2</th>
+        <th>Last Name</th>
         <th>ID 2</th>
         <th>Locker Number</th>
         <th colspan="3"></th>
@@ -34,8 +36,10 @@
           <% @cvhs_lockers.each do |cvhs_locker| %> 
           <tr>
             <td><%= cvhs_locker.name1 %></td>
+            <td><%= cvhs_locker.lastName1 %></td>
             <td><%= cvhs_locker.studentID1 %></td>
             <td><%= cvhs_locker.name2 %></td>
+            <td><%= cvhs_locker.lastName2 %></td>
             <td><%= cvhs_locker.studentID2 %></td>
             <td><%= cvhs_locker.pref1 %></td>
             <td><%= link_to 'Edit', edit_cvhs_locker_path(cvhs_locker) %></td>

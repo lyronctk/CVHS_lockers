@@ -121,18 +121,6 @@ a:hover { text-decoration: none; }
     text-align: center;
 }
 
-.mobile form {
-    padding: 20px 20px 40px 20px;
-    background: #f8f8f8 url(../img/pattern.jpg) left top repeat;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
-    border-radius: 8px;
-    -moz-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
-    -webkit-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
-    box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
-    text-align: center;
-}
-
 form h2 {
     margin-bottom: 25px;
     padding-bottom: 15px;
@@ -160,14 +148,20 @@ form input[type='text']{
 }
 
 form input[class="right"]{
-    width:35%;
+    width:30%;
     float: right;
 }
 
 form input[class="left"]{
-    width:60%;
+    width:25%;
     float: left;
 }
+
+form input[class="middle"]{
+    width:40%;
+    float: left;
+}
+
 
 form input[type='text']{
     border: 1px solid #ccc;
@@ -290,7 +284,7 @@ form select{
 }
 
 .index th{
-    padding: 0 100px 20px 0;
+    padding: 0 30px 20px 0;
     font-size: 25px;
 }
 

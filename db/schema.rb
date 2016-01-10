@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151219234609) do
+ActiveRecord::Schema.define(version: 20160110021843) do
 
   create_table "cvhs_lockers", force: :cascade do |t|
     t.string   "name1"
@@ -24,8 +24,9 @@ ActiveRecord::Schema.define(version: 20151219234609) do
     t.integer  "pref1"
     t.integer  "pref2"
     t.integer  "pref3"
-    t.integer  "pref4"
-    t.integer  "pref5"
+    t.string   "lastName1"
+    t.string   "lastName2"
+    t.string   "position"
   end
 
 end

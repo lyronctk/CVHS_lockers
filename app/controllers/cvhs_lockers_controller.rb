@@ -39,6 +39,9 @@ class CvhsLockersController < ApplicationController
   def create
     @cvhs_locker = CvhsLocker.new(cvhs_locker_params)
 
+    # puts 'PARAMSS: '
+    # puts cvhs_locker_params
+
     respond_to do |format|
       if @cvhs_locker.save
         format.html { redirect_to '/success'}
@@ -82,6 +85,6 @@ class CvhsLockersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cvhs_locker_params
-      params.require(:cvhs_locker).permit(:name1, :name2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :pref4, :pref5)
+      params.require(:cvhs_locker).permit(:name1, :lastName1, :name2, :lastName2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :position)
     end
 end
