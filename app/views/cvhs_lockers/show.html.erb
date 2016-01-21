@@ -1,29 +1,33 @@
-<p id="notice"><%= notice %></p>
+<div class="success">
 
-<p>
-  <strong>Name1:</strong>
-  <%= @cvhs_locker.name1 %>
-</p>
+	<h2>Locker Registered</h2>
 
-<p>
-  <strong>Name2:</strong>
-  <%= @cvhs_locker.name2 %>
-</p>
+	<table>
+		<thead>
+	      <tr>
+	        <th>First Name</th>
+	        <th>Last Name</th>
+	        <th>First Name</th>
+	        <th>Last Name</th>
+	        <th>Locker Number</th>
+	        <th colspan="3"></th>
+	      </tr>
+	    </thead>
 
-<p>
-  <strong>Studentid1:</strong>
-  <%= @cvhs_locker.studentID1 %>
-</p>
+	    <br>
+	    <tbody>
+	        <tr>
+	            <td><%= @cvhs_locker.name1 %></td>
+                <td><%= @cvhs_locker.lastName1 %></td>
+                <td><%= @cvhs_locker.name2 %></td>
+                <td><%= @cvhs_locker.lastName2 %></td>
+                <td><%= @cvhs_locker.lockerNum %></td>
+	        </tr>
+	    </tbody>
 
-<p>
-  <strong>Studentid2:</strong>
-  <%= @cvhs_locker.studentID2 %>
-</p>
+	  </table>
+	  <br>
 
-<p>
-  <strong>Number:</strong>
-  <%= @cvhs_locker.number %>
-</p>
+	</table>
 
-<%= link_to 'Edit', edit_cvhs_locker_path(@cvhs_locker) %> |
-<%= link_to 'Back', cvhs_lockers_path %>
+</div>

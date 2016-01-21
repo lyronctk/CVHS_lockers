@@ -41,7 +41,7 @@
             <td><%= cvhs_locker.name2 %></td>
             <td><%= cvhs_locker.lastName2 %></td>
             <td><%= cvhs_locker.studentID2 %></td>
-            <td><%= cvhs_locker.pref1 %></td>
+            <td><%= cvhs_locker.lockerNum %></td>
             <td><%= link_to 'Edit', edit_cvhs_locker_path(cvhs_locker) %></td>
             <td>-</td>
             <td><%= link_to 'Delete', cvhs_locker, :method => :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -74,11 +74,13 @@
           <br>
           <tbody>
               <tr>
-                <td><%= @cvhs_lockers.name1 %></td>
-                <td><%= @cvhs_lockers.studentID1 %></td>
-                <td><%= @cvhs_lockers.name2 %></td>
-                <td><%= @cvhs_lockers.studentID2 %></td>
-                <td><%= @cvhs_lockers.pref1 %></td>
+                <td><%= @cvhs_locker.name1 %></td>
+                <td><%= @cvhs_locker.lastName1 %></td>
+                <td><%= @cvhs_locker.studentID1 %></td>
+                <td><%= @cvhs_locker.name2 %></td>
+                <td><%= @cvhs_locker.lastName2 %></td>
+                <td><%= @cvhs_locker.studentID2 %></td>
+                <td><%= @cvhs_locker.lockerNum %></td>
                 <td><%= link_to 'Edit', edit_cvhs_locker_path(@cvhs_lockers) %></td>
                 <td>-</td>
                 <td><%= link_to 'Delete', @cvhs_lockers, :method => :delete, data: { confirm: 'Are you sure?' } %></td>

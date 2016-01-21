@@ -8,7 +8,6 @@ class CvhsLockersController < ApplicationController
       if params[:search] == nil
          @cvhs_lockers = CvhsLocker.paginate(page: params[:page])
       else
-         puts 'GOT TO ELSE STATEMENT'
          @cvhs_lockers = CvhsLocker.find_by studentID1: params[:search]
 
          if @cvhs_lockers == nil
@@ -20,9 +19,6 @@ class CvhsLockersController < ApplicationController
   # GET /cvhs_lockers/1 
   # GET /cvhs_lockers/1.json
   def show
-  end
-
-  def success
   end
 
   # GET /cvhs_lockers/new
@@ -39,15 +35,22 @@ class CvhsLockersController < ApplicationController
   def create
     @cvhs_locker = CvhsLocker.new(cvhs_locker_params)
 
-    # puts 'PARAMSS: '
-    # puts cvhs_locker_params
+    locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
+    person1_array = [cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1]]
+    person2_array = [cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]]
+
+    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'locker_list'))
+    allowed = master.createLocker(locker_array, person1_array, person2_array)
+    @cvhs_locker[:lockerNum] = master.getLockerNumber();
 
     respond_to do |format|
-      if @cvhs_locker.save
-        format.html { redirect_to '/success'}
-        format.json { render :new, status: :created, location: @cvhs_locker }
+      if allowed == true 
+        if @cvhs_locker.save
+          redirect_to @cvhs_locker
+          format.json { render :new, status: :created, location: @cvhs_locker }
+        end
       else
-        format.html { render :new }
+        format.html { redirect_to '/', notice: allowed }
         format.json { render json: @cvhs_locker.errors, status: :unprocessable_entity }
       end
     end
@@ -85,6 +88,6 @@ class CvhsLockersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cvhs_locker_params
-      params.require(:cvhs_locker).permit(:name1, :lastName1, :name2, :lastName2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :position)
+      params.require(:cvhs_locker).permit(:name1, :lastName1, :name2, :lastName2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :position, :lockerNum)
     end
 end

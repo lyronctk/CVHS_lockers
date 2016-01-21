@@ -280,7 +280,6 @@ form select{
 .index{
     margin: 40px 40px;
     color: white;
-
 }
 
 .index th{
@@ -338,7 +337,7 @@ form select{
 /* Success page */
 
 .success{
-    margin: 100px;
+    margin: 80px;
     padding: 20px 50px 40px 50px;
     background: #f8f8f8 url(../img/pattern.jpg) left top repeat;
     -moz-border-radius: 8px;
@@ -347,7 +346,6 @@ form select{
     -moz-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
     -webkit-box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
     box-shadow: 0 1px 5px 0 rgba(0,0,0,.3);
-    text-align: center;
 }
 
 .success h2{
@@ -356,8 +354,15 @@ form select{
     border-bottom: 2px dotted #bbb;
     font-size: 30px;
     font-weight: 400;
-    text-align: center;
 }
 
+.success th{
+    padding: 0 30px 20px 0;
+    font-size: 20px;
+}
+
+.success td{
+    padding-bottom: 10px;
+}
 
 
