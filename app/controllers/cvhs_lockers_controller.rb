@@ -1,6 +1,5 @@
 class CvhsLockersController < ApplicationController
   before_action :set_cvhs_locker, only: [:show, :edit, :update, :destroy]
-  before_filter :check_for_mobile, only: :new
 
   # GET /cvhs_lockers
   # GET /cvhs_lockers.json
@@ -18,7 +17,7 @@ class CvhsLockersController < ApplicationController
 
   # GET /cvhs_lockers/1 
   # GET /cvhs_lockers/1.json
-  def show
+  def success
   end
 
   # GET /cvhs_lockers/new
@@ -35,22 +34,39 @@ class CvhsLockersController < ApplicationController
   def create
     @cvhs_locker = CvhsLocker.new(cvhs_locker_params)
 
+    # CREATE PARAMETERS FOR LOCKERMASTER
     locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
     person1_array = [cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1]]
     person2_array = [cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]]
 
-    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'locker_list'))
+    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
+    
+    # STORES VALIDATION AND LOCKER INFORMATION
     allowed = master.createLocker(locker_array, person1_array, person2_array)
-    @cvhs_locker[:lockerNum] = master.getLockerNumber();
 
+    if(allowed[0])
+      @cvhs_locker[:lockerNum] = allowed[1][0];
+      @cvhs_locker[:buildingNum] = allowed[1][1];
+    end
+    
     respond_to do |format|
-      if allowed == true 
+      if allowed[0]
         if @cvhs_locker.save
-          redirect_to @cvhs_locker
+
+          # PASS IN RECEPIT INFORMATION
+          session[:name1] = cvhs_locker_params[:name1]
+          session[:lastName1] = cvhs_locker_params[:lastName1]
+          session[:name2] = cvhs_locker_params[:name2]
+          session[:lastName2] = cvhs_locker_params[:lastName2]
+          session[:lockerNum] =  allowed[1][0]
+          session[:buildingNum] = allowed[1][1]
+
+          redirect_to '/success' and return;
           format.json { render :new, status: :created, location: @cvhs_locker }
         end
       else
-        format.html { redirect_to '/', notice: allowed }
+        puts "REJECTED"
+        format.html { redirect_to '/', notice: allowed[1] }
         format.json { render json: @cvhs_locker.errors, status: :unprocessable_entity }
       end
     end
@@ -88,6 +104,6 @@ class CvhsLockersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cvhs_locker_params
-      params.require(:cvhs_locker).permit(:name1, :lastName1, :name2, :lastName2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :position, :lockerNum)
+      params.require(:cvhs_locker).permit(:name1, :lastName1, :name2, :lastName2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :lockerNum, :buildingNum)
     end
 end

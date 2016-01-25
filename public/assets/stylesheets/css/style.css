@@ -144,7 +144,7 @@ form input[type='text']{
     font-family: 'PT Sans', Helvetica, Arial, sans-serif;
     color: #888;            
     font-size: 16px;
-    margin: 10px 0;
+    margin: 15px 0;
 }
 
 form input[class="right"]{
@@ -178,7 +178,7 @@ form input[class='input-submit'] {
     cursor: pointer;
     width: 60%;
     height: 42px;
-    margin-top: 25px;
+    margin-top: 30px;
     padding: 0;
     background: #00a2bd;
     -moz-border-radius: 3px;
@@ -233,7 +233,7 @@ form label[class='select-label']{
 }
 
 form select{
-    margin: 10px 0;
+    margin: 13px 0;
     width: 50%;
     float: right;
 }
@@ -357,7 +357,7 @@ form select{
 }
 
 .success th{
-    padding: 0 30px 20px 0;
+    padding: 0 100px 20px 0;
     font-size: 20px;
 }
 

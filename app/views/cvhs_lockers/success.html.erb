@@ -1,0 +1,33 @@
+<div class="success">
+
+	<h2>Locker Registered</h2>
+
+	<table>
+		<thead>
+	      <tr>
+	        <th>Name</th>
+	        <th>Name</th>
+	        <th>Building</th>
+	        <th>Locker Number</th>
+	        <th colspan="3"></th>
+	      </tr>
+	    </thead>
+
+	    <br>
+	    <tbody>
+	        <tr>
+	            <td><%= session[:name1] + " " + session[:lastName1]%></td>
+                <td><%= session[:name2] + " " + session[:lastName2] %></td>
+                <td><%= session[:buildingNum] %></td>
+                <td><%= session[:lockerNum] %></td>
+	        </tr>
+	    </tbody>
+
+	  </table>
+	  <br>
+
+	  <a href="#" onclick="window.print();return false;">Print</a> 
+
+	</table>
+
+</div>

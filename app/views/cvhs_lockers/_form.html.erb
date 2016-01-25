@@ -45,11 +45,6 @@
                   <%= f.select :pref3, floor_list, {include_blank: true}, :required => true%>
                   </div>
 
-                  <div class="one-line">
-                  <%= f.label :position, "Position Preference: ", :class => "select-label"%>
-                  <%= f.select :position, ["Top", "Bottom"], {include_blank: true}, :required => true%>
-                  </div>
-
                   <%= f.submit 'REGISTER', :class => "input-submit" %>
                   
                   <% end %>
