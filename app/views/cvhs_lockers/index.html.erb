@@ -5,13 +5,19 @@
 <div class="index">
   <table>
 
-    <!-- Search Box -->
-    <%= form_tag cvhs_lockers_path, method: 'get' do %>
-      <p>
-        <%= text_field_tag  :search, params[:search], :placeholder => "Search By ID..", id:"search-box" %>
-        <%= submit_tag  "Search", id: "search-submit"%>
-      </p>
-    <% end %>
+    <div class="index-line">
+        <!-- Search Box -->
+        <%= form_tag cvhs_lockers_path, method: 'get' do %>
+          <p>
+            <%= text_field_tag  :search, params[:search], :placeholder => "Search By ID..", id:"search-box" %>
+            <%= submit_tag  "Search", id: "search-submit", class: "master-button"%>
+          </p>
+        <% end %>
+
+        <!-- DOWNLOAD XLSX SHEET -->
+        <a href='/download' download id="download-button" class="master-button">Generate Excel File</a>
+
+    </div>
         
     <thead>
       <tr>
@@ -94,6 +100,6 @@
 
     <% end %>
 
-    <button class="back"><%= link_to 'Back', 'javascript:history.go(-1);', {:style=>'color:white;'} %> </button>
+    <button class="master-button back"><%= link_to 'Back', 'javascript:history.go(-1);', {:style=>'color:white;'} %> </button>
 
 </div>

@@ -11,7 +11,7 @@
                   <%= form_for(@cvhs_locker) do |f| %> 
 
                   <% if flash[:notice] -%>
-                    <div class="alert alert-error" style="width:100%; margin-left: -1%; margin-top: -1%;  "><%= flash[:notice] %></div>
+                    <div class="alert alert-error" style="width:100%; margin-left: -1%; margin-top: -1%;"><%= flash[:notice] %></div>
                   <% end %>
 
                   <h2>REGISTER FOR A <span class="blue"> <strong> LOCKER</strong></span></h2>
@@ -31,17 +31,17 @@
                   <% floor_list = [1100, 1300, 2100, 2200, 2300, 5200, 5300, 7100, 7200, 7300]%>
 
                   <div class="one-line">
-                  <%= f.label :pref1, "First Choice: ", :class => "select-label"%>
+                  <%= f.label :pref1, "1st Choice of Building/Floor: ", :class => "select-label"%>
                   <%= f.select :pref1, floor_list, {include_blank: true}, :required => true%>
                   </div>
 
                   <div class="one-line">
-                  <%= f.label :pref2, "Second Choice: ", :class => "select-label"%>
+                  <%= f.label :pref2, "2nd Choice of Building/Floor: ", :class => "select-label"%>
                   <%= f.select :pref2, floor_list, {include_blank: true}, :required => true%>
                   </div>
 
                   <div class="one-line">
-                  <%= f.label :pref3, "Third Choice: ", :class => "select-label"%>
+                  <%= f.label :pref3, "3rd Choice of Building/Floor: ", :class => "select-label"%>
                   <%= f.select :pref3, floor_list, {include_blank: true}, :required => true%>
                   </div>
 

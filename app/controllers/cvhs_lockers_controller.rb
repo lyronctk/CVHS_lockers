@@ -45,8 +45,8 @@ class CvhsLockersController < ApplicationController
     allowed = master.createLocker(locker_array, person1_array, person2_array)
 
     if(allowed[0])
-      @cvhs_locker[:lockerNum] = allowed[1][0];
-      @cvhs_locker[:buildingNum] = allowed[1][1];
+      @cvhs_locker[:lockerNum] = allowed[1][1];
+      @cvhs_locker[:buildingNum] = allowed[1][0];
     end
     
     respond_to do |format|
@@ -58,14 +58,13 @@ class CvhsLockersController < ApplicationController
           session[:lastName1] = cvhs_locker_params[:lastName1]
           session[:name2] = cvhs_locker_params[:name2]
           session[:lastName2] = cvhs_locker_params[:lastName2]
-          session[:lockerNum] =  allowed[1][0]
-          session[:buildingNum] = allowed[1][1]
+          session[:lockerNum] =  allowed[1][1]
+          session[:buildingNum] = allowed[1][0]
 
           redirect_to '/success' and return;
           format.json { render :new, status: :created, location: @cvhs_locker }
         end
       else
-        puts "REJECTED"
         format.html { redirect_to '/', notice: allowed[1] }
         format.json { render json: @cvhs_locker.errors, status: :unprocessable_entity }
       end
@@ -89,11 +88,18 @@ class CvhsLockersController < ApplicationController
   # DELETE /cvhs_lockers/1
   # DELETE /cvhs_lockers/1.json
   def destroy
+    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
+    master.deleteLocker(@cvhs_locker.studentID1);
+
     @cvhs_locker.destroy
     respond_to do |format|
       format.html { redirect_to cvhs_lockers_url, notice: 'Locker was successfully deleted.' }
       format.json { head :no_content }
     end
+  end
+
+  def download
+    send_file File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx')
   end
 
   private
