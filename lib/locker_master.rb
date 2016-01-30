@@ -1,4 +1,4 @@
-class LockerMaster
+ class LockerMaster
 	def initialize (locs, persons)
 			@a= Time.new ;
 		@jking = 0;
@@ -128,7 +128,7 @@ class LockerMaster
 			@@worksheet.add_cell(@rownum, 0, "#{@student1[2]}");
 			@@worksheet.add_cell(@rownum, 1, "#{checkLockerAvaliable(@locker,false)[1][2]}");
 			
-			@@lbook.write("#{@@locker_databaset}.xlsx");
+			@@lbook.write("#{@@locker_database}.xlsx");
 			@b=Time.new ;
 			puts "#{@b-@a}";
 			return true, checkLockerAvaliable(@locker,false)[1];
@@ -221,7 +221,7 @@ class LockerMaster
 			end
 		end
 		
-		er = false;
+		er = [false];
 	end
 	public
 	def deleteLocker(student_ID)
@@ -303,7 +303,7 @@ class LockerMaster
 			a= "#{stu[0]} #{stu[1]} already has a locker";
 		elsif (!checkRealPerson (stu))
 			a= "#{stu[0]} #{stu[1]} is not a student"
-		elsif (!checkLockerAvaliable(lock,false)[0])
+		elsif (checkLockerAvaliable(lock,false)[0])
 			a= "There are no preferred lockers avaliable";
 		else
 			a= "Something's wrong with the other person";

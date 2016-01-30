@@ -28,7 +28,16 @@
 
                   <%= f.text_field :studentID2, :required => true, :placeholder => "ID", :class => "right"%>
 
-                  <% floor_list = [1100, 1300, 2100, 2200, 2300, 5200, 5300, 7100, 7200, 7300]%>
+                  <% floor_list = {"1000 Building - First Floor"  => 1100, 
+                                   "1000 Building - Third Floor"  => 1300,
+                                   "2000 Building - First Floor"  => 2100,
+                                   "2000 Building - Second Floor" => 2200, 
+                                   "2000 Building - Third Floor"  => 2300, 
+                                   "5000 Building - Second Floor" => 5200,
+                                   "5000 Building - Third Floor"  => 5300, 
+                                   "7000 Building - First Floor"  => 7100,
+                                   "7000 Building - Second Floor" => 7200, 
+                                   "7000 Building - Third Floor"  => 7300}  %>
 
                   <div class="one-line">
                   <%= f.label :pref1, "1st Choice of Building/Floor: ", :class => "select-label"%>
