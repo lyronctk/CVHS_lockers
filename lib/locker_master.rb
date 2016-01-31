@@ -110,7 +110,7 @@
 			puts "#{@b-@a}";
 			return true , checkLockerAvaliable(@locker,false)[1];
 		else
-			error_reason = ("#{reasonNotAllowed(s1,checkLockerAvaliable(@locker,false))}\n#{reasonNotAllowed(s2,checkLockerAvaliable(@locker,false));}");
+			error_reason = ("#{reasonNotAllowed(s1,checkLockerAvaliable(@locker,false))} and\n#{reasonNotAllowed(s2,checkLockerAvaliable(@locker,false));}");
 			return false , error_reason;
 		end
 
@@ -306,7 +306,7 @@
 		elsif (checkLockerAvaliable(lock,false)[0])
 			a= "There are no preferred lockers avaliable";
 		else
-			a= "Something's wrong with the other person";
+			a= "";
 		end
 		
 		return a;

@@ -89,6 +89,7 @@ class CvhsLockersController < ApplicationController
   # DELETE /cvhs_lockers/1.json
   def destroy
     master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
+    puts ''
     master.deleteLocker(@cvhs_locker.studentID1);
 
     @cvhs_locker.destroy
