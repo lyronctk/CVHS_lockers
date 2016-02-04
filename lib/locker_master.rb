@@ -1,4 +1,5 @@
- class LockerMaster
+require 'rubyXL'
+class LockerMaster
 	def initialize (locs, persons)
 			@a= Time.new ;
 		@jking = 0;
@@ -23,7 +24,7 @@
 		if(@@lbook[6].nil?)
 			@@lbook.add_worksheet('1100');
 			@@lbook.add_worksheet('1300');
-			@@lbook.add_worksheet('TRIPLES');
+			@@lbook.add_worksheet('1300-TRIPLES');
 			@@lbook.add_worksheet('2100');
 			@@lbook.add_worksheet('2200');
 			@@lbook.add_worksheet('2300');
@@ -46,9 +47,9 @@
 							@@lbook["1#{oa}00"].add_cell(roo,0,"#{row[3].value}");
 							@@lbook["1#{oa}00"].add_cell(roo,1,"#{row[0].value}");
 						elsif(row[4].value == oa && ((row[0].value).to_i > 1004048) )
-							poo = findNextAvaliableRow(@@lbook["TRIPLES"]);
-							@@lbook["TRIPLES"].add_cell(poo,0,"#{row[3].value}");
-							@@lbook["TRIPLES"].add_cell(poo,1,"#{row[0].value}");
+							poo = findNextAvaliableRow(@@lbook["1300-TRIPLES"]);
+							@@lbook["1300-TRIPLES"].add_cell(poo,0,"#{row[3].value}");
+							@@lbook["1300-TRIPLES"].add_cell(poo,1,"#{row[0].value}");
 						end
 					end
 				elsif(row[1].value == 2000)
@@ -98,7 +99,7 @@
 		@rownum = findNextAvaliableRow(@@worksheet);
 		
 		#put to new list CVHS LOCKER TEMPLATE
-		if(personCombo(@student1) and personCombo(@student2) and checkLockerAvaliable(@locker,true)[0])	
+		if(personCombo(@student1) and personCombo(@student2) and checkLockerAvaliable(@locker,true)[0] and !checkLockerAvaliable(@locker,false)[1][2].nil?)	
 			@@worksheet.add_cell(@rownum, 0, "#{@student1[2]}");
 			@@worksheet.add_cell(@rownum, 1, "#{checkLockerAvaliable(@locker,false)[1][2]}");
 			@@worksheet.add_cell(@rownum+1, 0, "#{@student2[2]}");
@@ -110,7 +111,15 @@
 			puts "#{@b-@a}";
 			return true , checkLockerAvaliable(@locker,false)[1];
 		else
-			error_reason = ("#{reasonNotAllowed(s1,checkLockerAvaliable(@locker,false))} and\n#{reasonNotAllowed(s2,checkLockerAvaliable(@locker,false));}");
+
+			if reasonNotAllowed(s1,checkLockerAvaliable(@locker,false)) == reasonNotAllowed(s2,checkLockerAvaliable(@locker,false))
+				error_reason = ("#{reasonNotAllowed(s1,checkLockerAvaliable(@locker,false))}")
+			elsif reasonNotAllowed(s1,checkLockerAvaliable(@locker,false)) != "" and reasonNotAllowed(s2,checkLockerAvaliable(@locker,false)) != ""
+				error_reason = ("#{reasonNotAllowed(s1,checkLockerAvaliable(@locker,false))} and #{reasonNotAllowed(s2,checkLockerAvaliable(@locker,false))}")
+			else
+				error_reason = ("#{reasonNotAllowed(s1,checkLockerAvaliable(@locker,false))} #{reasonNotAllowed(s2,checkLockerAvaliable(@locker,false))}")
+			end
+
 			return false , error_reason;
 		end
 
@@ -176,7 +185,67 @@
 		if(checkRealPerson(stu))
 			return	@grdlvl;
 		end
+		a = 0;
 	end
+	
+	public 
+	def clearAll()
+		clear_book = RubyXL::Workbook.new;
+		clear_sheet = @@lbook["Student Assignments"];
+		clear_book.worksheets[0] = clear_sheet; 
+		
+		length = findNextAvaliableRow(clear_sheet);
+		
+		clear_sheet[0][0].change_contents('iD #',clear_sheet[0][0].formula);
+		clear_sheet[0][1].change_contents('Lockeruniq',clear_sheet[0][0].formula);
+		clear_sheet.add_cell(0,2,"First Name");
+		clear_sheet.add_cell(0,3,"Last Name");
+		for rows in 1...length
+			iD_num = clear_sheet[rows][0].value;
+			location = findPerson(iD_num,@stu_sheet);
+			if(location != -1)
+				clear_sheet.add_cell(rows,2,"#{@stu_sheet[location][2].value}");
+				clear_sheet.add_cell(rows,3,"#{@stu_sheet[location][1].value}");
+			end
+		end
+		
+		
+		eTIS_book = RubyXL::Workbook.new;
+		eTIS_sheet = @@lbook["Student Assignments"];
+		eTIS_book.worksheets[0] = eTIS_sheet; 
+		
+		clean_book = RubyXL::Workbook.new;
+		clean_sheet = @@lbook["Sheet Providing LockerUniqs"];
+		clean_book.worksheets[0] = clean_sheet; 
+		
+		clean_sheet[0][0].change_contents("#{@@lbook[0][0][0].value}",clean_sheet[0][0].formula);
+		clean_sheet[0][1].change_contents("#{@@lbook[0][0][1].value}",clean_sheet[0][1].formula);
+		clean_sheet[0][2].change_contents("#{@@lbook[0][0][2].value}",clean_sheet[0][2].formula);
+		clean_sheet[0][3].change_contents("#{@@lbook[0][0][3].value}",clean_sheet[0][3].formula);
+		clean_sheet[0][4].change_contents("#{@@lbook[0][0][4].value}",clean_sheet[0][4].formula);
+		
+		t= Time.new
+		# File.delete("#{@@locker_database}.xlsx");
+		clear_book.write("Final Locker Sheet #{t.year}-ADMIN.xlsx");
+		eTIS_book.write("FINAL Locker Sheet #{t.year}-ETIS.xlsx");
+		clean_book.write("#{@@locker_database}.xlsx");
+	end
+	
+	public
+	def findPerson(id,c_sheet)
+		length = findNextAvaliableRow(c_sheet);
+		puts "#{length}"
+		for distance in 1...length
+			puts "#{id}  #{c_sheet[distance][0].value}"
+			if(id.to_i == c_sheet[distance][0].value.to_i)
+				return distance;
+			end
+			
+		end
+		
+		dd = -1 ;
+	end
+	
 	
 	#private enter id num, checks if the person has been entered on spreadshhet
 	#fix it for solo
@@ -221,8 +290,9 @@
 			end
 		end
 		
-		er = [false];
+		er = [false, [1, 2]];
 	end
+	
 	public
 	def deleteLocker(student_ID)
 		length = findNextAvaliableRow(@@worksheet);
@@ -278,6 +348,7 @@
 	end
 	#combine by adding parameter
 	#use recursion-->problems with recursion
+	private
 	def findNextAvaliableRow(database)
 		y=0;
 		until (database[y][0].value == nil)
@@ -296,14 +367,14 @@
 		# end
 	end
 	#got it done#fix here checkLockerAvaliable is called a second time #fixed the new error
+	private
 	def reasonNotAllowed (stu,lock)
 		a="";
-	
 		if (!personNotUsed (stu))
 			a= "#{stu[0]} #{stu[1]} already has a locker";
 		elsif (!checkRealPerson (stu))
-			a= "#{stu[0]} #{stu[1]} is not a student"
-		elsif (checkLockerAvaliable(lock,false)[0])
+			a= "#{stu[0]} #{stu[1]} (#{stu[2]}) is not a student"
+		elsif (!checkLockerAvaliable(lock,false)[0])
 			a= "There are no preferred lockers avaliable";
 		else
 			a= "";

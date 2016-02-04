@@ -1,6 +1,19 @@
 <link rel="stylesheet" href="/assets/bootstrap/css/maxcdn.css">
 <script src="/assets/stylesheets/js/scripts.js"></script>
 
+<script>
+  //checks if only one student is entered
+  function checkSingle(){
+    puts "GOT TO SINGLE"
+    var second = document.forms[mainForm][check].value;
+    if (second == null || second == ""){
+
+      alert("GOT TO SINGLE");
+      return false;
+    }
+  }
+</script>
+
 <body>
     <div class="register-container container main">
           <div class="row">
@@ -8,7 +21,7 @@
           </div>
               <div class="register span6">
 
-                  <%= form_for(@cvhs_locker) do |f| %> 
+                  <%= form_for(@cvhs_locker) do |f|%> 
 
                   <% if flash[:notice] -%>
                     <div class="alert alert-error" style="width:100%; margin-left: -1%; margin-top: -1%;"><%= flash[:notice] %></div>
@@ -22,11 +35,11 @@
 
                   <%= f.text_field :studentID1, :required => true, :class => 'right', :placeholder => "ID"%>
 
-                  <%= f.text_field :name2, :required => true, :class => 'left', :placeholder => "Partner's first name"%>
+                  <%= f.text_field :name2, :class => 'left', :placeholder => "Partner's first name", html:{name: "check"}%>
 
-                  <%= f.text_field :lastName2, :required => true, :class => 'middle', :placeholder => "Partner's last name"%>
+                  <%= f.text_field :lastName2, :class => 'middle', :placeholder => "Partner's last name"%>
 
-                  <%= f.text_field :studentID2, :required => true, :placeholder => "ID", :class => "right"%>
+                  <%= f.text_field :studentID2, :placeholder => "ID", :class => "right"%>
 
                   <% floor_list = {"1000 Building - First Floor"  => 1100, 
                                    "1000 Building - Third Floor"  => 1300,
@@ -54,7 +67,7 @@
                   <%= f.select :pref3, floor_list, {include_blank: true}, :required => true%>
                   </div>
 
-                  <%= f.submit 'REGISTER', :class => "input-submit" %>
+                  <%= f.submit 'REGISTER', :class => "input-submit"%>
                   
                   <% end %>
               </div>
