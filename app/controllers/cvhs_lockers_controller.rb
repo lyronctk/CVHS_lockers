@@ -1,5 +1,6 @@
 class CvhsLockersController < ApplicationController
   before_action :set_cvhs_locker, only: [:show, :edit, :update, :destroy]
+  before_filter :check_available, :only => :new
 
   # GET /cvhs_lockers
   # GET /cvhs_lockers.json
@@ -23,6 +24,13 @@ class CvhsLockersController < ApplicationController
   # GET /cvhs_lockers/new
   def new
     @cvhs_locker = CvhsLocker.new
+    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
+    floors = master.getAvailableFloors();
+    session[:available_floors] = floors[0]
+    session[:full_floors] = floors[1]
+  end
+
+  def disclaimer
   end
 
   # GET /cvhs_lockers/1/edit
@@ -36,9 +44,9 @@ class CvhsLockersController < ApplicationController
 
     master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
 
-    if @cvhs_locker[:name2] == "" 
+    if @cvhs_locker[:name2]  == "" 
       solo_array = [cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1]]
-      allowed = master.createSoloLocker(["1300-TRIPLES"], solo_array)
+      allowed = master.createSoloLocker(["1300-SINGLES"], solo_array)
     else
       # CREATE PARAMETERS FOR LOCKERMASTER
       locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
@@ -70,7 +78,7 @@ class CvhsLockersController < ApplicationController
           format.json { render :new, status: :created, location: @cvhs_locker }
         end
       else
-        format.html { redirect_to '/', notice: allowed[1] }
+        format.html { redirect_to 'new', notice: allowed[1] }
         format.json { render json: @cvhs_locker.errors, status: :unprocessable_entity }
       end
     end
@@ -110,6 +118,10 @@ class CvhsLockersController < ApplicationController
   end
 
   private
+    def check_available
+        session[:available_floors] = {"1000 Building - First Floor"  => 1100} 
+    end
+
     # Use callbacks to  share common setup or constraints between actions.
     def set_cvhs_locker
       @cvhs_locker = CvhsLocker.find(params[:id])

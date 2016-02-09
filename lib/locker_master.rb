@@ -1,4 +1,5 @@
 require 'rubyXL'
+#PROPERTY OF ANDERW DERTLI AND LYRON CO TING KEH
 class LockerMaster
 	def initialize (locs, persons)
 			@a= Time.new ;
@@ -6,6 +7,7 @@ class LockerMaster
 		@@locker_database = locs;
 		@@student_database = persons;
 		
+		#parses existing excel workbooks for student identities and locker avaliability, respectively
 		@stu_book = RubyXL::Parser.parse("#{@@student_database}.xlsx");
 		@stu_sheet = @stu_book.worksheets[0];
 			ff = Time.new;
@@ -13,6 +15,7 @@ class LockerMaster
 		@@lsheet = @@lbook.worksheets[0];
 			gg = Time.new;	
 		
+		#creates sheet where student id and lockeruniq will be stored
 		if(@@lbook["Student Assignments"].nil?)
 			@@worksheet = @@lbook.add_worksheet("Student Assignments");
 			@@worksheet.add_cell(0, 0, "ID #");
@@ -21,10 +24,12 @@ class LockerMaster
 			@@worksheet = @@lbook["Student Assignments"];
 		end
 		
+		#creates each worksheet with the correct lockers inside it 
+		#the boolean should be updated to reflect that those sheets are missing but it currently does not pose a problem
 		if(@@lbook[6].nil?)
 			@@lbook.add_worksheet('1100');
 			@@lbook.add_worksheet('1300');
-			@@lbook.add_worksheet('1300-TRIPLES');
+			@@lbook.add_worksheet('1300-SINGLES');
 			@@lbook.add_worksheet('2100');
 			@@lbook.add_worksheet('2200');
 			@@lbook.add_worksheet('2300');
@@ -47,9 +52,9 @@ class LockerMaster
 							@@lbook["1#{oa}00"].add_cell(roo,0,"#{row[3].value}");
 							@@lbook["1#{oa}00"].add_cell(roo,1,"#{row[0].value}");
 						elsif(row[4].value == oa && ((row[0].value).to_i > 1004048) )
-							poo = findNextAvaliableRow(@@lbook["1300-TRIPLES"]);
-							@@lbook["1300-TRIPLES"].add_cell(poo,0,"#{row[3].value}");
-							@@lbook["1300-TRIPLES"].add_cell(poo,1,"#{row[0].value}");
+							poo = findNextAvaliableRow(@@lbook["1300-SINGLES"]);
+							@@lbook["1300-SINGLES"].add_cell(poo,0,"#{row[3].value}");
+							@@lbook["1300-SINGLES"].add_cell(poo,1,"#{row[0].value}");
 						end
 					end
 				elsif(row[1].value == 2000)
@@ -76,8 +81,6 @@ class LockerMaster
 							@@lbook["7#{pp}00"].add_cell(re,1,"#{row[0].value}");
 						end
 					end
-				else 
-					puts "something is happenin  I don't know what  #{rr} ";
 				end
 			end
 			
@@ -88,7 +91,7 @@ class LockerMaster
 			puts "#{ff-@a}\n#{gg-ff}\n#{hh-gg}\n#{hh-@a}";
 	end
 	
-	#public takes in array locker, array of student1, array of student2 
+	#takes in array of locker buildings/floor ex)["1300","7200",ect], array of student1["FN","LN","ID#"], array of student2["FN","LN","ID#"] and tries to assign locker
 	#EVERY VALUE MUST BE ENTERED AS A STRING
 	public 
 	def createLocker (l, s1, s2)
@@ -98,8 +101,9 @@ class LockerMaster
 		@student2=s2;
 		@rownum = findNextAvaliableRow(@@worksheet);
 		
-		#put to new list CVHS LOCKER TEMPLATE
+		
 		if(personCombo(@student1) and personCombo(@student2) and checkLockerAvaliable(@locker,true)[0] and !checkLockerAvaliable(@locker,false)[1][2].nil?)	
+	#if they pass the tests, it writes down Student ID then Lockeruniq next to it, each person has a separate row 
 			@@worksheet.add_cell(@rownum, 0, "#{@student1[2]}");
 			@@worksheet.add_cell(@rownum, 1, "#{checkLockerAvaliable(@locker,false)[1][2]}");
 			@@worksheet.add_cell(@rownum+1, 0, "#{@student2[2]}");
@@ -109,9 +113,9 @@ class LockerMaster
 			
 			@b=Time.new ;
 			puts "#{@b-@a}";
+	#returns that locker was made and returns an array of all the locker information 
 			return true , checkLockerAvaliable(@locker,false)[1];
 		else
-
 			if reasonNotAllowed(s1,checkLockerAvaliable(@locker,false)) == reasonNotAllowed(s2,checkLockerAvaliable(@locker,false))
 				error_reason = ("#{reasonNotAllowed(s1,checkLockerAvaliable(@locker,false))}")
 			elsif reasonNotAllowed(s1,checkLockerAvaliable(@locker,false)) != "" and reasonNotAllowed(s2,checkLockerAvaliable(@locker,false)) != ""
@@ -119,12 +123,15 @@ class LockerMaster
 			else
 				error_reason = ("#{reasonNotAllowed(s1,checkLockerAvaliable(@locker,false))} #{reasonNotAllowed(s2,checkLockerAvaliable(@locker,false))}")
 			end
-
+	#returns unsuccessfully and reason(s) why
 			return false , error_reason;
 		end
 
 	end
-	#public  this is an alternate method; takes in array locker, array of student1
+	
+	#this is an alternate method; 
+	#takes in array locker floor buildings/floor ["#","#",ect], array of student1["FN","LN","ID#"]
+	#this is currently only being used for "1300-SINGLES" Lockers
 	#EVERY VALUE MUST BE ENTERED AS A STRING
 	public
 	def createSoloLocker (l, s1)
@@ -133,61 +140,50 @@ class LockerMaster
 		@rownum = findNextAvaliableRow(@@worksheet);
 		
 		
-		if(personCombo(@student1) and soloAllowed(@student1) and checkLockerAvaliable(@locker,true)[0])
+		if(personCombo(@student1) and checkLockerAvaliable(@locker,true)[0])
+	#if they pass the tests, writes down Student ID then Lockeruniq next to it
 			@@worksheet.add_cell(@rownum, 0, "#{@student1[2]}");
 			@@worksheet.add_cell(@rownum, 1, "#{checkLockerAvaliable(@locker,false)[1][2]}");
 			
 			@@lbook.write("#{@@locker_database}.xlsx");
 			@b=Time.new ;
 			puts "#{@b-@a}";
+	#returns that locker was made and returns an array of all the locker information 
 			return true, checkLockerAvaliable(@locker,false)[1];
 		else
-			bbb = reasonNotAllowed(s1,checkLockerAvaliable(@locker,false));
-			if(!soloAllowed(s1))
-				aaa = "#{s1[0]} #{s1[1]} cannot have a locker by themself"
-				return false, aaa;
-			end
-			return false , bbb;
+	#returns unsuccessfully and reason(s) why
+			return false , reasonNotAllowed(s1,checkLockerAvaliable(@locker,false));
 		end
 	end
-	#private checks if name matches up to id on database provided 
-	#goes id , last, first
+	
+	#checks if stu matches up to a person on database provided 
+	#stu[] is  assumed to go ["First Name", "Last Name","ID #"] while @stusheet goes ["ID #","Last Name","First Name"]
 	private
-	#put list a class variable
 	def checkRealPerson (stu)
-		
 		length = findNextAvaliableRow(@stu_sheet) - 1;
-		tempstu = ["","",""];
-		temp = ["0","0","0","0"];
-		
-		#fixes stu to order of database
-		for n in 0..2
-			tempstu[n] = stu[2-n];
-		end
-		stu = tempstu;
 		
 		for worth in 0..length 
-			for gg in  0..2
-					temp[gg]= @stu_sheet[worth][gg].value;
-			end
-			
-			if(stu[0] == temp[0] && ("#{stu[1]}".casecmp("#{temp[1]}") == 0) && ("#{stu[2]}".casecmp("#{temp[2]}") == 0))
+			if(stu[2] == @stu_sheet[worth][0].value && ("#{stu[1]}".casecmp("#{@stu_sheet[worth][1].value}") == 0) && ("#{stu[0]}".casecmp("#{@stu_sheet[worth][2].value}") == 0))
 				@grdlvl = @stu_sheet[worth][4];
 				return true;
 			end
 		end
 		
-		tpp= false;
+		default = false;
 	end
 	
+	#returns grade level if such person exists
+	#stu[] is  assumed to go ["First Name", "Last Name","ID #"];
 	public
 	def getGradeLvl(stu)
-		if(checkRealPerson(stu))
-			return	@grdlvl;
-		end
 		a = 0;
+		if(checkRealPerson(stu))
+			a = @grdlvl;
+		end
 	end
 	
+	#Finalizes the lockers by creating two workbooks, one that the School Administrators can look at and one specifically for ETIS
+	#Also clears the database of all assigned lockers
 	public 
 	def clearAll()
 		clear_book = RubyXL::Workbook.new;
@@ -200,6 +196,7 @@ class LockerMaster
 		clear_sheet[0][1].change_contents('Lockeruniq',clear_sheet[0][0].formula);
 		clear_sheet.add_cell(0,2,"First Name");
 		clear_sheet.add_cell(0,3,"Last Name");
+		
 		for rows in 1...length
 			iD_num = clear_sheet[rows][0].value;
 			location = findPerson(iD_num,@stu_sheet);
@@ -208,7 +205,6 @@ class LockerMaster
 				clear_sheet.add_cell(rows,3,"#{@stu_sheet[location][1].value}");
 			end
 		end
-		
 		
 		eTIS_book = RubyXL::Workbook.new;
 		eTIS_sheet = @@lbook["Student Assignments"];
@@ -231,7 +227,7 @@ class LockerMaster
 		clean_book.write("#{@@locker_database}.xlsx");
 	end
 	
-	public
+	private
 	def findPerson(id,c_sheet)
 		length = findNextAvaliableRow(c_sheet);
 		puts "#{length}"
@@ -240,22 +236,18 @@ class LockerMaster
 			if(id.to_i == c_sheet[distance][0].value.to_i)
 				return distance;
 			end
-			
 		end
 		
 		dd = -1 ;
 	end
 	
-	
-	#private enter id num, checks if the person has been entered on spreadshhet
-	#fix it for solo
+	#enter id num, checks if the person has been entered on spreadshhet
 	private
 	def personNotUsed(stu)
-
-		rr = findNextAvaliableRow(@@worksheet) - 1;
+		length = findNextAvaliableRow(@@worksheet) - 1;
 		
-		for xc in 0..(rr)
-				if(@@worksheet[xc][0].value == stu[2])
+		for place in 0..(length)
+				if(@@worksheet[place][0].value == stu[2])
 					return false;
 				end
 		end
@@ -268,31 +260,28 @@ class LockerMaster
 		if(checkRealPerson(stu) and personNotUsed(stu))
 			we = true;
 		end
-		
 	end
-	#private takes in locker array checks database on avaliability
-	#nvm(also create/adds to list of used lockers)nvm instead deletes from list created from list 
-	#$$change to locker num return$$
+	#takes in locker array checks database on avaliability
 	private
 	def checkLockerAvaliable(lock,rewrite)
-		for as in 0..(lock.length-1)
-			qq = findNextAvaliableRow((@@lbook["#{lock[as]}"]))
-			if(qq != 0)
-				ww =(Random.new).rand(0..(qq-1));
-				df = (@@lbook["#{lock[as]}"])[ww][0].value;
-				toos = (@@lbook["#{lock[as]}"])[ww][1].value;
+		for building_spot in 0..(lock.length-1)
+			length = findNextAvaliableRow((@@lbook["#{lock[building_spot]}"]))
+			if(length != 0)
+				ww =(Random.new).rand(0..(length-1));
+				df = (@@lbook["#{lock[building_spot]}"])[ww][0].value;
+				toos = (@@lbook["#{lock[building_spot]}"])[ww][1].value;
 				if(rewrite)
-					@@lbook["#{lock[as]}"].delete_row(ww);
+					@@lbook["#{lock[building_spot]}"].delete_row(ww);
 					@bob = df;
 					@nii = toos
 				end
-				return true, [lock[as], @bob, @nii] ;
+				return true, [lock[building_spot], @bob, @nii] ;
 			end
 		end
-		
 		er = [false, [1, 2]];
 	end
 	
+	#takes out an assigned locker based on lockeruniq and puts it back into the end of the spreadsheet it belongs to
 	public
 	def deleteLocker(student_ID)
 		length = findNextAvaliableRow(@@worksheet);
@@ -332,41 +321,76 @@ class LockerMaster
 		@@worksheet.delete_row(place_hold);
 		@@lbook.write("#{@@locker_database}.xlsx");
 	end
-	#########put in accessor for if sheet is empty#########
 	
-	# the special exception list of people get alternate locker constructor
-	private
-	def soloAllowed (stu)
+	#returns which floors are avaliable and which aren't in two separate hashes,respectively
+	public
+	def getAvailableFloors()
 		
-		#### #   # ##### #### ####      ## #### ##    ####
-		#    ##  #   #   #    #  #     #   #  # #  #  #
-		###  # # #   #   ###  ####    #    #  # #   # ###
-		#    #  ##   #   #    ##       #   #  # #  #  #
-		#### #   #   #   #### # ##      ## #### ##    ####
-		
-		op = true;
-	end
-	#combine by adding parameter
-	#use recursion-->problems with recursion
-	private
-	def findNextAvaliableRow(database)
-		y=0;
-		until (database[y][0].value == nil)
-			y=y+1;
+		hash_array = ["","","","","","","","","","",""]; 
+		building_array = ["","","","","","","","","","",""]
+		for sheet_tab in 2..12
+			hash_array[sheet_tab-2] =  isEmpty(@@lbook[sheet_tab]);
 		end
-		rescue Exception
-			return y;
-		# @information = database;
-		# if(@information[@jking][0].nil?)
-			# rg = @jking;
-			# @jking = 0;
-			# return rg;
-		# else
-			# @jking = @jking + 1;
-			# findNextAvaliableRow(information);
-		# end
+		
+		avaliable_hash = Hash.new;
+		empty_hash = Hash.new;
+		for spot in 0..10
+			a = @@lbook[spot+2].sheet_name;
+			temp_hash = {"#{createSentence(a)}" => (a)}
+			
+			if(hash_array[spot] == false && !createSentence(a).nil?)
+				avaliable_hash.merge!(temp_hash);
+			elsif(hash_array[spot] == true && !createSentence(a).nil?)
+				empty_hash.merge!(temp_hash);
+			end
+		end
+		
+		return avaliable_hash,empty_hash;
 	end
-	#got it done#fix here checkLockerAvaliable is called a second time #fixed the new error
+	
+	#input building/floor (ex. 1300,7100) and get if it is empty or not 
+	private 
+	def isEmpty(address)
+		if(findNextAvaliableRow(address) != 0)
+			return false;
+		end
+		default = true;
+	end
+	
+	private
+	def createSentence(bldg)
+		if(bldg.length >4)
+			return nil;
+		end
+		
+		thousands = (bldg.to_i/1000).to_i;
+		hundreds = (bldg.to_i%1000)/100;
+		floor = "";
+		
+		if(hundreds==1)
+			floor = "First";
+		elsif(hundreds==2)
+			floor = "Second";
+		elsif(hundreds==3)
+			floor = "Third";
+		end
+		
+			return "#{thousands}000 Building - #{floor} Floor";
+	end
+	
+	#finds the length of the worksheet
+	public
+	def findNextAvaliableRow(database)
+		if(database[@jking].nil?)
+			rg = @jking;
+			@jking = 0;
+			return rg;
+		else
+			@jking = @jking + 1;
+			findNextAvaliableRow(database);
+		end
+	end
+	#returns the reason why a locker canot be created
 	private
 	def reasonNotAllowed (stu,lock)
 		a="";

@@ -1,20 +1,19 @@
 <link rel="stylesheet" href="/assets/bootstrap/css/maxcdn.css">
 <script src="/assets/stylesheets/js/scripts.js"></script>
 
-<script>
-  //checks if only one student is entered
-  function checkSingle(){
-    puts "GOT TO SINGLE"
-    var second = document.forms[mainForm][check].value;
-    if (second == null || second == ""){
-
-      alert("GOT TO SINGLE");
-      return false;
-    }
+ <script>
+function checkSingle(){
+  var second = document.getElementById("check").value;
+  var first = document.getElementById("first").value;
+  if (second == "" && first != ""){
+    
+    alert(second);
   }
+}
 </script>
 
 <body>
+
     <div class="register-container container main">
           <div class="row">
             <div class="iphone span3">
@@ -29,19 +28,19 @@
 
                   <h2>REGISTER FOR A <span class="blue"> <strong> LOCKER</strong></span></h2>
 
-                  <%= f.text_field :name1, :required => true, :class => 'left', :placeholder => "First name"%>
+                  <%= f.text_field :name1, :required => true, :class => 'left', :placeholder => "First name", :id => 'first'%>
 
                   <%= f.text_field :lastName1, :required => true, :class => 'middle', :placeholder => "Last name"%>
 
                   <%= f.text_field :studentID1, :required => true, :class => 'right', :placeholder => "ID"%>
 
-                  <%= f.text_field :name2, :class => 'left', :placeholder => "Partner's first name", html:{name: "check"}%>
+                  <%= f.text_field :name2, :class => 'left', :placeholder => "Partner's first name", :id => 'check'%>
 
                   <%= f.text_field :lastName2, :class => 'middle', :placeholder => "Partner's last name"%>
 
                   <%= f.text_field :studentID2, :placeholder => "ID", :class => "right"%>
 
-                  <% floor_list = {"1000 Building - First Floor"  => 1100, 
+                  <% floor_list = {"1000 Building - First Floor"  => 1100,
                                    "1000 Building - Third Floor"  => 1300,
                                    "2000 Building - First Floor"  => 2100,
                                    "2000 Building - Second Floor" => 2200, 
@@ -54,20 +53,20 @@
 
                   <div class="one-line">
                   <%= f.label :pref1, "1st Choice of Position: ", :class => "select-label"%>
-                  <%= f.select :pref1, floor_list, {include_blank: true}, :required => true%>
+                  <%= f.select :pref1, session[:available_floors], {include_blank: true}, :required => true%>
                   </div>
 
                   <div class="one-line">
                   <%= f.label :pref2, "2nd Choice of Position: ", :class => "select-label"%>
-                  <%= f.select :pref2, floor_list, {include_blank: true}, :required => true%>
+                  <%= f.select :pref2, session[:available_floors], {include_blank: true}, :required => true%>
                   </div>
 
                   <div class="one-line">
                   <%= f.label :pref3, "3rd Choice of Position: ", :class => "select-label"%>
-                  <%= f.select :pref3, floor_list, {include_blank: true}, :required => true%>
+                  <%= f.select :pref3, session[:available_floors], {include_blank: true}, :required => true%>
                   </div>
 
-                  <%= f.submit 'REGISTER', :class => "input-submit"%>
+                  <button onclick="checkSingle()" id="register-button">REGISTER</button>
                   
                   <% end %>
               </div>

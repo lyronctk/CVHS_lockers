@@ -8,7 +8,11 @@ jQuery(document).ready(function() {
       "assets/stylesheets/img/backgrounds/1.jpg"
     , "assets/stylesheets/img/backgrounds/2.jpg"
     , "assets/stylesheets/img/backgrounds/3.jpg"
-    ], {duration: 3000, fade: 750});
+    , "assets/stylesheets/img/backgrounds/4.jpg"
+    , "assets/stylesheets/img/backgrounds/5.jpg"
+    , "assets/stylesheets/img/backgrounds/6.jpg"
+     , "assets/stylesheets/img/backgrounds/7.jpg"
+    ], {duration: 4000, fade: 750});
 
     /*
         Tooltips
