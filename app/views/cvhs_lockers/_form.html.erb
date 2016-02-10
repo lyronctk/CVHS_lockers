@@ -2,12 +2,14 @@
 <script src="/assets/stylesheets/js/scripts.js"></script>
 
  <script>
-function checkSingle(){
+function checkSingle(btn){
   var second = document.getElementById("check").value;
   var first = document.getElementById("first").value;
   if (second == "" && first != ""){
-    
-    alert(second);
+
+    // make pop-up only appear once
+    btn.onclick = null;
+    return confirm("Are you sure? Registering by yourself guarantees a 'single' locker in the 3rd floor of the 1000 building (if there are some still available).");
   }
 }
 </script>
@@ -49,24 +51,24 @@ function checkSingle(){
                                    "5000 Building - Third Floor"  => 5300, 
                                    "7000 Building - First Floor"  => 7100,
                                    "7000 Building - Second Floor" => 7200, 
-                                   "7000 Building - Third Floor"  => 7300}  %>
+                                   "7000 Building - Third Floor"  => 7300} %>
 
                   <div class="one-line">
                   <%= f.label :pref1, "1st Choice of Position: ", :class => "select-label"%>
-                  <%= f.select :pref1, session[:available_floors], {include_blank: true}, :required => true%>
+                   <%= select_tag(:pref1, options_for_select(floor_list, {disabled: [1100]} ), :include_blank => true, :required => true) %>
                   </div>
 
                   <div class="one-line">
                   <%= f.label :pref2, "2nd Choice of Position: ", :class => "select-label"%>
-                  <%= f.select :pref2, session[:available_floors], {include_blank: true}, :required => true%>
+                  <%= f.select :pref2, floor_list, {include_blank: true}, :required => true%>
                   </div>
 
                   <div class="one-line">
                   <%= f.label :pref3, "3rd Choice of Position: ", :class => "select-label"%>
-                  <%= f.select :pref3, session[:available_floors], {include_blank: true}, :required => true%>
+                  <%= f.select :pref3, floor_list, {include_blank: true}, :required => true%>
                   </div>
 
-                  <button onclick="checkSingle()" id="register-button">REGISTER</button>
+                  <button onclick="return checkSingle(this)" id="register-button">REGISTER</button>
                   
                   <% end %>
               </div>

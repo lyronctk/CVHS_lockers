@@ -29,7 +29,7 @@ class LockerMaster
 		if(@@lbook[6].nil?)
 			@@lbook.add_worksheet('1100');
 			@@lbook.add_worksheet('1300');
-			@@lbook.add_worksheet('1300-SINGLES');
+			@@lbook.add_worksheet('1300_SINGLES');
 			@@lbook.add_worksheet('2100');
 			@@lbook.add_worksheet('2200');
 			@@lbook.add_worksheet('2300');
@@ -52,9 +52,9 @@ class LockerMaster
 							@@lbook["1#{oa}00"].add_cell(roo,0,"#{row[3].value}");
 							@@lbook["1#{oa}00"].add_cell(roo,1,"#{row[0].value}");
 						elsif(row[4].value == oa && ((row[0].value).to_i > 1004048) )
-							poo = findNextAvaliableRow(@@lbook["1300-SINGLES"]);
-							@@lbook["1300-SINGLES"].add_cell(poo,0,"#{row[3].value}");
-							@@lbook["1300-SINGLES"].add_cell(poo,1,"#{row[0].value}");
+							poo = findNextAvaliableRow(@@lbook["1300_SINGLES"]);
+							@@lbook["1300_SINGLES"].add_cell(poo,0,"#{row[3].value}");
+							@@lbook["1300_SINGLES"].add_cell(poo,1,"#{row[0].value}");
 						end
 					end
 				elsif(row[1].value == 2000)
@@ -131,7 +131,7 @@ class LockerMaster
 	
 	#this is an alternate method; 
 	#takes in array locker floor buildings/floor ["#","#",ect], array of student1["FN","LN","ID#"]
-	#this is currently only being used for "1300-SINGLES" Lockers
+	#this is currently only being used for "1300_SINGLES" Lockers
 	#EVERY VALUE MUST BE ENTERED AS A STRING
 	public
 	def createSoloLocker (l, s1)
@@ -381,7 +381,9 @@ class LockerMaster
 	#finds the length of the worksheet
 	public
 	def findNextAvaliableRow(database)
-		if(database[@jking].nil?)
+		if(database.nil?)
+			return 0
+		elsif(database[@jking].nil?)
 			rg = @jking;
 			@jking = 0;
 			return rg;
