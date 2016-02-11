@@ -1,9 +1,9 @@
-require 'rubyXL'
 #PROPERTY OF ANDERW DERTLI AND LYRON CO TING KEH
 class LockerMaster
 	def initialize (locs, persons)
 			@a= Time.new ;
-		@jking = 0;
+			
+		@@jking = 0;
 		@@locker_database = locs;
 		@@student_database = persons;
 		
@@ -88,7 +88,8 @@ class LockerMaster
 		end
 		
 			hh = Time.new;
-			puts "#{ff-@a}\n#{gg-ff}\n#{hh-gg}\n#{hh-@a}";
+			puts "#{ff-@a}\n#{gg-ff}\n#{hh-gg}\n#{hh-@a}"; 
+
 	end
 	
 	#takes in array of locker buildings/floor ex)["1300","7200",ect], array of student1["FN","LN","ID#"], array of student2["FN","LN","ID#"] and tries to assign locker
@@ -324,7 +325,7 @@ class LockerMaster
 	
 	#returns which floors are avaliable and which aren't in two separate hashes,respectively
 	public
-	def getAvailableFloors()
+	def getAvaliableFloors()
 		
 		hash_array = ["","","","","","","","","","",""]; 
 		building_array = ["","","","","","","","","","",""]
@@ -382,13 +383,13 @@ class LockerMaster
 	public
 	def findNextAvaliableRow(database)
 		if(database.nil?)
-			return 0
-		elsif(database[@jking].nil?)
-			rg = @jking;
-			@jking = 0;
+			return 0;
+		elsif(database[@@jking].nil?)
+			rg = @@jking;
+			@@jking = 0;
 			return rg;
 		else
-			@jking = @jking + 1;
+			@@jking = @@jking + 1;
 			findNextAvaliableRow(database);
 		end
 	end

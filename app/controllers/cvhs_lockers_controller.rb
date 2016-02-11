@@ -1,6 +1,5 @@
 class CvhsLockersController < ApplicationController
   before_action :set_cvhs_locker, only: [:show, :edit, :update, :destroy]
-  before_filter :check_available, :only => :new
 
   # GET /cvhs_lockers
   # GET /cvhs_lockers.json
@@ -24,10 +23,10 @@ class CvhsLockersController < ApplicationController
   # GET /cvhs_lockers/new
   def new
     @cvhs_locker = CvhsLocker.new
-    # master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
-    # floors = master.getAvailableFloors();
-    # # session[:available_floors] = floors[0]
-    # session[:full_floors] = floors[1]
+    apprentice = (LockerApprentice).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'))
+    floors = apprentice.getFilledFloors();
+    # session[:available_floors] = floors[0]
+    session[:filled_floors] = floors
   end
 
   def disclaimer
@@ -118,10 +117,6 @@ class CvhsLockersController < ApplicationController
   end
 
   private
-    def check_available
-        session[:available_floors] = {"1000 Building - First Floor"  => 1100} 
-    end
-
     # Use callbacks to  share common setup or constraints between actions.
     def set_cvhs_locker
       @cvhs_locker = CvhsLocker.find(params[:id])
