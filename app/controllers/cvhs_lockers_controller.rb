@@ -41,7 +41,7 @@ class CvhsLockersController < ApplicationController
   def create
     @cvhs_locker = CvhsLocker.new(cvhs_locker_params)
 
-    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
+    master = (LockerMaster).new(File.join(Rails.root, 'lib', "CVHS Locker Template and Guide"), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
 
     if @cvhs_locker[:name2]  == "" 
       solo_array = [cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1]]
@@ -49,6 +49,7 @@ class CvhsLockersController < ApplicationController
     else
       # CREATE PARAMETERS FOR LOCKERMASTER
       locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
+      puts "LOCKER ARRAY IS: #{locker_array.to_s}"
       person1_array = [cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1]]
       person2_array = [cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]]
       
@@ -101,7 +102,6 @@ class CvhsLockersController < ApplicationController
   # DELETE /cvhs_lockers/1.json
   def destroy
     master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
-    puts ''
     master.deleteLocker(@cvhs_locker.studentID1);
 
     @cvhs_locker.destroy

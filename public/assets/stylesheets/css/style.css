@@ -35,10 +35,15 @@
 
 #download-button{
     float: left;
-    margin-left: 50px;
     padding: 5px 10px;
-    margin-left: 50px;
-    background: #D80000  ;
+    margin: 30px;
+    background: #D80000;
+}
+
+#settings-icon{
+    position: relative;
+    float: right;
+    margin-top: -42px;
 }
 
 
@@ -95,9 +100,7 @@ a:hover { text-decoration: none; }
 
 .back{
     cursor: pointer;
-    width: 60px;
-    height: 29px;
-    margin-top: -5px;
+    padding: 5px 10px; 
 }
 
 /*SPINNER*/
@@ -491,4 +494,7 @@ form select{
     padding-bottom: 10px;
 }
 
+ .black{
+    color: black;
+ }
 
