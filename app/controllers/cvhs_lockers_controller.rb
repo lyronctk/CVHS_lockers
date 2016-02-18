@@ -40,27 +40,34 @@ class CvhsLockersController < ApplicationController
   # POST /cvhs_lockers.json
   def create
     @cvhs_locker = CvhsLocker.new(cvhs_locker_params)
+    grade_restriction = Restriction.first[:grades]
 
     master = (LockerMaster).new(File.join(Rails.root, 'lib', "CVHS Locker Template and Guide"), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
 
-    if @cvhs_locker[:name2]  == "" 
-      solo_array = [cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1]]
-      allowed = master.createSoloLocker(["1300_SINGLES"], solo_array)
+    # CREATES INFO FOR LOCKER MASTER
+    person1_array = [cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1]]
+    person2_array = [cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]]
+    locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
+
+    puts "GRADE LEVEL IS #{master.getGradeLvl(person1_array)}"
+    puts "RESTRICTION IS#{grade_restriction} "
+
+    if master.getGradeLvl(person1_array).to_i >= grade_restriction || master.getGradeLvl(person2_array).to_i >= grade_restriction
+      if @cvhs_locker[:name2]  == "" 
+        allowed = master.createSoloLocker(["1300_SINGLES"], person1_array)
+      else
+        # STORES VALIDATION AND LOCKER INFORMATION
+        allowed = master.createLocker(locker_array, person1_array, person2_array)
+      end
+
+      if(allowed[0])
+        @cvhs_locker[:lockerNum] = allowed[1][1];
+        @cvhs_locker[:buildingNum] = allowed[1][0];
+      end
     else
-      # CREATE PARAMETERS FOR LOCKERMASTER
-      locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
-      puts "LOCKER ARRAY IS: #{locker_array.to_s}"
-      person1_array = [cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1]]
-      person2_array = [cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]]
-      
-      # STORES VALIDATION AND LOCKER INFORMATION
-      allowed = master.createLocker(locker_array, person1_array, person2_array)
+      allowed = false, "Your grade level is not permitted to register yet."
     end
 
-    if(allowed[0])
-      @cvhs_locker[:lockerNum] = allowed[1][1];
-      @cvhs_locker[:buildingNum] = allowed[1][0];
-    end
     
     respond_to do |format|
       if allowed[0]

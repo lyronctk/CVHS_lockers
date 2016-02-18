@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20160218023931) do
   end
 
   create_table "restrictions", force: :cascade do |t|
-    t.integer  "floors"
+    t.string   "floors"
     t.integer  "grades"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

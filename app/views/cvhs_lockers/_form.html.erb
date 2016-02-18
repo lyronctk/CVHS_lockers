@@ -80,7 +80,8 @@ function loadAjax() {
 
                   <%= f.text_field :studentID2, :placeholder => "ID", :class => "right"%>
 
-                  <% floor_list = {"1000 Building - First Floor"  => 1100, 
+                  
+                <%floor_list = {"1000 Building - First Floor"  => 1100, 
                                    "1000 Building - Third Floor"  => 1300,
                                    "2000 Building - First Floor"  => 2100,
                                    "2000 Building - Second Floor" => 2200, 
@@ -89,21 +90,27 @@ function loadAjax() {
                                    "5000 Building - Third Floor"  => 5300, 
                                    "7000 Building - First Floor"  => 7100,
                                    "7000 Building - Second Floor" => 7200, 
-                                   "7000 Building - Third Floor"  => 7300}  %>
+                                   "7000 Building - Third Floor"  => 7300}  
+
+                  # GETS RESTRICATED FLOORS FROM DATABASE AND TURNS INTO INT ARRAY
+                  restricted_floors = Restriction.first[:floors].split(',').map(&:to_i)
+
+                  display_floors = session[:filled_floors] + restricted_floors
+                  %>
 
                    <div class="one-line">
                   <%= f.label :pref1, "1st Choice of Position: ", :class => "select-label"%>
-                   <%= select_tag('cvhs_locker[pref1]', options_for_select(floor_list, {disabled: session[:filled_floors]} ), :include_blank => true, :required => true) %>
+                   <%= select_tag('cvhs_locker[pref1]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true) %>
                   </div>
 
                    <div class="one-line">
                   <%= f.label :pref2, "2nd Choice of Position: ", :class => "select-label"%>
-                  <%= select_tag('cvhs_locker[pref2]', options_for_select(floor_list, {disabled: session[:filled_floors]} ), :include_blank => true, :required => true) %>
+                  <%= select_tag('cvhs_locker[pref2]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true) %>
                   </div>
 
                   <div class="one-line">
                   <%= f.label :pref3, "3rd Choice of Position: ", :class => "select-label"%>
-                   <%= select_tag('cvhs_locker[pref3]', options_for_select(floor_list, {disabled: session[:filled_floors]} ), :include_blank => true, :required => true) %>
+                  <%= select_tag('cvhs_locker[pref3]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true) %>
                   </div>
 
                   <button onclick="return checkSingle(this);" id="register-button">REGISTER</button>

@@ -6,12 +6,36 @@ class ApplicationController < ActionController::Base
 
   def changeRestriction
 
-      for i in 0..9
-        current_floor = 'floor' + i.to_s
-        puts "GRADE IS: #{params[:grade]} and FLOOR IS #{params[current_floor]}"
-      end
+    # ONLY HAPPENS FIRST UPDATE
+    if(!Restriction.first)
+      Restriction.create!(grades: 9, floors:"")
+    end
 
-      redirect_to '/index', notice: "Settings Updated!"
+    # GETS CHECKBOX VALUES
+    restricted_floors = ""
+    update = false
+    for i in 0..10
+      counter_floor = 'floor' + i.to_s
+
+      if counter_floor == "none"
+        update = true
+        break
+      end
+      
+      if(params[counter_floor])
+        restricted_floors += (params[counter_floor]+',')
+      end
+    end
+
+    if(params[:grade] != "")
+      Restriction.first.update_attribute(:grades, params[:grade])
+    end
+
+    if(restricted_floors != "" || update) 
+      Restriction.first.update_attribute(:floors, restricted_floors)
+    end
+
+    redirect_to '/index', notice: "Settings Updated!"
   end
 
 end
