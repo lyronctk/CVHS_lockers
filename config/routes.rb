@@ -9,4 +9,8 @@ Rails.application.routes.draw do
 
   get 'new' => "cvhs_lockers#new"
 
+  get 'index' => "cvhs_lockers#index"
+
+  post 'restricted' => "application#changeRestriction"
+
 end
