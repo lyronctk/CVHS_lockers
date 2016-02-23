@@ -25,33 +25,41 @@
                 <h4 class="modal-title">Settings</h4>
               </div>
 
-              <!-- DOWNLOAD XLSX SHEET -->
-             <a href='/download' download id="download-button" class="master-button">Generate Excel File</a>
+              <div id="settings-buttons">
+                  <!-- DOWNLOAD XLSX SHEET -->
+                 <a href='/download' download id="download-button" class="master-button">Generate Excel File</a>
 
-             <!-- UPDATE RESTRICTIONS -->
-             <form action="restricted" method="post">
+                 <a id="download-button" class="master-button">Switch Student Locator</a>
+             </div>
 
-                <!-- GRADE RESTRICTION -->
-                <input type="radio" name="grade" value='9'> 9th<br>
-                <input type="radio" name="grade" value="10"> 10th<br>
-                <input type="radio" name="grade" value="11"> 11th<br>
-                <input type="radio" name="grade" value="12"> 12th<br>
+             <div id="settings">
+               <!-- UPDATE RESTRICTIONS -->
+               <form action="restricted" method="post">
 
-                <!-- FLOOR RESTRICTION -->
-                <input type="checkbox" name="floor0" value="none">None<br>
-                <input type="checkbox" name="floor1" value="1100">1000 Building - First Floor<br>
-                <input type="checkbox" name="floor2" value="1300">1000 Building - Third Floor<br>
-                <input type="checkbox" name="floor3" value="2100">2000 Building - First Floor<br>
-                <input type="checkbox" name="floor4" value="2200">2000 Building - Second Floor<br>
-                <input type="checkbox" name="floor5" value="2300">2000 Building - Third Floor<br>
-                <input type="checkbox" name="floor6" value="5200">5000 Building - Second Floor<br>
-                <input type="checkbox" name="floor7" value="5300">5000 Building - Third Floor<br>
-                <input type="checkbox" name="floor8" value="7100">7000 Building - First Floor<br>
-                <input type="checkbox" name="floor9" value="7200">7000 Building - Second Floor<br>
-                <input type="checkbox" name="floor10" value="7300">7000 Building - Third Floor<br>
+                    <h2>Change Grade Restriction</h2>
+                    <!-- GRADE RESTRICTION -->
+                    <input type="radio" name="grade" value='9'> 9th<br>
+                    <input type="radio" name="grade" value="10"> 10th<br>
+                    <input type="radio" name="grade" value="11"> 11th<br>
+                    <input type="radio" name="grade" value="12"> 12th<br>
 
-                <input type="submit" value="Submit">
-             </form>
+                    <h2>Change Floor Restriction</h2>
+                    <!-- FLOOR RESTRICTION -->
+                    <input type="checkbox" name="floor0" value="none">None<br>
+                    <input type="checkbox" name="floor1" value="1100">1000 Building - First Floor<br>
+                    <input type="checkbox" name="floor2" value="1300">1000 Building - Third Floor<br>
+                    <input type="checkbox" name="floor3" value="2100">2000 Building - First Floor<br>
+                    <input type="checkbox" name="floor4" value="2200">2000 Building - Second Floor<br>
+                    <input type="checkbox" name="floor5" value="2300">2000 Building - Third Floor<br>
+                    <input type="checkbox" name="floor6" value="5200">5000 Building - Second Floor<br>
+                    <input type="checkbox" name="floor7" value="5300">5000 Building - Third Floor<br>
+                    <input type="checkbox" name="floor8" value="7100">7000 Building - First Floor<br>
+                    <input type="checkbox" name="floor9" value="7200">7000 Building - Second Floor<br>
+                    <input type="checkbox" name="floor10" value="7300">7000 Building - Third Floor<br>
+
+                    <input type="submit" value="Save Changes" class="master-button" id="settings-submit">
+               </form>
+             </div>
 
             </div>
 
