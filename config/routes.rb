@@ -11,6 +11,10 @@ Rails.application.routes.draw do
 
   get 'index' => "cvhs_lockers#index"
 
+  get 'clear' => "cvhs_lockers#clear_all"
+
+  get 'admin_login' => 'cvhs_lockers#admin_login'
+
   post 'restricted' => "application#changeRestriction"
 
 end

@@ -175,10 +175,10 @@ class LockerMaster
 	def clearAll()
 		t= Time.new
 	
-		eTIS_book = RubyXL::Workbook.new;
-		eTIS_sheet = @@lbook["Student Assignments"].dup();
-		eTIS_book.worksheets[0] = eTIS_sheet; 
-		eTIS_book.write("FINAL Locker Sheet #{t.year}-ETIS.xlsx");
+		# eTIS_book = RubyXL::Workbook.new;
+		# eTIS_sheet = @@lbook["Student Assignments"].dup();
+		# eTIS_book.worksheets[0] = eTIS_sheet; 
+		# eTIS_book.write("FINAL Locker Sheet #{t.year}-ETIS.xlsx");
 		
 		cleaR_book = RubyXL::Workbook.new;
 		cleaR_sheet = @@lbook["Student Assignments"];
@@ -214,8 +214,8 @@ class LockerMaster
 			clean_sheet[thing][2].change_contents("B",@@lbook[0][1][2].formula);
 		end
 		# File.delete("#{@@locker_database}.xlsx");
-		clean_book.write("#{@@locker_database}.xlsx");
-		cleaR_book.write("Final Locker Sheet #{t.year}-ADMIN.xlsx");
+		clean_book.write(File.join(Rails.root, 'lib'), "#{@@locker_database}.xlsx");
+		cleaR_book.write(File.join(Rails.root, 'lib'), "Final Locker Sheet #{t.year}-ADMIN.xlsx");
 	end
 	
 	public

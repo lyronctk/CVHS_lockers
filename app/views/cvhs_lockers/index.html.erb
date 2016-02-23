@@ -29,7 +29,11 @@
                   <!-- DOWNLOAD XLSX SHEET -->
                  <a href='/download' download id="download-button" class="master-button">Generate Excel File</a>
 
+                 <!-- SWITCH STUDENT FILTER -->
                  <a id="download-button" class="master-button">Switch Student Locator</a>
+
+                 <!-- RESET DATABASE -->
+                 <a download id="download-button" class="master-button" style="background: #D80000" onclick="return clearAttempt()" href="/clear">Clear All</a>
              </div>
 
              <div id="settings">
@@ -155,3 +159,13 @@
     <button class="master-button back"><%= link_to 'Back', 'javascript:history.go(-1);', {:style=>'color:white;'} %> </button>
 
 </div>
+
+<script>
+    function clearAttempt() {
+       if (confirm('Are you sure?')) {
+           return confirm('This will clear the database and return a final excel sheet. This cannot be undone.')
+       } else {
+           return false;
+       }
+    }
+</script>

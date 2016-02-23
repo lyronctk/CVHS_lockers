@@ -289,6 +289,10 @@ form input[class="middle"]{
     float: left;
 }
 
+form input[class="full"]{
+    width: 100%;
+}
+
 
 form input[type='text']{
     border: 1px solid #ccc;

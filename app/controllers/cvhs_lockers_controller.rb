@@ -1,5 +1,6 @@
 class CvhsLockersController < ApplicationController
   before_action :set_cvhs_locker, only: [:show, :edit, :update, :destroy]
+  before_action :check_admin, only: :index
 
   # GET /cvhs_lockers
   # GET /cvhs_lockers.json
@@ -25,8 +26,14 @@ class CvhsLockersController < ApplicationController
     @cvhs_locker = CvhsLocker.new
     apprentice = (LockerApprentice).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'))
     floors = apprentice.getFilledFloors();
-    # session[:available_floors] = floors[0]
     session[:filled_floors] = floors
+  end
+
+  def admin_login
+    if(params[:username] == ENV["USERNAME"] && params[:password] == ENV["PASSWORD"])
+      session[:admin] = true;
+      redirect_to "/index"
+    end
   end
 
   def disclaimer
@@ -42,15 +49,12 @@ class CvhsLockersController < ApplicationController
     @cvhs_locker = CvhsLocker.new(cvhs_locker_params)
     grade_restriction = Restriction.first[:grades]
 
-    master = (LockerMaster).new(File.join(Rails.root, 'lib', "CVHS Locker Template and Guide"), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
+    master = (LockerMaster).new(File.join(Rails.root, 'lib', "CVHS Locker Template and Guide"), File.join(Rails.root, 'lib', 'student_locator'))
 
     # CREATES INFO FOR LOCKER MASTER
     person1_array = [cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1]]
     person2_array = [cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]]
     locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
-
-    puts "GRADE LEVEL IS #{master.getGradeLvl(person1_array)}"
-    puts "RESTRICTION IS#{grade_restriction} "
 
     if master.getGradeLvl(person1_array).to_i >= grade_restriction || master.getGradeLvl(person2_array).to_i >= grade_restriction
       if @cvhs_locker[:name2]  == "" 
@@ -108,7 +112,7 @@ class CvhsLockersController < ApplicationController
   # DELETE /cvhs_lockers/1
   # DELETE /cvhs_lockers/1.json
   def destroy
-    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'Student locator fall 2015'))
+    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'student_locator'))
     master.deleteLocker(@cvhs_locker.studentID1);
 
     @cvhs_locker.destroy
@@ -123,6 +127,19 @@ class CvhsLockersController < ApplicationController
     send_file File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx')
   end
 
+  # RESET DATABASE
+  def clear_all
+    t= Time.new
+    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'student_locator'))
+    
+    send_file File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx')
+    master.clearAll()
+    CvhsLocker.delete_all
+
+    send_file File.join(Rails.root, 'lib', "Final Locker Sheet #{t.year}-ADMIN.xlsx")
+    redirect_to '/index', notice: "Database Cleared"
+  end
+
   private
     # Use callbacks to  share common setup or constraints between actions.
     def set_cvhs_locker
@@ -132,5 +149,11 @@ class CvhsLockersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def cvhs_locker_params
       params.require(:cvhs_locker).permit(:name1, :lastName1, :name2, :lastName2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :lockerNum, :buildingNum)
+    end
+
+    def check_admin
+      if session[:admin] == nil
+        redirect_to "/admin_login"
+      end
     end
 end
