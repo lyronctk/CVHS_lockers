@@ -4,8 +4,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   skip_before_filter :verify_authenticity_token, :only => :changeRestriction
 
-  def changeRestriction
+  helper_method :is_admin?
 
+  def changeRestriction
     # ONLY HAPPENS FIRST UPDATE
     if(!Restriction.first)
       Restriction.create!(grades: 9, floors:"")
@@ -35,7 +36,22 @@ class ApplicationController < ActionController::Base
       Restriction.first.update_attribute(:floors, restricted_floors)
     end
 
+    # CHECKS IF PASSWORD IS INCORRECT
+    if(params[:current_password] != "" && params[:current_password] != ENV["PASSWORD"])
+      redirect_to '/index', notice: "error"
+      return
+    end
+
+
+    if(params[:current_password] != ENV["PASSWORD"] && params[:new_password] == params[:again_password] && params[:new_password] != "")
+      ENV["PASSWORD"] = params[:new_password]
+    end
+
     redirect_to '/index', notice: "Settings Updated!"
+  end
+
+  def is_admin?
+    return true if session[:admin]
   end
 
 end

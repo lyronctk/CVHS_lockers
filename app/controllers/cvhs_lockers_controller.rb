@@ -8,7 +8,7 @@ class CvhsLockersController < ApplicationController
       if params[:search] == nil
          @cvhs_lockers = CvhsLocker.paginate(page: params[:page])
       else
-         @cvhs_lockers = CvhsLocker.find_by studentID1: params[:search]
+         @cvhs_lockers = CvhsLockerdf.find_by studentID1: params[:search]
 
          if @cvhs_lockers == nil
             @cvhs_lockers = CvhsLocker.find_by studentID2: params[:search]
@@ -152,7 +152,7 @@ class CvhsLockersController < ApplicationController
     end
 
     def check_admin
-      if session[:admin] == nil
+      if !is_admin?
         redirect_to "/admin_login"
       end
     end

@@ -7,6 +7,20 @@
  *
  */
 
+.over{
+    max-height: calc(100vh - 180px);
+    overflow: auto;
+}
+
+.new-line{
+    width: 10%;
+}
+
+.password{
+    float: left;
+    width: 51%;
+}
+
  #settings{
     float: left;
     margin-left: 25px;
