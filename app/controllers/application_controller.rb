@@ -36,16 +36,16 @@ class ApplicationController < ActionController::Base
       Restriction.first.update_attribute(:floors, restricted_floors)
     end
 
-    # CHECKS IF PASSWORD IS INCORRECT
-    if(params[:current_password] != "" && params[:current_password] != ENV["PASSWORD"])
-      redirect_to '/index', notice: "error"
-      return
-    end
+    # CHECKS IF PASSWORD IS INCORRECT  - CAN'T CHANGE PASSWORDS FOR NOW
+    # if(params[:current_password] != "" && params[:current_password] != ENV["PASSWORD"])
+    #   redirect_to '/index', notice: "error"
+    #   return
+    # end
 
 
-    if(params[:current_password] != ENV["PASSWORD"] && params[:new_password] == params[:again_password] && params[:new_password] != "")
-      ENV["PASSWORD"] = params[:new_password]
-    end
+    # if(params[:current_password] != ENV["PASSWORD"] && params[:new_password] == params[:again_password] && params[:new_password] != "")
+    #   ENV["PASSWORD"] = params[:new_password]
+    # end
 
     redirect_to '/index', notice: "Settings Updated!"
   end

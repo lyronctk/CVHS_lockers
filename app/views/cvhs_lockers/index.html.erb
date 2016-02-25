@@ -68,10 +68,10 @@
                     <input type="checkbox" name="floor9" value="7200">7000 Building - Second Floor<br>
                     <input type="checkbox" name="floor10" value="7300">7000 Building - Third Floor<br>
 
-                    <h2>Change Password</h2>
+               <!--      <h2>Change Password</h2>
                     <input type="password" name="current_password" placeholder="Current Password" class="password"></input>
                     <input type="password" name="new_password" placeholder="New Password" class="password"></input>
-                    <input type="password" name="again_password" placeholder="Re-enter New Password" class="password"></input>
+                    <input type="password" name="again_password" placeholder="Re-enter New Password" class="password"></input> -->
 
 
                     <div class="new-line">
@@ -123,8 +123,6 @@
             <td><%= cvhs_locker.studentID2 %></td>
             <td><%= cvhs_locker.buildingNum %></td>
             <td><%= cvhs_locker.lockerNum %></td>
-            <td><%= link_to 'Edit', edit_cvhs_locker_path(cvhs_locker) %></td>
-            <td>-</td>
             <td><%= link_to 'Delete', cvhs_locker, :method => :delete, data: { confirm: 'Are you sure?' } %></td>
           </tr>
         <% end %>
@@ -162,8 +160,6 @@
                 <td><%= @cvhs_locker.lastName2 %></td>
                 <td><%= @cvhs_locker.studentID2 %></td>
                 <td><%= @cvhs_locker.lockerNum %></td>
-                <td><%= link_to 'Edit', edit_cvhs_locker_path(@cvhs_lockers) %></td>
-                <td>-</td>
                 <td><%= link_to 'Delete', @cvhs_lockers, :method => :delete, data: { confirm: 'Are you sure?' } %></td>
               </tr>
           </tbody>

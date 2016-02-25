@@ -8,7 +8,7 @@ class CvhsLockersController < ApplicationController
       if params[:search] == nil
          @cvhs_lockers = CvhsLocker.paginate(page: params[:page])
       else
-         @cvhs_lockers = CvhsLockerdf.find_by studentID1: params[:search]
+         @cvhs_lockers = CvhsLocker.find_by studentID1: params[:search]
 
          if @cvhs_lockers == nil
             @cvhs_lockers = CvhsLocker.find_by studentID2: params[:search]
@@ -94,21 +94,7 @@ class CvhsLockersController < ApplicationController
       end
     end
   end
-
-  # PATCH/PUT /cvhs_lockers/1
-  # PATCH/PUT /cvhs_lockers/1.json
-  def update
-    respond_to do |format|
-      if @cvhs_locker.update(cvhs_locker_params)
-        format.html { redirect_to @cvhs_locker, notice: 'Cvhs locker was successfully updated.' }
-        format.json { render :show, status: :ok, location: @cvhs_locker }
-      else
-        format.html { render :edit }
-        format.json { render json: @cvhs_locker.errors, status: :unprocessable_entity }
-      end
-    end
-  end       
-
+  
   # DELETE /cvhs_lockers/1
   # DELETE /cvhs_lockers/1.json
   def destroy
