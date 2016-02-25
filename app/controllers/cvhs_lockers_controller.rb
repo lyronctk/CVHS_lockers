@@ -5,15 +5,8 @@ class CvhsLockersController < ApplicationController
   # GET /cvhs_lockers
   # GET /cvhs_lockers.json
   def index
-      if params[:search] == nil
-         @cvhs_lockers = CvhsLocker.paginate(page: params[:page])
-      else
-         @cvhs_lockers = CvhsLocker.find_by studentID1: params[:search]
-
-         if @cvhs_lockers == nil
-            @cvhs_lockers = CvhsLocker.find_by studentID2: params[:search]
-         end
-      end
+      # @cvhs_lockers = CvhsLocker.paginate(page: params[:page])
+      @cvhs_lockers = CvhsLocker.all
   end
 
   # GET /cvhs_lockers/1 
@@ -56,7 +49,10 @@ class CvhsLockersController < ApplicationController
     person2_array = [cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]]
     locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
 
-    if master.getGradeLvl(person1_array).to_i >= grade_restriction || master.getGradeLvl(person2_array).to_i >= grade_restriction
+    puts "PERSON 1 IS: #{master.getGradeLvl(person1_array).to_s}"
+    puts "PERSON 2 IS: #{master.getGradeLvl(person2_array).to_s}"
+
+    if grade_restriction && (master.getGradeLvl(person1_array).to_i >= grade_restriction || master.getGradeLvl(person2_array).to_i >= grade_restriction)
       if @cvhs_locker[:name2]  == "" 
         allowed = master.createSoloLocker(["1300_SINGLES"], person1_array)
       else
@@ -94,7 +90,7 @@ class CvhsLockersController < ApplicationController
       end
     end
   end
-  
+
   # DELETE /cvhs_lockers/1
   # DELETE /cvhs_lockers/1.json
   def destroy

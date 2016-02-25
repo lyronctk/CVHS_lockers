@@ -420,25 +420,24 @@ form select{
 
 
 /* Search */
-#search-box{
+.search-box{
     margin-bottom: -20px;
-    float: left;
 }
 
 
 #search-submit {
     float:left;
     cursor: pointer;
-    width: 65px;
-    height: 29px;
-    margin-left: 5px;
+    width: 47px;
+    height: 20px;
+    margin-right: 5px;
 }
 
 
 /* Index */
 
 .index{
-    margin: 40px 40px;
+    margin: 40px;
     color: white;
 }
 
@@ -519,6 +518,10 @@ form select{
 .success th{
     padding: 0 100px 20px 0;
     font-size: 20px;
+}
+
+.success th#space{
+    padding: 0 160px 20px 0;
 }
 
 .success td{

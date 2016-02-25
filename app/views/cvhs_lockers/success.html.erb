@@ -7,18 +7,31 @@
 	      <tr>
 	        <th>Name</th>
 	        <th>Name</th>
-	        <th>Building</th>
+	        <th id = "space">Building</th>
 	        <th>Locker Number</th>
 	        <th colspan="3"></th>
 	      </tr>
 	    </thead>
+
+      <%floor_list = { 1100 => "1000 Building - First Floor", 
+                       1300 => "1000 Building - Third Floor",
+                       2100 => "2000 Building - First Floor",
+                       2200 => "2000 Building - Second Floor", 
+                       2300 => "2000 Building - Third Floor", 
+                       5200 => "5000 Building - Second Floor",
+                       5300 => "5000 Building - Third Floor", 
+                       7100 => "7000 Building - First Floor",
+                       7200 => "7000 Building - Second Floor", 
+                       7300 => "7000 Building - Third Floor"}  %>
 
 	    <br>
 	    <tbody>
 	        <tr>
 	            <td><%= session[:name1] + " " + session[:lastName1]%></td>
                 <td><%= session[:name2] + " " + session[:lastName2] %></td>
-                <td><%= session[:buildingNum] %></td>
+                <% puts "BUILDING NUM IS #{session[:buildingNum]}" %>
+                <% puts "FLOOR LIST IS #{floor_list[session[:buildingNum].to_i]}" %>
+                <td><%= floor_list[session[:buildingNum].to_i] %></td>
                 <td><%= session[:lockerNum] %></td>
 	        </tr>
 	    </tbody>
