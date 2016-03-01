@@ -1,3 +1,37 @@
+<script>
+// SPINNER
+function openModal() {
+          document.getElementById('modal').style.display = 'block';
+          document.getElementById('fade').style.display = 'block';
+  }
+
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+    document.getElementById('fade').style.display = 'none';
+}
+        
+function loadAjax() {
+    document.getElementById('results').innerHTML = '';
+    openModal();
+    var xhr = false;
+    if (window.XMLHttpRequest) {
+        xhr = new XMLHttpRequest();
+    }
+    else {
+        xhr = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    if (xhr) {
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                closeModal();
+                document.getElementById("results").innerHTML = xhr.responseText;
+            }
+        }
+        xhr.send(null);
+    }
+}
+</script>
+
 <link rel="stylesheet" href="/assets/bootstrap/css/maxcdn.css">
 <script src="/assets/stylesheets/js/scripts.js"></script>
 
@@ -7,6 +41,11 @@
 
          <div class="iphone span3">
          </div>
+
+         <div class="spinner" id="spinner">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+          </div>
 
          <div class="register span6 disclaimer">
             <h2>READ<span class="blue"> <strong>THIS!</strong></span></h2>
@@ -18,8 +57,15 @@
                     <li><p>You and your partner are responsible for all items in the locker. CV is not responsible for lost or stolen items from lockers.</li>
                  </ol>
               </div>
-              <a href="/new"><button id="register-button" style="margin: 15px 0">I AGREE</button></a>
+              <a href="/new"><button onClick="loadAjax();" id="register-button" style="margin: 15px 0">I AGREE</button></a>
          </div>
       </div>
    </div>
+
+    <!-- SPINNER -->
+    <div id="results"><!-- Results are displayed here --></div>
+    <div id="fade"></div>
+    <div id="modal">
+        <img id="loader" src="/assets/images/loading.gif" />
+    </div>
 </body>
