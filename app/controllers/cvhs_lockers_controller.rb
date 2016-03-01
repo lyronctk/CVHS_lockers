@@ -36,6 +36,17 @@ class CvhsLockersController < ApplicationController
   def edit
   end
 
+  # SWITCH OUT STUDNET LOCATOR
+  def upload
+    uploaded_io = params[:database_file]
+
+    File.open(Rails.root.join('lib', 'student_locator.xlsx'), 'wb') do |file|
+      file.write(uploaded_io.read)
+    end
+
+    redirect_to '/index', :notice => "Student Locator successfully replaced"
+  end
+
   # POST /cvhs_lockers
   # POST /cvhs_lockers.json
   def create

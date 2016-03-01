@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
   get 'admin_login' => 'cvhs_lockers#admin_login'
 
+  post 'upload' => 'cvhs_lockers#upload'
+
   post 'restricted' => "application#changeRestriction"
 
 end

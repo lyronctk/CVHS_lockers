@@ -1,10 +1,5 @@
 <% if flash[:notice] -%>
-  <% if flash[:notice] == "error" %>
-    <div class="alert alert-error">Incorrect password</div>
-  <% else %>
     <div class="alert alert-success"><%= flash[:notice] %></div>
-  <% end %>
-
 <% end %>
 
 <div class="index">
@@ -33,11 +28,21 @@
                   <!-- DOWNLOAD XLSX SHEET -->
                  <a href='/download' download id="download-button" class="master-button">Generate Excel File</a>
 
-                 <!-- SWITCH STUDENT FILTER -->
-                 <a id="download-button" class="master-button">Switch Student Locator</a>
-
                  <!-- RESET DATABASE -->
                  <a download id="download-button" class="master-button" style="background: #D80000" onclick="return clearAttempt()" href="/clear">Clear All</a>
+
+                 <br/><br/><br/>
+
+                  <!-- SWITCH STUDENT FILTER -->
+                 <div class="new-line">
+                   <fieldset class="upload-field">
+                    <%= form_tag({:action => 'upload'}, :multipart => true) do %>
+                      <%= file_field_tag 'database_file' %>
+                      <input type="submit" value="Upload" class="master-button" id="download-button" style="margin:0; margin-bottom: 10px">
+                    <% end %>
+                    </fieldset>
+                  </div>
+
              </div>
 
              <div id="settings">

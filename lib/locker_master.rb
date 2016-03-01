@@ -1,90 +1,99 @@
 require 'rubyXL'
-#PROPERTY OF ANDERW DERTLI AND LYRON CO TING KEH
-#THE USE AND/OR REPRODUCTION OF 'LockerMaster' OR ANY SEGMENTS OF IT IS FORBIDDEN WITHOUT THE EXPRESSED WRITTEN CONSENT OF ONE OR MORE OF SAID OWNERS
+#PROPERTY OF ANDREW S. DERTLI AND LYRON CO TING KEH
+#THE USE AND/OR REPRODUCTION OF 'LockerMaster' OR ANY SEGMENTS OF IT IS FORBIDDEN WITHOUT THE EXPRESSED WRITTEN CONSENT OF BOTH OF SAID OWNERS 
 class LockerMaster
 	def initialize (locs, persons)
+		a = Time.new;
 		@@mega_counter = 0;
 		@@locker_database = locs;
 		@@student_database = persons;
+		the_threads = [];
 		
-		#parses existing excel workbooks for student identities and locker avaliability, respectively
-		@@stu_book = RubyXL::Parser.parse("#{@@student_database}.xlsx");
-		@stu_sheet = @@stu_book.worksheets[0];
-
-		@@lbook = RubyXL::Parser.parse("#{@@locker_database}.xlsx");
-		@@lsheet = @@lbook.worksheets[0];
+		#parses existing excel workbooks for student identities
+		the_threads << Thread.new {
+			@@stu_book = RubyXL::Parser.parse("#{@@student_database}.xlsx");
+			@stu_sheet = @@stu_book.worksheets[0];
+		}
+		#parses existing excel workbooks for locker avaliability
+		the_threads << Thread.new {
+			@@lbook = RubyXL::Parser.parse("#{@@locker_database}.xlsx");
+			@@lsheet = @@lbook.worksheets[0];
 		
 		#creates sheet where student id and lockeruniq will be stored
-		if(@@lbook["Student Assignments"].nil?)
-			@@worksheet = @@lbook.add_worksheet("Student Assignments");
-			@@worksheet.add_cell(0, 0, "ID #");
-			@@worksheet.add_cell(0, 1, "Lockeruniq");
-		else
-			@@worksheet = @@lbook["Student Assignments"];
-		end
+			if(@@lbook["Student Assignments"].nil?)
+				@@worksheet = @@lbook.add_worksheet("Student Assignments");
+				@@worksheet.add_cell(0, 0, "ID #");
+				@@worksheet.add_cell(0, 1, "Lockeruniq");
+			else
+				@@worksheet = @@lbook["Student Assignments"];
+			end
 		
 		#creates each worksheet with the correct lockers inside it 
-		#the boolean should be updated to reflect that those sheets are missing but it currently does not pose a problem so I'll leave it
-		if(@@lbook[6].nil?)
-			@@lbook.add_worksheet('1100');
-			@@lbook.add_worksheet('1300');
-			@@lbook.add_worksheet('1300_SINGLES');
-			@@lbook.add_worksheet('2100');
-			@@lbook.add_worksheet('2200');
-			@@lbook.add_worksheet('2300');
-			@@lbook.add_worksheet('5200');
-			@@lbook.add_worksheet('5300');
-			@@lbook.add_worksheet('7100');
-			@@lbook.add_worksheet('7200');
-			@@lbook.add_worksheet('7300');
-			
-			length = findNextAvailableRow(@@lsheet);
-			
-			for rr in 0..(length-1)
-				row = @@lsheet[rr];
-				if(row[1].value == 1000)
-					for oa in 1..3
-						if(oa == 2)
-							next;
-						elsif(row[4].value == oa && ((row[0].value).to_i < 1004049) )
-							roo = findNextAvailableRow(@@lbook["1#{oa}00"]);
-							@@lbook["1#{oa}00"].add_cell(roo,0,"#{row[3].value}");
-							@@lbook["1#{oa}00"].add_cell(roo,1,"#{row[0].value}");
-						elsif(row[4].value == oa && ((row[0].value).to_i > 1004048) )
-							poo = findNextAvailableRow(@@lbook["1300_SINGLES"]);
-							@@lbook["1300_SINGLES"].add_cell(poo,0,"#{row[3].value}");
-							@@lbook["1300_SINGLES"].add_cell(poo,1,"#{row[0].value}");
+		#the boolean should be updated to reflect that if those sheets are missing make them but it currently does not pose a problem so I'll leave it
+			if(@@lbook[2].nil?)
+				@@lbook.add_worksheet('1100');
+				@@lbook.add_worksheet('1300');
+				@@lbook.add_worksheet('1300_SINGLES');
+				@@lbook.add_worksheet('2100');
+				@@lbook.add_worksheet('2200');
+				@@lbook.add_worksheet('2300');
+				@@lbook.add_worksheet('5200');
+				@@lbook.add_worksheet('5300');
+				@@lbook.add_worksheet('7100');
+				@@lbook.add_worksheet('7200');
+				@@lbook.add_worksheet('7300');
+				
+				length = findNextAvailableRow(@@lsheet);
+				
+				for rr in 0..(length-1)
+					row = @@lsheet[rr];
+					if(row[1].value == 1000)
+						for oa in 1..3
+							if(oa == 2)
+								next;
+							elsif(row[4].value == oa && ((row[0].value).to_i < 1004049) )
+								roo = findNextAvailableRow(@@lbook["1#{oa}00"]);
+								@@lbook["1#{oa}00"].add_cell(roo,0,"#{row[3].value}");
+								@@lbook["1#{oa}00"].add_cell(roo,1,"#{row[0].value}");
+							elsif(row[4].value == oa && ((row[0].value).to_i > 1004048) )
+								poo = findNextAvailableRow(@@lbook["1300_SINGLES"]);
+								@@lbook["1300_SINGLES"].add_cell(poo,0,"#{row[3].value}");
+								@@lbook["1300_SINGLES"].add_cell(poo,1,"#{row[0].value}");
+							end
 						end
-					end
-				elsif(row[1].value == 2000)
-					for oo in 1..3
-						if(row[4].value == oo)
-							pss = findNextAvailableRow(@@lbook["2#{oo}00"]);
-							@@lbook["2#{oo}00"].add_cell(pss,0,"#{row[3].value}");
-							@@lbook["2#{oo}00"].add_cell(pss,1,"#{row[0].value}");
+					elsif(row[1].value == 2000)
+						for oo in 1..3
+							if(row[4].value == oo)
+								pss = findNextAvailableRow(@@lbook["2#{oo}00"]);
+								@@lbook["2#{oo}00"].add_cell(pss,0,"#{row[3].value}");
+								@@lbook["2#{oo}00"].add_cell(pss,1,"#{row[0].value}");
+							end
 						end
-					end
-				elsif(row[1].value == 5000)
-					for rt in 2..3
-						if(row[4].value == rt)
-							qw = findNextAvailableRow(@@lbook["5#{rt}00"]);
-							@@lbook["5#{rt}00"].add_cell(qw,0,"#{row[3].value}"); 
-							@@lbook["5#{rt}00"].add_cell(qw,1,"#{row[0].value}");
+					elsif(row[1].value == 5000)
+						for rt in 2..3
+							if(row[4].value == rt)
+								qw = findNextAvailableRow(@@lbook["5#{rt}00"]);
+								@@lbook["5#{rt}00"].add_cell(qw,0,"#{row[3].value}"); 
+								@@lbook["5#{rt}00"].add_cell(qw,1,"#{row[0].value}");
+							end
 						end
-					end
-				elsif(row[1].value == 7000)
-					for pp in 1..3
-						if(row[4].value== pp)
-							re = findNextAvailableRow(@@lbook["7#{pp}00"]);
-							@@lbook["7#{pp}00"].add_cell(re,0,"#{row[3].value}");
-							@@lbook["7#{pp}00"].add_cell(re,1,"#{row[0].value}");
+					elsif(row[1].value == 7000)
+						for pp in 1..3
+							if(row[4].value== pp)
+								re = findNextAvailableRow(@@lbook["7#{pp}00"]);
+								@@lbook["7#{pp}00"].add_cell(re,0,"#{row[3].value}");
+								@@lbook["7#{pp}00"].add_cell(re,1,"#{row[0].value}");
+							end
 						end
 					end
 				end
+				
+				@@lbook.write("#{@@locker_database}.xlsx");
 			end
-			
-			@@lbook.write("#{@@locker_database}.xlsx");
-		end
+		}
+			the_threads.each { |thr| thr.join };
+		b= Time.new;
+		puts "#{b-a}";
 	end
 	
 	#takes in array of locker buildings/floor ex)["1300","7200",ect], array of student1["FN","LN","ID#"], array of student2["FN","LN","ID#"] and tries to assign locker
@@ -152,7 +161,7 @@ class LockerMaster
 		# puts "#{@stu_sheet} #{length}";
 		for worth in 0..length 
 			if(stu[2] == @stu_sheet[worth][0].value and ("#{stu[1]}".casecmp("#{@stu_sheet[worth][1].value}") == 0) and ("#{stu[0]}".casecmp("#{@stu_sheet[worth][2].value}") == 0))
-				@grdlvl = @stu_sheet[worth][4].value;
+				@grdlvl = @stu_sheet[worth][4];
 				return true;
 			end
 		end
@@ -175,10 +184,10 @@ class LockerMaster
 	def clearAll()
 		t= Time.new
 	
-		# eTIS_book = RubyXL::Workbook.new;
-		# eTIS_sheet = @@lbook["Student Assignments"].dup();
-		# eTIS_book.worksheets[0] = eTIS_sheet; 
-		# eTIS_book.write("FINAL Locker Sheet #{t.year}-ETIS.xlsx");
+		eTIS_book = RubyXL::Workbook.new;
+		eTIS_sheet = @@lbook["Student Assignments"].dup();
+		eTIS_book.worksheets[0] = eTIS_sheet; 
+		eTIS_book.write("FINAL Locker Sheet #{t.year}-ETIS.xlsx");
 		
 		cleaR_book = RubyXL::Workbook.new;
 		cleaR_sheet = @@lbook["Student Assignments"];
@@ -214,8 +223,8 @@ class LockerMaster
 			clean_sheet[thing][2].change_contents("B",@@lbook[0][1][2].formula);
 		end
 		# File.delete("#{@@locker_database}.xlsx");
-		clean_book.write(File.join(Rails.root, 'lib'), "#{@@locker_database}.xlsx");
-		cleaR_book.write(File.join(Rails.root, 'lib'), "Final Locker Sheet #{t.year}-ADMIN.xlsx");
+		clean_book.write("#{@@locker_database}.xlsx");
+		cleaR_book.write("Final Locker Sheet #{t.year}-ADMIN.xlsx");
 	end
 	
 	public
@@ -255,21 +264,22 @@ class LockerMaster
 	def checkLockerAvailable(lock,rewrite)
 		for building_spot in 0..(lock.length-1)
 			length = findNextAvailableRow(@@lbook["#{lock[building_spot]}"]);
-			puts "#{length}"
 			if(length != 0)
 				ww =(Random.new).rand(0..(length-1));
-				puts "#{ww}";
 				df = (@@lbook["#{lock[building_spot]}"])[ww][0].value;
 				toos = (@@lbook["#{lock[building_spot]}"])[ww][1].value;
 				if(rewrite)
 					@@lbook["#{lock[building_spot]}"].delete_row(ww);
 					@bob = df;
 					@nii = toos
+					if (length == 1)
+						@safety_1 = [lock[building_spot], @bob, @nii];
+					end
 				end
 				return true, [lock[building_spot], @bob, @nii] ;
 			end
 		end
-		er = [false, [1, 2]];
+		er = false, @safety_1;
 	end
 	
 	#takes out an assigned locker based on lockeruniq and puts it back into the end of the spreadsheet it belongs to
@@ -316,7 +326,6 @@ class LockerMaster
 	#returns which floors are avaliable and which aren't in two separate hashes,respectively
 	public
 	def getAvaliableFloors()
-		
 		hash_array = ["","","","","","","","","","",""]; 
 		building_array = ["","","","","","","","","","",""]
 		for sheet_tab in 2..12
@@ -365,7 +374,6 @@ class LockerMaster
 		elsif(hundreds==3)
 			floor = "Third";
 		end
-		
 			return "#{thousands}000 Building - #{floor} Floor";
 	end
 	
@@ -382,12 +390,6 @@ class LockerMaster
 			@@mega_counter = @@mega_counter + 1;
 			findNextAvailableRow(database);
 		end
-		# y=0;
-		# until (database[y][0].nil?)
-			# y=y+1;
-		# end
-		# rescue Exception
-			# return y;
 	end
 	#returns the reason why a locker cannot be created
 	private
