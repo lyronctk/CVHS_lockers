@@ -3,10 +3,15 @@
 <% end %>
 
 <div class="index">
+
+  <div class="spinner" id="spinner">
+    <div class="cube1"></div>
+    <div class="cube2"></div>
+  </div>
+
   <table>
 
     <div class="index-line">
-
         <!-- Search Box -->
         <input class="form-control input-transparent search-box" id="search" type="text" placeholder="Search">
         <a class="master-button" id="search-submit">Search</a>
@@ -28,8 +33,10 @@
                   <!-- DOWNLOAD XLSX SHEET -->
                  <a href='/download' download id="download-button" class="master-button">Generate Excel File</a>
 
+                 <a href='/download_final' download id="download-button" class="master-button">Download Final Sheets</a>
+
                  <!-- RESET DATABASE -->
-                 <a download id="download-button" class="master-button" style="background: #D80000" onclick="return clearAttempt()" href="/clear">Clear All</a>
+                 <a download id="download-button" class="master-button" style="background: #D80000" onclick="return clearAttempt() && loadAjax()" href="/clear">Clear All</a>
 
                  <br/><br/><br/>
 
@@ -131,6 +138,13 @@
     <br>
 
     <button class="master-button back"><%= link_to 'Back', 'javascript:history.go(-1);', {:style=>'color:white;'} %> </button>
+
+     <!-- SPINNER -->
+    <div id="results"><!-- Results are displayed here --></div>
+    <div id="fade"></div>
+    <div id="modal">
+        <img id="loader" src="/assets/images/loading.gif" />
+    </div>
 
 </div>
 

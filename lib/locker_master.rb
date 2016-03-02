@@ -174,7 +174,7 @@ class LockerMaster
 	def getGradeLvl(stu)
 		a = 0;
 		if(checkRealPerson(stu))
-			a = @grdlvl;
+			a = @grdlvl.value;
 		end
 	end
 	

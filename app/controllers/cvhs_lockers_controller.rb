@@ -60,9 +60,6 @@ class CvhsLockersController < ApplicationController
     person2_array = [cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]]
     locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
 
-    puts "PERSON 1 IS: #{master.getGradeLvl(person1_array).to_s}"
-    puts "PERSON 2 IS: #{master.getGradeLvl(person2_array).to_s}"
-
     if grade_restriction && (master.getGradeLvl(person1_array).to_i >= grade_restriction || master.getGradeLvl(person2_array).to_i >= grade_restriction)
       if @cvhs_locker[:name2]  == "" 
         allowed = master.createSoloLocker(["1300_SINGLES"], person1_array)
@@ -120,17 +117,22 @@ class CvhsLockersController < ApplicationController
     send_file File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx')
   end
 
+  def download_final
+    send_file File.join(Rails.root, "Final.zip")
+  end
+
   # RESET DATABASE
   def clear_all
     t= Time.new
     master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'student_locator'))
     
-    send_file File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx')
     master.clearAll()
     CvhsLocker.delete_all
 
-    send_file File.join(Rails.root, 'lib', "Final Locker Sheet #{t.year}-ADMIN.xlsx")
-    redirect_to '/index', notice: "Database Cleared"
+    # # RE-INITIALIZES TABS
+    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'student_locator'))
+
+    redirect_to('/index', notice: "Database Cleared (download the final sheets in settings)") and return;
   end
 
   private
