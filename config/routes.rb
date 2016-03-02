@@ -7,8 +7,6 @@ Rails.application.routes.draw do
 
   get 'download' => "cvhs_lockers#download"
 
-  get 'download_final' => "cvhs_lockers#download_final"
-
   get 'new' => "cvhs_lockers#new"
 
   get 'index' => "cvhs_lockers#index"

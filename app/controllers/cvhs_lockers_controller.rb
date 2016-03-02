@@ -117,12 +117,13 @@ class CvhsLockersController < ApplicationController
     send_file File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx')
   end
 
-  def download_final
-    send_file File.join(Rails.root, "Final.zip")
-  end
-
   # RESET DATABASE
   def clear_all
+
+    if(session[:cleared] == true) 
+      redirect_to :back
+    end
+
     t= Time.new
     master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'student_locator'))
     
@@ -132,7 +133,8 @@ class CvhsLockersController < ApplicationController
     # # RE-INITIALIZES TABS
     master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'student_locator'))
 
-    redirect_to('/index', notice: "Database Cleared (download the final sheets in settings)") and return;
+    session[:cleared] = true;
+    send_file File.join(Rails.root, "Final Locker Sheet #{t.year}-ADMIN.xlsx")
   end
 
   private
