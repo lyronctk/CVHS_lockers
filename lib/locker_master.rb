@@ -184,10 +184,16 @@ class LockerMaster
 	def clearAll()
 		t= Time.new
 	
+		dirname = ("complete_files")
+
+		unless File.exists?("#{dirname}")
+			Dir.mkdir("complete_files");
+		end
+		
 		eTIS_book = RubyXL::Workbook.new;
 		eTIS_sheet = @@lbook["Student Assignments"].dup();
 		eTIS_book.worksheets[0] = eTIS_sheet; 
-		eTIS_book.write("FINAL Locker Sheet #{t.year}-ETIS.xlsx");
+		eTIS_book.write("complete_files/FINAL Locker Sheet #{t.year}-ETIS.xlsx");
 		
 		cleaR_book = RubyXL::Workbook.new;
 		cleaR_sheet = @@lbook["Student Assignments"];
@@ -223,8 +229,9 @@ class LockerMaster
 			clean_sheet[thing][2].change_contents("B",@@lbook[0][1][2].formula);
 		end
 		# File.delete("#{@@locker_database}.xlsx");
+
 		clean_book.write("#{@@locker_database}.xlsx");
-		cleaR_book.write("Final Locker Sheet #{t.year}-ADMIN.xlsx");
+		cleaR_book.write("complete_files/Final Locker Sheet #{t.year}-ADMIN.xlsx");
 	end
 	
 	public
@@ -324,29 +331,29 @@ class LockerMaster
 	end
 	
 	#returns which floors are avaliable and which aren't in two separate hashes,respectively
-	public
-	def getAvaliableFloors()
-		hash_array = ["","","","","","","","","","",""]; 
-		building_array = ["","","","","","","","","","",""]
-		for sheet_tab in 2..12
-			hash_array[sheet_tab-2] =  isEmpty(@@lbook[sheet_tab]);
-		end
+	# public
+	# def getAvaliableFloors()
+		# hash_array = ["","","","","","","","","","",""]; 
+		# building_array = ["","","","","","","","","","",""]
+		# for sheet_tab in 2..12
+			# hash_array[sheet_tab-2] =  isEmpty(@@lbook[sheet_tab]);
+		# end
 		
-		avaliable_hash = Hash.new;
-		empty_hash = Hash.new;
-		for spot in 0..10
-			a = @@lbook[spot+2].sheet_name;
-			temp_hash = {"#{createSentence(a)}" => (a)}
+		# avaliable_hash = Hash.new;
+		# empty_hash = Hash.new;
+		# for spot in 0..10
+			# a = @@lbook[spot+2].sheet_name;
+			# temp_hash = {"#{createSentence(a)}" => (a)}
 			
-			if(hash_array[spot] == false && !createSentence(a).nil?)
-				avaliable_hash.merge!(temp_hash);
-			elsif(hash_array[spot] == true && !createSentence(a).nil?)
-				empty_hash.merge!(temp_hash);
-			end
-		end
+			# if(hash_array[spot] == false && !createSentence(a).nil?)
+				# avaliable_hash.merge!(temp_hash);
+			# elsif(hash_array[spot] == true && !createSentence(a).nil?)
+				# empty_hash.merge!(temp_hash);
+			# end
+		# end
 		
-		return avaliable_hash,empty_hash;
-	end
+		# return avaliable_hash,empty_hash;
+	# end
 	
 	#input building/floor (ex. 1300,7100) and get if it is empty or not 
 	private 
@@ -357,25 +364,25 @@ class LockerMaster
 		default = true;
 	end
 	
-	private
-	def createSentence(bldg)
-		if(bldg.length >4)
-			return nil;
-		end
+	# private
+	# def createSentence(bldg)
+		# if(bldg.length >4)
+			# return nil;
+		# end
 		
-		thousands = (bldg.to_i/1000).to_i;
-		hundreds = (bldg.to_i%1000)/100;
-		floor = "";
+		# thousands = (bldg.to_i/1000).to_i;
+		# hundreds = (bldg.to_i%1000)/100;
+		# floor = "";
 		
-		if(hundreds==1)
-			floor = "First";
-		elsif(hundreds==2)
-			floor = "Second";
-		elsif(hundreds==3)
-			floor = "Third";
-		end
-			return "#{thousands}000 Building - #{floor} Floor";
-	end
+		# if(hundreds==1)
+			# floor = "First";
+		# elsif(hundreds==2)
+			# floor = "Second";
+		# elsif(hundreds==3)
+			# floor = "Third";
+		# end
+			# return "#{thousands}000 Building - #{floor} Floor";
+	# end
 	
 	#finds the length of the worksheet
 	public
@@ -405,5 +412,15 @@ class LockerMaster
 			a= "";
 		end
 		return a;
+	end
+	
+	def replace_Students(nu_file)
+		@@stu_book = RubyXL::Parser.parse("#{nu_file}.xlsx");
+		@stu_sheet = @@stu_book.worksheets[0];
+		
+		@@stu_book.write("#{nu_file}.xlsx");
+		
+		File.delete("#{@@student_database}.xlsx");
+		@@student_database = nu_file;
 	end
 end

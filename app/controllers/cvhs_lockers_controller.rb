@@ -129,12 +129,13 @@ class CvhsLockersController < ApplicationController
     
     master.clearAll()
     CvhsLocker.delete_all
+    compress(File.join(Rails.root, "complete_files"))
 
-    # # RE-INITIALIZES TABS
+    # RE-INITIALIZES TABS
     master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'student_locator'))
 
     session[:cleared] = true;
-    send_file File.join(Rails.root, "Final Locker Sheet #{t.year}-ADMIN.xlsx")
+    send_file File.join(Rails.root, "complete_files" , "complete_files.zip")
   end
 
   private
@@ -151,6 +152,18 @@ class CvhsLockersController < ApplicationController
     def check_admin
       if !is_admin?
         redirect_to "/admin_login"
+      end
+    end
+
+    def compress(path)
+      path.sub!(%r[/$],'')
+      archive = File.join(path,File.basename(path))+'.zip'
+      FileUtils.rm archive, :force=>true
+
+      Zip::File.open(archive, 'w') do |zipfile|
+        Dir["#{path}/**/**"].reject{|f|f==archive}.each do |file|
+          zipfile.add(file.sub(path+'/',''),file)
+        end
       end
     end
 end
