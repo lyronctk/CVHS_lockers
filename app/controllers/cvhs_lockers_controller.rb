@@ -60,6 +60,14 @@ class CvhsLockersController < ApplicationController
     person2_array = [cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]]
     locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
 
+    if(!master.checkRealPerson(person1_array))
+      redirect_to '/new', notice: "#{person1_array[0]} #{person1_array[1]} (#{person1_array[2]}) is not a student." and return
+    end
+
+    if(!master.checkRealPerson(person2_array))
+      redirect_to '/new', notice: "#{person2_array[0]} #{person2_array[1]} (#{person2_array[2]}) is not a student." and return
+    end
+
     if grade_restriction && (master.getGradeLvl(person1_array).to_i >= grade_restriction || master.getGradeLvl(person2_array).to_i >= grade_restriction)
       if @cvhs_locker[:name2]  == "" 
         allowed = master.createSoloLocker(["1300_SINGLES"], person1_array)

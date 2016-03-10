@@ -155,14 +155,16 @@ class LockerMaster
 	
 	#checks if stu matches up to a person on database provided 
 	#stu[] is  assumed to go ["First Name", "Last Name","ID #"] while @stusheet goes ["ID #","Last Name","First Name"]
-	private
+	public
 	def checkRealPerson (stu)
 		length = findNextAvailableRow(@stu_sheet)-1;
 		# puts "#{@stu_sheet} #{length}";
-		for worth in 0..length 
-			if(stu[2] == @stu_sheet[worth][0].value and ("#{stu[1]}".casecmp("#{@stu_sheet[worth][1].value}") == 0) and ("#{stu[0]}".casecmp("#{@stu_sheet[worth][2].value}") == 0))
-				@grdlvl = @stu_sheet[worth][4];
-				return true;
+		if(stu[2].to_i != 0)
+			for worth in 0..length 
+				if(stu[2] == @stu_sheet[worth][0].value and ("#{stu[1]}".casecmp("#{@stu_sheet[worth][1].value}") == 0) and ("#{stu[0]}".casecmp("#{@stu_sheet[worth][2].value}") == 0))
+					@grdlvl = @stu_sheet[worth][4];
+					return true;
+				end
 			end
 		end
 		return false;
@@ -412,15 +414,5 @@ class LockerMaster
 			a= "";
 		end
 		return a;
-	end
-	
-	def replace_Students(nu_file)
-		@@stu_book = RubyXL::Parser.parse("#{nu_file}.xlsx");
-		@stu_sheet = @@stu_book.worksheets[0];
-		
-		@@stu_book.write("#{nu_file}.xlsx");
-		
-		File.delete("#{@@student_database}.xlsx");
-		@@student_database = nu_file;
 	end
 end
