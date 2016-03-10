@@ -260,11 +260,12 @@ class LockerMaster
 		end
 		return true;
 	end
-	
+
+	# does not check for real person anymore, checked in controller
 	private
 	def personCombo(stu)
 		we = false;
-		if(checkRealPerson(stu) and personNotUsed(stu))
+		if(personNotUsed(stu))
 			we = true;
 		end
 	end
