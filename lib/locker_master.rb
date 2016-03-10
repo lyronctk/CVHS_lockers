@@ -261,7 +261,7 @@ class LockerMaster
 		return true;
 	end
 
-	# does not check for real person anymore, checked in controller
+	# does not check for real person anymore, checked	 in controller
 	private
 	def personCombo(stu)
 		we = false;

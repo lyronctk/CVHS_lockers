@@ -61,12 +61,12 @@ class CvhsLockersController < ApplicationController
     locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
 
 
-    # THIS IS REQUIRED
+    # THIS IS REQUIRED TO VERIFY STUDENT
     if(!master.checkRealPerson(person1_array))
       redirect_to '/new', notice: "#{person1_array[0]} #{person1_array[1]} (#{person1_array[2]}) is not a student." and return
     end
 
-    if(!master.checkRealPerson(person2_array))
+    if(!master.checkRealPerson(person2_array) && @cvhs_locker[:name2]  != "")
       redirect_to '/new', notice: "#{person2_array[0]} #{person2_array[1]} (#{person2_array[2]}) is not a student." and return
     end
     # REQUIRED ^
