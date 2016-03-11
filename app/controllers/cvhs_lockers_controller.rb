@@ -51,7 +51,12 @@ class CvhsLockersController < ApplicationController
   # POST /cvhs_lockers.json
   def create
     @cvhs_locker = CvhsLocker.new(cvhs_locker_params)
-    grade_restriction = Restriction.first[:grades]
+
+    if Restriction.first
+      grade_restriction = Restriction.first[:grades]
+    else
+      grade_restriction = 0
+    end
 
     master = (LockerMaster).new(File.join(Rails.root, 'lib', "CVHS Locker Template and Guide"), File.join(Rails.root, 'lib', 'student_locator'))
 

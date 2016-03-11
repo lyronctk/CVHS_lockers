@@ -6,16 +6,23 @@ function checkSingle(btn){
   var second = document.getElementById("check").value;
   var first = document.getElementById("first").value;
   if (second == "" && first != ""){
-
     // make pop-up only appear once
     btn.onclick = null;
-    return confirm("Are you sure? Registering by yourself guarantees a 'single' locker in the 3rd floor of the 1000 building (if there are some still available).");
+    confirm_single = confirm("Are you sure? Registering by yourself guarantees a 'single' locker in the 3rd floor of the 1000 building (if there are some still available).");
+
+    // make locker preferences not required
+    if(confirm_single == true){
+       $('#first_select').removeAttr('required');
+       $('#second_select').removeAttr('required');
+       $('#third_select').removeAttr('required');
+       return true;
+    }
+    return false;
   }
 }
 </script>
 
 <body>
-
     <div class="register-container container main">
       <div class="spinner" id="spinner">
         <div class="cube1"></div>
@@ -59,24 +66,28 @@ function checkSingle(btn){
                                    "7000 Building - Third Floor"  => 7300}  
 
                   # GETS RESTRICATED FLOORS FROM DATABASE AND TURNS INTO INT ARRAY
-                  restricted_floors = Restriction.first[:floors].split(',').map(&:to_i)
+                  if Restriction.first
+                    restricted_floors = Restriction.first[:floors].split(',').map(&:to_i)
+                  else
+                     restricted_floors = []
+                  end
 
                   display_floors = session[:filled_floors] + restricted_floors
                   %>
 
                    <div class="one-line">
                   <%= f.label :pref1, "1st Choice of Position: ", :class => "select-label"%>
-                   <%= select_tag('cvhs_locker[pref1]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true) %>
+                   <%= select_tag('cvhs_locker[pref1]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true, :id => 'first_select') %>
                   </div>
 
                    <div class="one-line">
                   <%= f.label :pref2, "2nd Choice of Position: ", :class => "select-label"%>
-                  <%= select_tag('cvhs_locker[pref2]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true) %>
+                  <%= select_tag('cvhs_locker[pref2]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true, :id => 'second_select') %>
                   </div>
 
                   <div class="one-line">
                   <%= f.label :pref3, "3rd Choice of Position: ", :class => "select-label"%>
-                  <%= select_tag('cvhs_locker[pref3]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true) %>
+                  <%= select_tag('cvhs_locker[pref3]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true, :id => 'third_select') %>
                   </div>
 
                   <button onclick="return checkSingle(this);" id="register-button">REGISTER</button>
@@ -92,5 +103,7 @@ function checkSingle(btn){
     <div id="modal">
         <img id="loader" src="/assets/images/loading.gif" />
     </div>
+
+    <p></p>
 
 </body>
