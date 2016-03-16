@@ -1,6 +1,28 @@
+function Counter(elem, delay) {
+  var names = ["Laura Perez", "Sarah Balina", "Sarah Balina", "Adriana Menendez", "Trey Ballard", "Asia Cain", "Lea Hassakorzian"]
+  var value = 0;
+  var interval;
+
+  function increment() {
+    return value += 1;
+  }
+
+  function updateDisplay(value) {
+    elem.innerHTML = "Background By: " + names[value%7];
+  }
+
+  function run() {
+    updateDisplay(increment());
+  }
+
+  function start() {
+    interval = window.setInterval(run, delay);
+  }
+
+  this.start = start;
+}
 
 jQuery(document).ready(function() {
-
     /*
         Background slideshow
     */
@@ -13,6 +35,10 @@ jQuery(document).ready(function() {
     , "assets/stylesheets/img/backgrounds/6.jpg"
      , "assets/stylesheets/img/backgrounds/7.jpg"
     ], {duration: 4000, fade: 750});
+
+    var elem = document.getElementById("credit-text");
+    var counter = new Counter(elem, 4750);
+    counter.start();
 
     /*
         Tooltips

@@ -8,10 +8,10 @@ class LockerMaster
 		@@locker_database = locs;
 		@@student_database = persons;
 		the_threads = [];
-		
 		#parses existing excel workbooks for student identities
 		the_threads << Thread.new {
 			@@stu_book = RubyXL::Parser.parse("#{@@student_database}.xlsx");
+			puts "#{@@stu_book.worksheets[0]}"
 			@stu_sheet = @@stu_book.worksheets[0];
 		}
 		#parses existing excel workbooks for locker avaliability
@@ -92,6 +92,8 @@ class LockerMaster
 			end
 		}
 			the_threads.each { |thr| thr.join };
+			
+			@stu_length = findNextAvailableRow(@stu_sheet);
 		b= Time.new;
 		puts "#{b-a}";
 	end
@@ -112,7 +114,7 @@ class LockerMaster
 			@@worksheet.add_cell(@rownum+1, 0, "#{@student2[2]}");
 			@@worksheet.add_cell(@rownum+1, 1, "#{checkLockerAvailable(@locker,false)[1][2]}");
 			
-			@@lbook.write("#{@@locker_database}.xlsx");
+			# @@lbook.write("#{@@locker_database}.xlsx");
 	#returns that locker was made and returns an array of all the locker information 
 			return true , checkLockerAvailable(@locker,false)[1];
 		else
@@ -144,7 +146,7 @@ class LockerMaster
 			@@worksheet.add_cell(@rownum, 0, "#{@student1[2]}");
 			@@worksheet.add_cell(@rownum, 1, "#{checkLockerAvailable(@locker,false)[1][2]}");
 			
-			@@lbook.write("#{@@locker_database}.xlsx");
+			# @@lbook.write("#{@@locker_database}.xlsx");
 	#returns that locker was made and returns an array of all the locker information 
 			return true, checkLockerAvailable(@locker,false)[1];
 		else
@@ -157,7 +159,7 @@ class LockerMaster
 	#stu[] is  assumed to go ["First Name", "Last Name","ID #"] while @stusheet goes ["ID #","Last Name","First Name"]
 	public
 	def checkRealPerson (stu)
-		length = findNextAvailableRow(@stu_sheet)-1;
+		length = @stu_length-1;
 		# puts "#{@stu_sheet} #{length}";
 		if(stu[2].to_i != 0)
 			for worth in 0..length 
@@ -167,7 +169,9 @@ class LockerMaster
 				end
 			end
 		end
-		return false;
+		aa = false;
+		
+		# return checkpsuedo(stu,0,length)
 	end
 	
 	#returns grade level if such person exists
@@ -333,31 +337,6 @@ class LockerMaster
 		@@lbook.write("#{@@locker_database}.xlsx");
 	end
 	
-	#returns which floors are avaliable and which aren't in two separate hashes,respectively
-	# public
-	# def getAvaliableFloors()
-		# hash_array = ["","","","","","","","","","",""]; 
-		# building_array = ["","","","","","","","","","",""]
-		# for sheet_tab in 2..12
-			# hash_array[sheet_tab-2] =  isEmpty(@@lbook[sheet_tab]);
-		# end
-		
-		# avaliable_hash = Hash.new;
-		# empty_hash = Hash.new;
-		# for spot in 0..10
-			# a = @@lbook[spot+2].sheet_name;
-			# temp_hash = {"#{createSentence(a)}" => (a)}
-			
-			# if(hash_array[spot] == false && !createSentence(a).nil?)
-				# avaliable_hash.merge!(temp_hash);
-			# elsif(hash_array[spot] == true && !createSentence(a).nil?)
-				# empty_hash.merge!(temp_hash);
-			# end
-		# end
-		
-		# return avaliable_hash,empty_hash;
-	# end
-	
 	#input building/floor (ex. 1300,7100) and get if it is empty or not 
 	private 
 	def isEmpty(address)
@@ -366,27 +345,7 @@ class LockerMaster
 		end
 		default = true;
 	end
-	
-	# private
-	# def createSentence(bldg)
-		# if(bldg.length >4)
-			# return nil;
-		# end
-		
-		# thousands = (bldg.to_i/1000).to_i;
-		# hundreds = (bldg.to_i%1000)/100;
-		# floor = "";
-		
-		# if(hundreds==1)
-			# floor = "First";
-		# elsif(hundreds==2)
-			# floor = "Second";
-		# elsif(hundreds==3)
-			# floor = "Third";
-		# end
-			# return "#{thousands}000 Building - #{floor} Floor";
-	# end
-	
+
 	#finds the length of the worksheet
 	public
 	def findNextAvailableRow(database)
@@ -415,5 +374,10 @@ class LockerMaster
 			a= "";
 		end
 		return a;
+	end
+	
+	public
+	def writeToFile()
+		@@lbook.write("#{@@locker_database}.xlsx");
 	end
 end

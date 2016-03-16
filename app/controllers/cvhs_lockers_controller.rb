@@ -104,7 +104,7 @@ class CvhsLockersController < ApplicationController
           session[:lastName2] = cvhs_locker_params[:lastName2]
           session[:lockerNum] =  allowed[1][1]
           session[:buildingNum] = allowed[1][0]
-
+          master.writeToFile()
           redirect_to '/success' and return;
           format.json { render :new, status: :created, location: @cvhs_locker }
         end

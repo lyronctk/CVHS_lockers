@@ -7,12 +7,21 @@
  *
  */
 
+ #credit-text{
+    color: white;
+    float: bottom;
+    font-family: "Georgia";
+    font-weight: .1;
+    font-size: 14px;
+    margin-left: 81%;
+ }
+
  .upload-field{
     width: 150px;
     margin-left: 25px;
     border-top: 2px dashed #046ca3;
     border-bottom: 1px dashed #046ca3;
-        box-shadow: inset 0 -1px 0 0 #046ca3, inset 0 1px 0 0 #046ca3, 0 1px 0 0 #046ca3, 0 -1px 0 0 #046ca3;
+    box-shadow: inset 0 -1px 0 0 #046ca3, inset 0 1px 0 0 #046ca3, 0 1px 0 0 #046ca3, 0 -1px 0 0 #046ca3;
     margin-bottom: 1px;
  }
 
@@ -540,4 +549,3 @@ form select{
  .black{
     color: black;
  }
-
