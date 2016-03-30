@@ -3,7 +3,6 @@ require 'rubyXL'
 #THE USE AND/OR REPRODUCTION OF 'LockerMaster' OR ANY SEGMENTS OF IT IS FORBIDDEN WITHOUT THE EXPRESSED WRITTEN CONSENT OF BOTH OF SAID OWNERS 
 class LockerMaster
 	def initialize (locs, persons)
-		a = Time.new;
 		@@mega_counter = 0;
 		@@locker_database = locs;
 		@@student_database = persons;
@@ -11,7 +10,6 @@ class LockerMaster
 		#parses existing excel workbooks for student identities
 		the_threads << Thread.new {
 			@@stu_book = RubyXL::Parser.parse("#{@@student_database}.xlsx");
-			puts "#{@@stu_book.worksheets[0]}"
 			@stu_sheet = @@stu_book.worksheets[0];
 		}
 		#parses existing excel workbooks for locker avaliability
@@ -94,8 +92,6 @@ class LockerMaster
 			the_threads.each { |thr| thr.join };
 			
 			@stu_length = findNextAvailableRow(@stu_sheet);
-		b= Time.new;
-		puts "#{b-a}";
 	end
 	
 	#takes in array of locker buildings/floor ex)["1300","7200",ect], array of student1["FN","LN","ID#"], array of student2["FN","LN","ID#"] and tries to assign locker
@@ -114,7 +110,6 @@ class LockerMaster
 			@@worksheet.add_cell(@rownum+1, 0, "#{@student2[2]}");
 			@@worksheet.add_cell(@rownum+1, 1, "#{checkLockerAvailable(@locker,false)[1][2]}");
 			
-			# @@lbook.write("#{@@locker_database}.xlsx");
 	#returns that locker was made and returns an array of all the locker information 
 			return true , checkLockerAvailable(@locker,false)[1];
 		else
@@ -160,7 +155,6 @@ class LockerMaster
 	public
 	def checkRealPerson (stu)
 		length = @stu_length-1;
-		# puts "#{@stu_sheet} #{length}";
 		if(stu[2].to_i != 0)
 			for worth in 0..length 
 				if(stu[2] == @stu_sheet[worth][0].value and ("#{stu[1]}".casecmp("#{@stu_sheet[worth][1].value}") == 0) and ("#{stu[0]}".casecmp("#{@stu_sheet[worth][2].value}") == 0))
@@ -170,8 +164,6 @@ class LockerMaster
 			end
 		end
 		aa = false;
-		
-		# return checkpsuedo(stu,0,length)
 	end
 	
 	#returns grade level if such person exists
@@ -188,8 +180,6 @@ class LockerMaster
 	#Also clears the database of all assigned lockers
 	public 
 	def clearAll()
-		t= Time.new
-	
 		dirname = ("complete_files")
 
 		unless File.exists?("#{dirname}")
