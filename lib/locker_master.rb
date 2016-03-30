@@ -180,6 +180,8 @@ class LockerMaster
 	#Also clears the database of all assigned lockers
 	public 
 	def clearAll()
+		t= Time.new
+
 		dirname = ("complete_files")
 
 		unless File.exists?("#{dirname}")
@@ -189,6 +191,8 @@ class LockerMaster
 		eTIS_book = RubyXL::Workbook.new;
 		eTIS_sheet = @@lbook["Student Assignments"].dup();
 		eTIS_book.worksheets[0] = eTIS_sheet; 
+		eTIS_sheet[0][0].change_contents("#{@@lbook["Student Assignments"][0][0].value}",eTIS_sheet[0][0].formula)
+		eTIS_sheet[0][1].change_contents("#{@@lbook["Student Assignments"][0][1].value}",eTIS_sheet[0][1].formula)
 		eTIS_book.write("complete_files/FINAL Locker Sheet #{t.year}-ETIS.xlsx");
 		
 		cleaR_book = RubyXL::Workbook.new;
