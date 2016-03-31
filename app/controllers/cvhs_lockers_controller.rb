@@ -36,15 +36,51 @@ class CvhsLockersController < ApplicationController
   def edit
   end
 
-  # SWITCH OUT STUDNET LOCATOR
-  def upload
-    uploaded_io = params[:database_file]
+  # SWITCH OUT STUDENT LOCATOR
+  def upload_students
+    uploaded_io = params[:student_locator]
 
     File.open(Rails.root.join('lib', 'student_locator.xlsx'), 'wb') do |file|
       file.write(uploaded_io.read)
     end
 
+    Student.delete_all
+
+    # seed lockers
+    workbook = RubyXL::Parser.parse(Rails.root.join('lib', 'student_locator.xlsx'))
+    worksheet = workbook[0]
+    worksheet.delete_row(0)
+    worksheet.each { |row|
+      Student.create!(student_id: row[0].value, last_name: row[1].value, first_name: row[2].value, grade: row[4].value)
+    }
+
     redirect_to '/index', :notice => "Student Locator successfully replaced"
+  end
+
+  def upload_lockers
+    uploaded_io = params[:locker_guide]
+
+    File.open(Rails.root.join('lib', 'CVHS Locker Template and Guide.xlsx'), 'wb') do |file|
+      file.write(uploaded_io.read)
+    end
+
+    LockersDb.delete_all
+    CvhsLocker.delete_all
+
+    # seed lockers
+    workbook = RubyXL::Parser.parse(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx'))
+    worksheet = workbook[0]
+    worksheet.delete_row(0)
+    worksheet.each { |row|
+       if row[1].value == 1000 && (row[0].value).to_i > 1004048
+          puts "Unique: #{row[0].value}, Building: 1300_SINGLES, Locker_id: #{row[3].value}"
+          LockersDb.create!(building: "1300_SINGLES", unique: row[0].value, locker_id: row[3].value)
+       else
+          LockersDb.create!(building: "#{row[1].value+(row[4].value*100)}", unique: row[0].value, locker_id: row[3].value)
+       end
+    }
+
+    redirect_to '/index', :notice => "Locker Guide successfully replaced"
   end
 
   # POST /cvhs_lockers
@@ -52,65 +88,55 @@ class CvhsLockersController < ApplicationController
   def create
     @cvhs_locker = CvhsLocker.new(cvhs_locker_params)
 
+    # grade restriciton
     if Restriction.first
       grade_restriction = Restriction.first[:grades]
     else
       grade_restriction = 0
     end
 
-    master = (LockerMaster).new(File.join(Rails.root, 'lib', "CVHS Locker Template and Guide"), File.join(Rails.root, 'lib', 'student_locator'))
-
-    # CREATES INFO FOR LOCKER MASTER
-    person1_array = [cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1]]
-    person2_array = [cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]]
-    locker_array = [cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3]]
-
-
-    # THIS IS REQUIRED TO VERIFY STUDENT
-    if(!master.checkRealPerson(person1_array))
-      redirect_to '/new', notice: "#{person1_array[0]} #{person1_array[1]} (#{person1_array[2]}) is not a student." and return
+    # verify student
+    person1 = checkValidPerson(cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1])
+    person2 = checkValidPerson(cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]) if @cvhs_locker[:name2]  != "" 
+    if(!person1[0])
+      redirect_to '/new', notice: person1[1] and return
+    end
+    if(person2 && !person2[0])
+      redirect_to '/new', notice: person2 [1] and return
     end
 
-    if(!master.checkRealPerson(person2_array) && @cvhs_locker[:name2]  != "")
-      redirect_to '/new', notice: "#{person2_array[0]} #{person2_array[1]} (#{person2_array[2]}) is not a student." and return
-    end
-    # REQUIRED ^
-
-    if grade_restriction && (master.getGradeLvl(person1_array).to_i >= grade_restriction || master.getGradeLvl(person2_array).to_i >= grade_restriction)
+    if grade_restriction && (person1[1].to_i >= grade_restriction || person2[1].to_i >= grade_restriction)
       if @cvhs_locker[:name2]  == "" 
-        allowed = master.createSoloLocker(["1300_SINGLES"], person1_array)
+        number = getLockerNum("1300_SINGLES")
+        @cvhs_locker[:lockerNum] = number[0]
+        @cvhs_locker[:locker_unique] = number[1]
+        @cvhs_locker[:buildingNum] = "1300-Singles"
       else
-        # STORES VALIDATION AND LOCKER INFORMATION
-        allowed = master.createLocker(locker_array, person1_array, person2_array)
-      end
-
-      if(allowed[0])
-        @cvhs_locker[:lockerNum] = allowed[1][1];
-        @cvhs_locker[:buildingNum] = allowed[1][0];
+        building = getAvailableBuilding(cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3])
+        number = getLockerNum(building)
+        @cvhs_locker[:lockerNum] = number[0]
+        @cvhs_locker[:locker_unique] = number[1]
+        @cvhs_locker[:buildingNum] = building
       end
     else
-      allowed = false, "Your grade level is not permitted to register yet."
+      respond_to do |format|
+        format.html { redirect_to '/new', notice: "Your grade level is not permitted to register yet." }
+        format.json { render json: @cvhs_locker.errors, status: :unprocessable_entity }
+      end
     end
 
     
     respond_to do |format|
-      if allowed[0]
-        if @cvhs_locker.save
-
-          # PASS IN RECEPIT INFORMATION
-          session[:name1] = cvhs_locker_params[:name1]
-          session[:lastName1] = cvhs_locker_params[:lastName1]
-          session[:name2] = cvhs_locker_params[:name2]
-          session[:lastName2] = cvhs_locker_params[:lastName2]
-          session[:lockerNum] =  allowed[1][1]
-          session[:buildingNum] = allowed[1][0]
-          master.writeToFile()
-          redirect_to '/success' and return;
-          format.json { render :new, status: :created, location: @cvhs_locker }
-        end
-      else
-        format.html { redirect_to '/new', notice: allowed[1] }
-        format.json { render json: @cvhs_locker.errors, status: :unprocessable_entity }
+      if @cvhs_locker.save
+        # PASS IN RECEPIT INFORMATION
+        session[:name1] = cvhs_locker_params[:name1]
+        session[:lastName1] = cvhs_locker_params[:lastName1]
+        session[:name2] = cvhs_locker_params[:name2]
+        session[:lastName2] = cvhs_locker_params[:lastName2]
+        session[:lockerNum] =  @cvhs_locker[:lockerNum]
+        session[:buildingNum] = @cvhs_locker
+        redirect_to '/success' and return;
+        format.json { render :new, status: :created, location: @cvhs_locker }
       end
     end
   end
@@ -118,9 +144,7 @@ class CvhsLockersController < ApplicationController
   # DELETE /cvhs_lockers/1
   # DELETE /cvhs_lockers/1.json
   def destroy
-    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'student_locator'))
-    master.deleteLocker(@cvhs_locker.studentID1);
-
+    LockersDb.create!(building: @cvhs_locker[:buildingNum], unique: @cvhs_locker[:locker_unique], locker_id: @cvhs_locker[:lockerNum])
     @cvhs_locker.destroy
     respond_to do |format|
       format.html { redirect_to cvhs_lockers_url, notice: 'Locker was successfully deleted.' }
@@ -181,5 +205,32 @@ class CvhsLockersController < ApplicationController
           zipfile.add(file.sub(path+'/',''),file)
         end
       end
+    end
+
+    def checkValidPerson(firstName, lastName, id)
+      student = CvhsLocker.find_by studentID1: id
+      student = CvhsLocker.find_by studentID2: id if !student  
+      return false, "#{firstName} #{lastName} (#{id}) is already registered for a locker." if student
+
+      student = Student.find_by student_id: id
+      return false, "#{firstName} #{lastName} (#{id}) is not a student" if !student
+
+      return false, "#{firstName} #{lastName} (#{id}) is not a student" if !(student[:first_name] == firstName && student[:last_name] == lastName)
+
+      return true, student[:grade]
+    end
+
+    def getAvailableBuilding(pref1, pref2, pref3)
+      return pref1 if LockersDb.find_by building: pref1
+      return pref2 if LockersDb.find_by building: pref2
+      return pref3 if LockersDb.find_by building: pref3
+    end
+
+    def getLockerNum(building)
+      locker = LockersDb.find_by building: building
+      number = locker[:locker_id]
+      unique = locker[:unique]
+      locker.delete
+      return number, unique
     end
 end

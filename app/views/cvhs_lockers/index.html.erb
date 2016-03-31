@@ -41,13 +41,24 @@
                   <!-- SWITCH STUDENT FILTER -->
                  <div class="new-line">
                    <fieldset class="upload-field">
-                    <%= form_tag({:action => 'upload'}, :multipart => true) do %>
-                      <%= file_field_tag 'database_file' %>
+                   <h4>Switch Student Locator</h4>
+                    <%= form_tag({:action => 'upload_students'}, :multipart => true) do %>
+                      <%= file_field_tag 'student_locator' %>
                       <input type="submit" value="Upload" class="master-button" id="download-button" style="margin:0; margin-bottom: 10px">
                     <% end %>
                     </fieldset>
                   </div>
-
+                  <br />
+                  <!-- SWITCH LOCKER GUIDE -->
+                 <div class="new-line">
+                   <fieldset class="upload-field">
+                   <h4>Switch Locker Guide</h4>
+                    <%= form_tag({:action => 'upload_lockers'}, :multipart => true) do %>
+                      <%= file_field_tag 'locker_guide' %>
+                      <input onclick="return replaceLockerAttempt()" type="submit" value="Upload" class="master-button" id="download-button" style="margin:0; margin-bottom: 10px">
+                    <% end %>
+                    </fieldset>
+                  </div>
              </div>
 
              <div id="settings">
@@ -151,6 +162,14 @@
     function clearAttempt() {
        if (confirm('Are you sure?')) {
            return confirm('This will clear the database and return a final excel sheet. This cannot be undone.')
+       } else {
+           return false;
+       }
+    }
+
+    function replaceLockerAttempt() {
+       if (confirm('CAUTION: This will clear the current locker-signups database. All registered students will be cleared.')) {
+           return confirm('This cannot be undone. Are you sure?')
        } else {
            return false;
        }

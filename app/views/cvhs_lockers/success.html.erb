@@ -29,9 +29,7 @@
 	        <tr>
 	            <td><%= session[:name1] + " " + session[:lastName1]%></td>
                 <td><%= session[:name2] + " " + session[:lastName2] %></td>
-                <% puts "BUILDING NUM IS #{session[:buildingNum]}" %>
-                <% puts "FLOOR LIST IS #{floor_list[session[:buildingNum].to_i]}" %>
-                <td><%= floor_list[session[:buildingNum].to_i] %></td>
+                <td><%= floor_list[session[:buildingNum]["buildingNum"].to_i] %></td>
                 <td><%= session[:lockerNum] %></td>
 	        </tr>
 	    </tbody>

@@ -11,15 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160218023931) do
+ActiveRecord::Schema.define(version: 20160331021059) do
 
   create_table "cvhs_lockers", force: :cascade do |t|
     t.string   "name1"
     t.string   "name2"
     t.integer  "studentID1"
     t.integer  "studentID2"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "pref1"
     t.integer  "pref2"
     t.integer  "pref3"
@@ -27,11 +27,30 @@ ActiveRecord::Schema.define(version: 20160218023931) do
     t.string   "lastName2"
     t.integer  "lockerNum"
     t.string   "buildingNum"
+    t.string   "locker_unique"
+  end
+
+  create_table "lockers_dbs", force: :cascade do |t|
+    t.string   "building"
+    t.integer  "unique"
+    t.integer  "locker_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "restrictions", force: :cascade do |t|
     t.string   "floors"
     t.integer  "grades"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "full_buildings"
+  end
+
+  create_table "students", force: :cascade do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.integer  "student_id"
+    t.integer  "grade"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
