@@ -214,7 +214,7 @@ class CvhsLockersController < ApplicationController
       student = Student.find_by student_id: id
       return false, "#{firstName} #{lastName} (#{id}) is not a student" if !student
 
-      return false, "#{firstName} #{lastName} (#{id}) is not a student" if !(student[:first_name] == firstName && student[:last_name] == lastName)
+      return false, "#{firstName} #{lastName} (#{id}) is not a student" if !(student[:first_name].casecmp(firstName) == 0 && student[:last_name].casecmp(lastName))
 
       return true, student[:grade]
     end
