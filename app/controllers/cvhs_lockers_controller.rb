@@ -17,8 +17,7 @@ class CvhsLockersController < ApplicationController
   # GET /cvhs_lockers/new
   def new
     @cvhs_locker = CvhsLocker.new
-    apprentice = (LockerApprentice).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'))
-    floors = apprentice.getFilledFloors();
+    floors = Restriction.first.full_buildings.split(" ")
     session[:filled_floors] = floors
   end
 
@@ -227,7 +226,13 @@ class CvhsLockersController < ApplicationController
     end
 
     def getLockerNum(building)
-      locker = LockersDb.find_by building: building
+      list = LockersDb.where(building: building)
+      locker = list.first
+      if !list.second
+        r = Restriction.first
+        r.full_buildings = r.full_buildings.concat(" #{building}")
+        r.save
+      end
       number = locker[:locker_id]
       unique = locker[:unique]
       locker.delete

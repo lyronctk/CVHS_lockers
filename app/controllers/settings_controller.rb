@@ -2,7 +2,7 @@ class SettingsController < ApplicationController
 	def changeRestriction
     # ONLY HAPPENS FIRST UPDATE
     if(!Restriction.first)
-      Restriction.create!(grades: 9, floors:"")
+      Restriction.create!(grades: 9, floors:"", full_buildings:"")
     end
 
     # GETS CHECKBOX VALUES
@@ -41,11 +41,5 @@ class SettingsController < ApplicationController
     # end
 
     redirect_to '/index', notice: "Settings Updated!"
-  end
-
-  def update_lockers
-  end
-
-  def update_students
   end
 end
