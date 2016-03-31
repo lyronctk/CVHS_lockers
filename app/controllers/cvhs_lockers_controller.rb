@@ -17,7 +17,7 @@ class CvhsLockersController < ApplicationController
   # GET /cvhs_lockers/new
   def new
     @cvhs_locker = CvhsLocker.new
-    floors = Restriction.first.full_buildings.split(" ")
+    floors = Restriction.first.full_buildings.split(" ") if Restriction.first
     session[:filled_floors] = floors
   end
 
