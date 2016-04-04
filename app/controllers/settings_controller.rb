@@ -29,7 +29,7 @@ class SettingsController < ApplicationController
       Restriction.first.update_attribute(:floors, restricted_floors)
     end
 
-    # CHECKS IF PASSWORD IS INCORRECT  - CAN'T CHANGE PASSWORDS FOR NOW
+    # CHECKS IF PASSWORD IS INCORRECT  - NOT FUNCTIONAL
     # if(params[:current_password] != "" && params[:current_password] != ENV["PASSWORD"])
     #   redirect_to '/index', notice: "error"
     #   return
