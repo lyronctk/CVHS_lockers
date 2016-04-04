@@ -50,7 +50,9 @@ class CvhsLockersController < ApplicationController
     worksheet = workbook[0]
     worksheet.delete_row(0)
     worksheet.each { |row|
-      Student.create!(student_id: row[0].value, last_name: row[1].value, first_name: row[2].value, grade: row[4].value)
+      if row && row[0]
+        Student.create!(student_id: row[0].value, last_name: row[1].value, first_name: row[2].value, grade: row[4].value)
+      end
     }
 
     redirect_to '/index', :notice => "Student Locator successfully replaced"
@@ -71,11 +73,12 @@ class CvhsLockersController < ApplicationController
     worksheet = workbook[0]
     worksheet.delete_row(0)
     worksheet.each { |row|
-       if row[1].value == 1000 && (row[0].value).to_i > 1004048
-          puts "Unique: #{row[0].value}, Building: 1300_SINGLES, Locker_id: #{row[3].value}"
-          LockersDb.create!(building: "1300_SINGLES", unique: row[0].value, locker_id: row[3].value)
-       else
-          LockersDb.create!(building: "#{row[1].value+(row[4].value*100)}", unique: row[0].value, locker_id: row[3].value)
+       if row && row[0]
+         if row[1].value == 1000 && (row[0].value).to_i > 1004048
+            LockersDb.create!(building: "1300_SINGLES", unique: row[0].value, locker_id: row[3].value)
+         else
+            LockersDb.create!(building: "#{row[1].value+(row[4].value*100)}", unique: row[0].value, locker_id: row[3].value) if row
+         end
        end
     }
 
@@ -94,6 +97,10 @@ class CvhsLockersController < ApplicationController
       grade_restriction = 0
     end
 
+    if cvhs_locker_params[:name1] == cvhs_locker_params[:name2] && cvhs_locker_params[:lastName1] == cvhs_locker_params[:lastName2] && cvhs_locker_params[:studentID1] == cvhs_locker_params[:studentID2]
+        redirect_to '/new', notice: "There needs to be two different people to a locker." and return  
+    end
+
     # verify student
     person1 = checkValidPerson(cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1])
     person2 = checkValidPerson(cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]) if @cvhs_locker[:name2]  != "" 
@@ -101,10 +108,10 @@ class CvhsLockersController < ApplicationController
       redirect_to '/new', notice: person1[1] and return
     end
     if(person2 && !person2[0])
-      redirect_to '/new', notice: person2 [1] and return
+      redirect_to '/new', notice: person2[1] and return
     end
 
-    if grade_restriction && (person1[1].to_i >= grade_restriction || person2[1].to_i >= grade_restriction)
+    if grade_restriction && (person1[1].to_i >= grade_restriction || (person2 && person2[1].to_i >= grade_restriction))
       if @cvhs_locker[:name2]  == "" 
         number = getLockerNum("1300_SINGLES")
         @cvhs_locker[:lockerNum] = number[0]
@@ -118,10 +125,7 @@ class CvhsLockersController < ApplicationController
         @cvhs_locker[:buildingNum] = building
       end
     else
-      respond_to do |format|
-        format.html { redirect_to '/new', notice: "Your grade level is not permitted to register yet." }
-        format.json { render json: @cvhs_locker.errors, status: :unprocessable_entity }
-      end
+      redirect_to '/new', notice: "Inputed grade level is not permitted to register yet." and return
     end
 
     
@@ -134,7 +138,7 @@ class CvhsLockersController < ApplicationController
         session[:lastName2] = cvhs_locker_params[:lastName2]
         session[:lockerNum] =  @cvhs_locker[:lockerNum]
         session[:buildingNum] = @cvhs_locker
-        redirect_to '/success' and return;
+        redirect_to '/success' and return
         format.json { render :new, status: :created, location: @cvhs_locker }
       end
     end
@@ -153,28 +157,87 @@ class CvhsLockersController < ApplicationController
 
   # DOWNLOAD FILE FOR ETIS
   def download
-    send_file File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx')
+    unless File.exists?("complete_files")
+      Dir.mkdir("complete_files");
+    end
+
+    t= Time.new
+
+    etis = RubyXL::Workbook.new
+    etis_worksheet = etis[0]
+    etis_worksheet.sheet_name = 'Uniqs'
+    etis_worksheet.add_cell(0, 0, "ID #")
+    etis_worksheet.add_cell(0, 1, "Uniq")
+
+    cvhs = RubyXL::Workbook.new
+    cvhs_worksheet = cvhs[0]
+    cvhs_worksheet.sheet_name = 'Assignments'
+    cvhs_worksheet.add_cell(0, 0, "Last Name")
+    cvhs_worksheet.add_cell(0, 1, "First Name")
+    cvhs_worksheet.add_cell(0, 2, "ID #")
+    cvhs_worksheet.add_cell(0, 3, "Building #")
+    cvhs_worksheet.add_cell(0, 4, "Locker #")
+    cvhs_worksheet.change_column_width(0, 20)
+    cvhs_worksheet.change_column_width(1, 10)
+
+
+    etis_counter = 1
+    cvhs_counter = 1
+
+    CvhsLocker.all.each do |locker|
+      etis_worksheet.add_cell(etis_counter, 0, locker.studentID1)
+      etis_worksheet.add_cell(etis_counter, 1, locker.locker_unique)
+      etis_counter += 1
+
+      cvhs_worksheet.add_cell(cvhs_counter, 0, locker.lastName1)
+      cvhs_worksheet.add_cell(cvhs_counter, 1, locker.name1)
+      cvhs_worksheet.add_cell(cvhs_counter, 2, locker.studentID1)
+      cvhs_worksheet.add_cell(cvhs_counter, 3, locker.buildingNum)
+      cvhs_worksheet.add_cell(cvhs_counter, 4, locker.lockerNum)
+      cvhs_counter += 1
+      if locker.name2 != ""
+        etis_worksheet.add_cell(etis_counter, 0, locker.studentID2)
+        etis_worksheet.add_cell(etis_counter, 1, locker.locker_unique)
+        etis_counter += 1
+
+        cvhs_worksheet.add_cell(cvhs_counter, 0, locker.lastName2)
+        cvhs_worksheet.add_cell(cvhs_counter, 1, locker.name2)
+        cvhs_worksheet.add_cell(cvhs_counter, 2, locker.studentID2)
+        cvhs_worksheet.add_cell(cvhs_counter, 3, locker.buildingNum)
+        cvhs_worksheet.add_cell(cvhs_counter, 4, locker.lockerNum)
+        cvhs_counter += 1
+      end
+    end
+
+
+    etis.write("complete_files/ETIS Locker Sheet #{t.year}.xlsx")
+    cvhs.write("complete_files/CVHS Locker Sheet #{t.year}.xlsx")
+
+    compress(File.join(Rails.root, "complete_files"))
+    send_file File.join(Rails.root, "complete_files" , "complete_files.zip")
+    puts "SENT FILES"
   end
 
   # RESET DATABASE
   def clear_all
-
-    if(session[:cleared] == true) 
-      redirect_to :back
-    end
-
-    t= Time.new
-    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'student_locator'))
-    
-    master.clearAll()
+    LockersDb.delete_all
     CvhsLocker.delete_all
-    compress(File.join(Rails.root, "complete_files"))
 
-    # RE-INITIALIZES TABS
-    master = (LockerMaster).new(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide'), File.join(Rails.root, 'lib', 'student_locator'))
+    # seed lockers
+    workbook = RubyXL::Parser.parse(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx'))
+    worksheet = workbook[0]
+    worksheet.delete_row(0)
+    worksheet.each { |row|
+       if row && row[0]
+         if row[1].value == 1000 && (row[0].value).to_i > 1004048
+            LockersDb.create!(building: "1300_SINGLES", unique: row[0].value, locker_id: row[3].value)
+         else
+            LockersDb.create!(building: "#{row[1].value+(row[4].value*100)}", unique: row[0].value, locker_id: row[3].value) if row
+         end
+       end
+    }
 
-    session[:cleared] = true;
-    send_file File.join(Rails.root, "complete_files" , "complete_files.zip")
+    redirect_to '/index', notice: "Database Reset!" and return
   end
 
   private
@@ -207,6 +270,8 @@ class CvhsLockersController < ApplicationController
     end
 
     def checkValidPerson(firstName, lastName, id)
+      return nil if firstName == "" || lastName == "" || id == ""
+
       student = CvhsLocker.find_by studentID1: id
       student = CvhsLocker.find_by studentID2: id if !student  
       return false, "#{firstName} #{lastName} (#{id}) is already registered for a locker." if student
@@ -214,7 +279,7 @@ class CvhsLockersController < ApplicationController
       student = Student.find_by student_id: id
       return false, "#{firstName} #{lastName} (#{id}) is not a student" if !student
 
-      return false, "#{firstName} #{lastName} (#{id}) is not a student" if !(student[:first_name].casecmp(firstName) == 0 && student[:last_name].casecmp(lastName))
+      return false, "#{firstName} #{lastName} (#{id}) is not a student" if !(student[:first_name].casecmp(firstName) == 0 && student[:last_name].casecmp(lastName) == 0)
 
       return true, student[:grade]
     end

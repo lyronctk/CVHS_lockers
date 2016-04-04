@@ -34,7 +34,7 @@
                  <a href='/download' download id="download-button" class="master-button">Generate Excel File</a>
 
                  <!-- RESET DATABASE -->
-                 <a download id="download-button" class="master-button" style="background: #D80000" onclick="return clearAttempt()" href="/clear">Clear All</a>
+                 <a download id="download-button" class="master-button" style="background: #D80000" onclick="return clearAttempt()" href="/clear">Reset Database</a>
 
                  <br/><br/><br/>
 
@@ -160,8 +160,8 @@
 <script>
     // DOUBLE CHECK
     function clearAttempt() {
-       if (confirm('Are you sure?')) {
-           return confirm('This will clear the database and return a final excel sheet. This cannot be undone.')
+       if (confirm('Make sure to generate excel sheets BEFORE clearing, or all data will be lost.')) {
+           return confirm('This will clear the database, it cannot be undone. Please make sure you have already generated the excel sheet.')
        } else {
            return false;
        }
