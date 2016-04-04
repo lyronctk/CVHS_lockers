@@ -59,6 +59,13 @@
                     <% end %>
                     </fieldset>
                   </div>
+                  <br />
+                  <div class="new-line">
+                   <fieldset class="upload-field">
+                    <% restriction = Restriction.first %>
+                    <h5>Current Grade Level Permitted: <%= restriction[:grades] %></h5>
+                    <h5>Current Restricted Floors: <%= restriction[:floors][0..(restriction[:floors].length-2)] %></h5>
+                  </div>
              </div>
 
              <div id="settings">
