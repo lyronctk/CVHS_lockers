@@ -101,6 +101,10 @@ class CvhsLockersController < ApplicationController
         redirect_to '/new', notice: "There needs to be two different people to a locker." and return  
     end
 
+    if (cvhs_locker_params[:name2] != "" || cvhs_locker_params[:lastName2] != "" || cvhs_locker_params[:studentID2] != "") && (cvhs_locker_params[:name2] == "" || cvhs_locker_params[:lastName2] == "" || cvhs_locker_params[:studentID2] == "")
+        redirect_to '/new', notice: "Please fill out required information." and return  
+    end
+
     # verify student
     person1 = checkValidPerson(cvhs_locker_params[:name1], cvhs_locker_params[:lastName1], cvhs_locker_params[:studentID1])
     person2 = checkValidPerson(cvhs_locker_params[:name2], cvhs_locker_params[:lastName2], cvhs_locker_params[:studentID2]) if @cvhs_locker[:name2]  != "" 
