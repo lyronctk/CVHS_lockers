@@ -7,6 +7,10 @@
  *
  */
 
+ .red-text{
+    color: red;
+ }
+
  #credit-text{
     color: white;
     float: bottom;
@@ -89,6 +93,13 @@
     position: relative;
     float: right;
     margin-top: -42px;
+}
+
+#stats-icon{
+    position: relative;
+    float: right;
+    margin-top: -48px;
+    margin-right: 55px;
 }
 
 
