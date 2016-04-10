@@ -8,7 +8,7 @@
           </div>
             <div class="register span6">
                <% if flash[:notice] %>
-                  <% if flash[:notice] == "There were no lockers found under inputed ID number." %>
+                  <% if flash[:notice] == "No locker found under the inputed ID number." %>
                     <div class="alert alert-error" style="width:100%; margin-left: -1%; margin-top: -1%;"><%= flash[:notice] %></div>
                   <% else %>
                     <div class="alert alert-success" style="width:100%; margin-left: -1%; margin-top: -1%;"><%= flash[:notice] %></div>
