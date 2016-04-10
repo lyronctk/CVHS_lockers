@@ -294,9 +294,9 @@ class CvhsLockersController < ApplicationController
       return false, "#{firstName} #{lastName} (#{id}) is already registered for a locker." if student
 
       student = Student.find_by student_id: id
-      return false, "#{firstName} #{lastName} (#{id}) is not a student" if !student
+      return false, "#{firstName} #{lastName} (#{id}) is not a student. If the problem persists and you are using a mobile device, please register with a computer." if !student
 
-      return false, "#{firstName} #{lastName} (#{id}) is not a student" if !(student[:first_name].casecmp(firstName) == 0 && student[:last_name].casecmp(lastName) == 0)
+      return false, "#{firstName} #{lastName} (#{id}) is not a student. If the problem persists and you are using a mobile device, please register with a computer." if !(student[:first_name].casecmp(firstName) == 0 && student[:last_name].casecmp(lastName) == 0)
 
       return true, student[:grade]
     end
