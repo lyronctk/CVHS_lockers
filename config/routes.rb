@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
   get 'admin_login' => 'cvhs_lockers#admin_login'
 
+  get 'search' => 'cvhs_lockers#search'
+
   post 'upload_students' => 'cvhs_lockers#upload_students'
 
   post 'upload_lockers' => 'cvhs_lockers#upload_lockers'

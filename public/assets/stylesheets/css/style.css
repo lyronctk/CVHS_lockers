@@ -259,6 +259,10 @@ a {
     font-weight: 400;
     text-align: center;
 }
+.no-bottom h2{
+    margin-bottom: 0;
+    /*border-bottom: 0;*/
+}
 #list2 ol {
     font-style: italic;
     font-family: Georgia, Times, serif;

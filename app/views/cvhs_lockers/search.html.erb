@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="/assets/bootstrap/css/maxcdn.css">
+<script src="/assets/stylesheets/js/scripts.js"></script>
+
+<body>
+    <div class="register-container container main">
+          <div class="row">
+            <div class="iphone span3">
+          </div>
+            <div class="register span6">
+               <% if flash[:notice] %>
+                  <% if flash[:notice] == "There were no lockers found under inputed ID number." %>
+                    <div class="alert alert-error" style="width:100%; margin-left: -1%; margin-top: -1%;"><%= flash[:notice] %></div>
+                  <% else %>
+                    <div class="alert alert-success" style="width:100%; margin-left: -1%; margin-top: -1%;"><%= flash[:notice] %></div>
+                  <% end %>
+                <% end %>
+                <%= form_tag("/search", method: "get") do%>
+                  <h2>LOCKER<span class="blue"> <strong> SEARCH</strong></span></h2>
+
+                    <%= text_field_tag :student_id, nil, :required => true, :class => 'full', :placeholder => "Your ID Number"%>
+
+                  <button id="register-button" style="margin-bottom: -5%; margin-top: 2%">Search</button>
+                <% end %>
+
+            </div>
+          </div>
+    </div>
+</body>
