@@ -1,0 +1,95 @@
+<div id="settingsModal" class="modal fade black" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Settings</h4>
+      </div>
+
+      <div class="over">
+
+      <div id="settings-buttons">
+          <!-- DOWNLOAD XLSX SHEET -->
+         <a href='/download' download id="download-button" class="master-button">Generate Excel File</a>
+
+         <!-- RESET DATABASE -->
+         <a download id="download-button" class="master-button" style="background: #D80000" onclick="return clearAttempt()" href="/clear">Reset Database</a>
+
+         <br/><br/><br/>
+
+          <!-- SWITCH STUDENT FILTER -->
+         <div class="new-line">
+           <fieldset class="upload-field">
+           <h4>Switch Student Locator</h4>
+            <%= form_tag({:action => 'upload_students'}, :multipart => true) do %>
+              <%= file_field_tag 'student_locator' %>
+              <input type="submit" value="Upload" class="master-button" id="download-button" style="margin:0; margin-bottom: 10px">
+            <% end %>
+            </fieldset>
+          </div>
+          <br />
+          <!-- SWITCH LOCKER GUIDE -->
+         <div class="new-line">
+           <fieldset class="upload-field">
+           <h4>Switch Locker Guide</h4>
+            <%= form_tag({:action => 'upload_lockers'}, :multipart => true) do %>
+              <%= file_field_tag 'locker_guide' %>
+              <input onclick="return replaceLockerAttempt()" type="submit" value="Upload" class="master-button" id="download-button" style="margin:0; margin-bottom: 10px">
+            <% end %>
+            </fieldset>
+          </div>
+          <br />
+          <div class="new-line">
+           <fieldset class="upload-field">
+            <% restriction = Restriction.first %>
+            <h5>Current Grade Level Permitted: <span class="red-text"><%= restriction[:grades] %></span></h5>
+            <h5>Current Restricted Floors: <span class="red-text"><%= restriction[:floors][0..(restriction[:floors].length-2)] %></span></h5>
+          </div>
+     </div>
+
+     <div id="settings">
+       <!-- UPDATE RESTRICTIONS -->
+       <form action="restricted" method="post">
+
+            <h2>Change Grade Restriction</h2>
+            <!-- GRADE RESTRICTION -->
+            <input type="radio" name="grade" value='9'> 9th<br>
+            <input type="radio" name="grade" value="10"> 10th<br>
+            <input type="radio" name="grade" value="11"> 11th<br>
+            <input type="radio" name="grade" value="12"> 12th<br>
+            <input type="radio" name="grade" value="100"> Not Open<br>
+
+            <h2>Change Floor Restriction</h2>
+            <!-- FLOOR RESTRICTION -->
+            <input type="checkbox" name="floor0" value="none">None<br>
+            <input type="checkbox" name="floor1" value="1100">1000 Building - First Floor<br>
+            <input type="checkbox" name="floor2" value="1300">1000 Building - Third Floor<br>
+            <input type="checkbox" name="floor3" value="2100">2000 Building - First Floor<br>
+            <input type="checkbox" name="floor4" value="2200">2000 Building - Second Floor<br>
+            <input type="checkbox" name="floor5" value="2300">2000 Building - Third Floor<br>
+            <input type="checkbox" name="floor6" value="5200">5000 Building - Second Floor<br>
+            <input type="checkbox" name="floor7" value="5300">5000 Building - Third Floor<br>
+            <input type="checkbox" name="floor8" value="7100">7000 Building - First Floor<br>
+            <input type="checkbox" name="floor9" value="7200">7000 Building - Second Floor<br>
+            <input type="checkbox" name="floor10" value="7300">7000 Building - Third Floor<br>
+
+       <!--      <h2>Change Password</h2>
+            <input type="password" name="current_password" placeholder="Current Password" class="password"></input>
+            <input type="password" name="new_password" placeholder="New Password" class="password"></input>
+            <input type="password" name="again_password" placeholder="Re-enter New Password" class="password"></input> -->
+
+
+            <div class="new-line">
+              <input type="submit" value="Save Changes" class="master-button" id="settings-submit">
+            </div>
+       </form>
+     </div>
+
+     </div>
+
+    </div>
+
+  </div>
+</div>

@@ -21,5 +21,9 @@ Rails.application.routes.draw do
 
   post 'upload_lockers' => 'cvhs_lockers#upload_lockers'
 
+  get 'override' => 'cvhs_lockers#override'
+
+  post 'override' => 'cvhs_lockers#manual_form'
+
   post 'restricted' => "settings#changeRestriction"
 end

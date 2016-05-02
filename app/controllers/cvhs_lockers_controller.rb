@@ -1,6 +1,6 @@
 class CvhsLockersController < ApplicationController
   before_action :set_cvhs_locker, only: [:show, :edit, :update, :destroy]
-  before_action :check_admin, only: :index
+  before_action :check_admin, only: [:index, :override]
 
   # GET /cvhs_lockers
   # GET /cvhs_lockers.json
@@ -31,7 +31,6 @@ class CvhsLockersController < ApplicationController
   def search
     locker = CvhsLocker.find_by studentID1: params[:student_id]
     locker = CvhsLocker.find_by studentID2: params[:student_id] if !locker
-    puts "ID IS:   #{params[:student_id]}"
     if params[:student_id]
       if locker
         redirect_to "/search", notice: "Your assigned locker is #{locker.lockerNum}" and return
@@ -161,6 +160,15 @@ class CvhsLockersController < ApplicationController
     end
   end
 
+  def override
+  end
+
+  def manual_form
+    CvhsLocker.create(params.require(:locker).permit(:name1, :lastName1, :name2, :lastName2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :lockerNum, :buildingNum, :locker_unique))
+
+    redirect_to '/override', notice: "Locker was assigned." and return
+  end
+
   # DELETE /cvhs_lockers/1
   # DELETE /cvhs_lockers/1.json
   def destroy
@@ -232,7 +240,6 @@ class CvhsLockersController < ApplicationController
 
     compress(File.join(Rails.root, "complete_files"))
     send_file File.join(Rails.root, "complete_files" , "complete_files.zip")
-    puts "SENT FILES"
   end
 
   # RESET DATABASE
@@ -291,7 +298,6 @@ class CvhsLockersController < ApplicationController
 
       student = CvhsLocker.find_by studentID1: id
       student = CvhsLocker.find_by studentID2: id if !student  
-      return false, "#{firstName} #{lastName} (#{id}) is already registered for a locker." if student
 
       student = Student.find_by student_id: id
       return false, "#{firstName} #{lastName} (#{id}) is not a student. If the problem persists and you are using a mobile device, please register with a computer." if !student

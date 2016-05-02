@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="/assets/bootstrap/css/maxcdn.css">
+<script src="/assets/stylesheets/js/scripts.js"></script>
+
+<body>
+   <div class="register-container container main">
+      <div class="row">
+         <div class="iphone span3">
+         </div>
+
+         <div class="register span6">
+            <%= form_for("locker") do |f|%>
+               <% if flash[:notice] -%>
+               <div class="alert alert-success" style="width:100%; margin-left: -1%; margin-top: -1%;"><%= flash[:notice] %></div>
+               <% end %>
+               <h2>Manual <span class="blue"> <strong> Registration</strong></span></h2>
+               <%= f.text_field :name1, :required => true, :class => 'left', :placeholder => "Legal First name", :id => 'first'%>
+               <%= f.text_field :lastName1, :required => true, :class => 'middle', :placeholder => "Last name"%>
+               <%= f.text_field :studentID1, :required => true, :class => 'right', :placeholder => "ID"%>
+               <%= f.text_field :name2, :class => 'left', :placeholder => "Partner's first name", :id => 'check'%>
+               <%= f.text_field :lastName2, :class => 'middle', :placeholder => "Partner's last name"%>
+               <%= f.text_field :studentID2, :placeholder => "ID", :class => "right"%>
+               <%= f.text_field :lockerNum, :required => true, :placeholder => "Locker Number", :class => "left"%>
+               <%= f.text_field :locker_unique, :required => true, :class => 'middle', :placeholder => "Locker Unique"%>
+               <%= f.text_field :buildingNum, :required => true, :placeholder => "Building Number", :class => "right"%>
+               <button id="register-button">REGISTER</button>
+            <% end %>
+         </div>
+
+      </div>
+   </div>
+   <p></p>
+</body>
+
