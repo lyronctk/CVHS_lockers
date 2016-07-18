@@ -197,6 +197,15 @@ class CvhsLockersController < ApplicationController
   # DELETE /cvhs_lockers/1.json
   def destroy
     LockersDb.create!(building: @cvhs_locker[:buildingNum], unique: @cvhs_locker[:locker_unique], locker_id: @cvhs_locker[:lockerNum])
+
+    r = Restriction.first
+    if(@cvhs_locker[:buildingNum] == "1300-Singles")
+      r.full_buildings.slice!("1300_SINGLES") if r.full_buildings.slice!("1300_SINGLES")
+    else
+      r.full_buildings.slice!(@cvhs_locker[:buildingNum].to_s) if r.full_buildings.slice!(@cvhs_locker[:buildingNum].to_s)
+    end
+    r.save
+
     @cvhs_locker.destroy
     respond_to do |format|
       format.html { redirect_to cvhs_lockers_url, notice: 'Locker was successfully deleted.' }
