@@ -33,13 +33,25 @@
           <!-- SWITCH LOCKER GUIDE -->
          <div class="new-line">
            <fieldset class="upload-field">
-           <h4>Switch Locker Guide</h4>
+           <h4>SWITCH Locker Guide</h4>
             <%= form_tag({:action => 'upload_lockers'}, :multipart => true) do %>
               <%= file_field_tag 'locker_guide' %>
               <input onclick="return replaceLockerAttempt()" type="submit" value="Upload" class="master-button" id="download-button" style="margin:0; margin-bottom: 10px">
             <% end %>
             </fieldset>
           </div>
+          <br />
+          <!-- ADD TO LOCKER GUIDE -->
+          <div class="new-line">
+           <fieldset class="upload-field">
+           <h4>ADD to Locker Guide</h4>
+            <%= form_tag({:action => 'add_lockers'}, :multipart => true) do %>
+              <%= file_field_tag 'add_locker_guide' %>
+              <input type="submit" value="Upload" class="master-button" id="download-button" style="margin:0; margin-bottom: 10px">
+            <% end %>
+            </fieldset>
+          </div>
+
           <br />
           <div class="new-line">
            <fieldset class="upload-field">

@@ -97,6 +97,30 @@ class CvhsLockersController < ApplicationController
     redirect_to '/index', :notice => "Locker Guide successfully replaced"
   end
 
+  def add_lockers
+    uploaded_io = params[:add_locker_guide]
+
+    File.open(Rails.root.join('lib', 'Additional Locker Guide.xlsx'), 'wb') do |file|
+      file.write(uploaded_io.read)
+    end
+
+    # seed lockers
+    workbook = RubyXL::Parser.parse(File.join(Rails.root, 'lib', 'Additional Locker Guide.xlsx'))
+    worksheet = workbook[0]
+    worksheet.delete_row(0)
+    worksheet.each { |row|
+       if row && row[0]
+         if row[1].value == 1000 && (row[0].value).to_i > 1004048
+            LockersDb.create!(building: "1300_SINGLES", unique: row[0].value, locker_id: row[3].value)
+         else
+            LockersDb.create!(building: "#{row[1].value+(row[4].value*100)}", unique: row[0].value, locker_id: row[3].value) if row
+         end
+       end
+    }
+
+    redirect_to '/index', :notice => "Lockers Added!"
+  end
+
   # POST /cvhs_lockers
   # POST /cvhs_lockers.json
   def create

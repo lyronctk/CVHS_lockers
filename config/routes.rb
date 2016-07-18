@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
   post 'upload_lockers' => 'cvhs_lockers#upload_lockers'
 
+  post 'add_lockers' => 'cvhs_lockers#add_lockers'
+
   get 'override' => 'cvhs_lockers#override'
 
   post 'override' => 'cvhs_lockers#manual_form'
