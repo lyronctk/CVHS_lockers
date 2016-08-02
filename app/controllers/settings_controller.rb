@@ -21,7 +21,7 @@ class SettingsController < ApplicationController
       end
     end
 
-    if(params[:grade] != "")
+    if(params[:grade])
       Restriction.first.update_attribute(:grades, params[:grade])
     end
 
