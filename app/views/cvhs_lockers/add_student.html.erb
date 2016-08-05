@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="/assets/bootstrap/css/maxcdn.css">
+<script src="/assets/stylesheets/js/scripts.js"></script>
+
+<body>
+   <div class="register-container container main">
+      <div class="row">
+         <div class="iphone span3">
+         </div>
+
+         <div class="register span6">
+            <%= form_for("student") do |f|%>
+               <% if flash[:notice] -%>
+               <div class="alert alert-success" style="width:100%; margin-left: -1%; margin-top: -1%;"><%= flash[:notice] %></div>
+               <% end %>
+               <h2>Add a<span class="blue"> <strong> Student</strong></span></h2>
+               <%= f.text_field :first_name, :required => true, :class => 'left', :placeholder => "First name", :id => 'first'%>
+               <%= f.text_field :last_name, :required => true, :class => 'middle_squeeze', :placeholder => "Last name"%>
+               <%= f.text_field :grade, :required => true, :class => 'grade', :placeholder => "Grade"%>
+               <%= f.text_field :student_id, :required => true, :class => 'right', :placeholder => "ID"%>
+               <button id="register-button" style="margin-bottom: -10px">ADD</button>
+            <% end %>
+         </div>
+
+      </div>
+   </div>
+   <p></p>
+</body>
+

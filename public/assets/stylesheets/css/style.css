@@ -336,6 +336,21 @@ form input[class="middle"]{
     float: left;
 }
 
+form input[class="left_squeeze"]{
+    width:20%;
+    float: left;
+}
+
+form input[class="middle_squeeze"]{
+    width:30%;
+    float: left;
+}
+
+form input[class="grade"]{
+    width:15%;
+    float: left;
+}
+
 form input[class="full"]{
     width: 100%;
 }

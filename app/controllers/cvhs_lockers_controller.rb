@@ -1,6 +1,6 @@
 class CvhsLockersController < ApplicationController
   before_action :set_cvhs_locker, only: [:show, :edit, :update, :destroy]
-  before_action :check_admin, only: [:index, :override]
+  before_action :check_admin, only: [:index, :override, :add_student]
 
   # GET /cvhs_lockers
   # GET /cvhs_lockers.json
@@ -191,6 +191,15 @@ class CvhsLockersController < ApplicationController
     CvhsLocker.create(params.require(:locker).permit(:name1, :lastName1, :name2, :lastName2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :lockerNum, :buildingNum, :locker_unique))
 
     redirect_to '/override', notice: "Locker was assigned." and return
+  end
+
+  def add_student
+  end
+
+  def new_student
+    Student.create(params.require(:student).permit(:last_name, :first_name, :student_id, :grade))
+
+    redirect_to '/add_student', notice: "Student added." and return
   end
 
   # DELETE /cvhs_lockers/1
