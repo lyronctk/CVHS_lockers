@@ -348,7 +348,7 @@ form input[class="middle_squeeze"]{
 
 form input[class="grade"]{
     width:15%;
-    float: left;
+    float: right;
 }
 
 form input[class="full"]{

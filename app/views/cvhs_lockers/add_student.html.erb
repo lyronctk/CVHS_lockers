@@ -13,7 +13,7 @@
                <div class="alert alert-success" style="width:100%; margin-left: -1%; margin-top: -1%;"><%= flash[:notice] %></div>
                <% end %>
                <h2>Add a<span class="blue"> <strong> Student</strong></span></h2>
-               <%= f.text_field :first_name, :required => true, :class => 'left', :placeholder => "First name", :id => 'first'%>
+               <%= f.text_field :first_name, :required => true, :class => 'left_squeeze', :placeholder => "First name", :id => 'first'%>
                <%= f.text_field :last_name, :required => true, :class => 'middle_squeeze', :placeholder => "Last name"%>
                <%= f.text_field :grade, :required => true, :class => 'grade', :placeholder => "Grade"%>
                <%= f.text_field :student_id, :required => true, :class => 'right', :placeholder => "ID"%>
