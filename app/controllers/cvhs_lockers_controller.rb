@@ -153,10 +153,14 @@ class CvhsLockersController < ApplicationController
 
     if grade_restriction && (person1[1].to_i >= grade_restriction || (person2 && person2[1].to_i >= grade_restriction))
       if @cvhs_locker[:name2]  == "" 
-        number = getLockerNum("1300_SINGLES")
-        @cvhs_locker[:lockerNum] = number[0]
-        @cvhs_locker[:locker_unique] = number[1]
-        @cvhs_locker[:buildingNum] = "1300-Singles"
+        if LockersDb.where(building: "1300_SINGLES").count > 0
+          number = getLockerNum("1300_SINGLES")
+          @cvhs_locker[:lockerNum] = number[0]
+          @cvhs_locker[:locker_unique] = number[1]
+          @cvhs_locker[:buildingNum] = "1300-Singles"
+        else
+          redirect_to '/new', notice: "There are no more single lockers remaining. If you cannot find a partner, you must talk to administration." and return
+        end
       else
         building = getAvailableBuilding(cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3])
         number = getLockerNum(building)
