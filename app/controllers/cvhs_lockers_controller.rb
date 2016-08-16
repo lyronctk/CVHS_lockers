@@ -57,7 +57,7 @@ class CvhsLockersController < ApplicationController
 
     Student.delete_all
 
-    # seed lockers
+    # seed students
     workbook = RubyXL::Parser.parse(Rails.root.join('lib', 'student_locator.xlsx'))
     worksheet = workbook[0]
     worksheet.delete_row(0)
@@ -292,6 +292,9 @@ class CvhsLockersController < ApplicationController
   def clear_all
     LockersDb.delete_all
     CvhsLocker.delete_all
+
+    Restriction.delete_all
+    Restriction.create!(grades: 9, floors:"", full_buildings:"")
 
     # seed lockers
     workbook = RubyXL::Parser.parse(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx'))
