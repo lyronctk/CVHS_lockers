@@ -53,41 +53,33 @@ function checkSingle(btn){
 
                   <%= f.text_field :studentID2, :placeholder => "ID", :class => "right"%>
 
-                  
-                <%floor_list = {"1000 Building - First Floor"  => 1100, 
-                                   "1000 Building - Third Floor"  => 1300,
-                                   "2000 Building - First Floor"  => 2100,
-                                   "2000 Building - Second Floor" => 2200, 
-                                   "2000 Building - Third Floor"  => 2300, 
-                                   "5000 Building - Second Floor" => 5200,
-                                   "5000 Building - Third Floor"  => 5300, 
-                                   "7000 Building - First Floor"  => 7100,
-                                   "7000 Building - Second Floor" => 7200, 
-                                   "7000 Building - Third Floor"  => 7300}  
 
-                  # GETS RESTRICATED FLOORS FROM DATABASE AND TURNS INTO INT ARRAY
-                  if Restriction.first
-                    restricted_floors = Restriction.first[:floors].split(',').map(&:to_i)
-                  else
-                     restricted_floors = []
-                  end
-
-                  display_floors = session[:filled_floors] + restricted_floors
+                  <%floor_list = [["1000 Building - First Floor", ["Top Locker (1100)", "Bottom Locker (1100)"]],
+                                         ["1000 Building - Third Floor", ["Top Locker (1300)", "Bottom Locker (1300)"]],
+                                         ["2000 Building - First Floor", ["Top Locker (2100)", "Bottom Locker (2100)"]],
+                                         ["2000 Building - Second Floor", ["Top Locker (2200)", "Bottom Locker (2200)"]],
+                                         ["2000 Building - Third Floor", ["Top Locker (2300)", "Bottom Locker (2300)"]],
+                                         ["5000 Building - Second Floor", ["Top Locker (5200)", "Bottom Locker (5200)"]],
+                                         ["5000 Building - Third Floor", ["Top Locker (5300)", "Bottom Locker (5300)"]],
+                                         ["7000 Building - First Floor", ["Top Locker (7100)", "Bottom Locker (7100)"]],
+                                         ["7000 Building - Second Floor", ["Top Locker (7200)", "Bottom Locker (7200)"]],
+                                         ["7000 Building - Third Floor", ["Top Locker (7300)", "Bottom Locker (7300)"]],
+                                        ]
                   %>
 
                    <div class="one-line">
                   <%= f.label :pref1, "1st Choice of Position: ", :class => "select-label"%>
-                   <%= select_tag('cvhs_locker[pref1]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true, :id => 'first_select') %>
+                   <%= select_tag('cvhs_locker[pref1]', grouped_options_for_select(floor_list, {disabled: session[:restricted_floors]}), :include_blank => true, :required => true, :id => 'first_select') %>
                   </div>
 
                    <div class="one-line">
                   <%= f.label :pref2, "2nd Choice of Position: ", :class => "select-label"%>
-                  <%= select_tag('cvhs_locker[pref2]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true, :id => 'second_select') %>
+                  <%= select_tag('cvhs_locker[pref2]', grouped_options_for_select(floor_list, {disabled: session[:restricted_floors]}), :include_blank => true, :required => true, :id => 'second_select') %>
                   </div>
 
                   <div class="one-line">
                   <%= f.label :pref3, "3rd Choice of Position: ", :class => "select-label"%>
-                  <%= select_tag('cvhs_locker[pref3]', options_for_select(floor_list, {disabled: display_floors} ), :include_blank => true, :required => true, :id => 'third_select') %>
+                  <%= select_tag('cvhs_locker[pref3]', grouped_options_for_select(floor_list, {disabled: session[:restricted_floors]}), :include_blank => true, :required => true, :id => 'third_select') %>
                   </div>
 
                   <button onclick="return checkSingle(this);" id="register-button">REGISTER</button>

@@ -54,9 +54,9 @@
 
           <br />
           <div class="new-line">
-           <fieldset class="upload-field">
+           <fieldset class="upload-field" style="width:425px">
             <% restriction = Restriction.first %>
-            <h5>Current Grade Level Permitted: <span class="red-text"><%= restriction[:grades] %></span></h5>
+            <h5>Current Grade Level Permitted: <span class="red-text"><%= ("closed" if restriction[:grades] == 100) || restriction[:grades] %></span></h5>
             <h5>Current Restricted Floors: <span class="red-text"><%= restriction[:floors][0..(restriction[:floors].length-2)] %></span></h5>
           </div>
      </div>
@@ -76,16 +76,26 @@
             <h2>Change Floor Restriction</h2>
             <!-- FLOOR RESTRICTION -->
             <input type="checkbox" name="floor0" value="none">None<br>
-            <input type="checkbox" name="floor1" value="1100">1000 Building - First Floor<br>
-            <input type="checkbox" name="floor2" value="1300">1000 Building - Third Floor<br>
-            <input type="checkbox" name="floor3" value="2100">2000 Building - First Floor<br>
-            <input type="checkbox" name="floor4" value="2200">2000 Building - Second Floor<br>
-            <input type="checkbox" name="floor5" value="2300">2000 Building - Third Floor<br>
-            <input type="checkbox" name="floor6" value="5200">5000 Building - Second Floor<br>
-            <input type="checkbox" name="floor7" value="5300">5000 Building - Third Floor<br>
-            <input type="checkbox" name="floor8" value="7100">7000 Building - First Floor<br>
-            <input type="checkbox" name="floor9" value="7200">7000 Building - Second Floor<br>
-            <input type="checkbox" name="floor10" value="7300">7000 Building - Third Floor<br>
+            <input type="checkbox" name="floor1" value="Top Locker (1100)">Top Locker (1100)<br>
+            <input type="checkbox" name="floor2" value="Bottom Locker (1100)">Bottom Locker (1100)<br>
+            <input type="checkbox" name="floor3" value="Top Locker (1300)">Top Locker (1300)<br>
+            <input type="checkbox" name="floor4" value="Bottom Locker (1300)">Bottom Locker (1300)<br>
+            <input type="checkbox" name="floor5" value="Top Locker (2100)">Top Locker (2100)<br>
+            <input type="checkbox" name="floor6" value="Bottom Locker (2100)">Bottom Locker (2100)<br>
+            <input type="checkbox" name="floor7" value="Top Locker (2200)">Top Locker (2200)<br>
+            <input type="checkbox" name="floor8" value="Bottom Locker (2200)">Bottom Locker (2200)<br>
+            <input type="checkbox" name="floor9" value="Top Locker (2300)">Top Locker (2300)<br>
+            <input type="checkbox" name="floor10" value="Bottom Locker (2300)">Bottom Locker (2300)<br>
+            <input type="checkbox" name="floor11" value="Top Locker (5200)">Top Locker (5200)<br>
+            <input type="checkbox" name="floor12" value="Bottom Locker (5200)">Bottom Locker (5200)<br>
+            <input type="checkbox" name="floor13" value="Top Locker (5300)">Top Locker (5300)<br>
+            <input type="checkbox" name="floor14" value="Bottom Locker (5300)">Bottom Locker (5300)<br>
+            <input type="checkbox" name="floor15" value="Top Locker (7100)">Top Locker (7100)<br>
+            <input type="checkbox" name="floor16" value="Bottom Locker (7100)">Bottom Locker (7100)<br>
+            <input type="checkbox" name="floor17" value="Top Locker (7200)">Top Locker (7200)<br>
+            <input type="checkbox" name="floor18" value="Bottom Locker (7200)">Bottom Locker (7200)<br>
+            <input type="checkbox" name="floor19" value="Top Locker (7300)">Top Locker (7300)<br>
+            <input type="checkbox" name="floor20" value="Bottom Locker (7300)">Bottom Locker (7300)<br>
 
        <!--      <h2>Change Password</h2>
             <input type="password" name="current_password" placeholder="Current Password" class="password"></input>

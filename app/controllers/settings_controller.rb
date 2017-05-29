@@ -7,12 +7,11 @@ class SettingsController < ApplicationController
 
     # GETS CHECKBOX VALUES
     restricted_floors = ""
-    update = false
-    for i in 0..10
+    for i in 1..20
       counter_floor = 'floor' + i.to_s
 
-      if counter_floor == "none"
-        update = true
+      if params['floor0']
+        restricted_floors = "none,"
         break
       end
       
@@ -25,7 +24,7 @@ class SettingsController < ApplicationController
       Restriction.first.update_attribute(:grades, params[:grade])
     end
 
-    if(restricted_floors != "" || update) 
+    if(restricted_floors != "") 
       Restriction.first.update_attribute(:floors, restricted_floors)
     end
 

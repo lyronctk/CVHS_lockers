@@ -1,28 +1,16 @@
-== README
+CvhsLocker(id: integer, name1: string, name2: string, studentID1: integer, studentID2: integer, created_at: datetime, updated_at: datetime, pref1: integer, pref2: integer, pref3: integer, lastName1: string, lastName2: string, lockerNum: integer, buildingNum: string, locker_unique: string)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+LockersDb(id: integer, building: string, unique: integer, locker_id: integer, created_at: datetime, updated_at: datetime)
 
-Things you may want to cover:
+Restriction(id: integer, floors: string, grades: integer, created_at: datetime, updated_at: datetime, full_buildings: string)
 
-* Ruby version
+Student(id: integer, first_name: string, last_name: string, student_id: integer, grade: integer, created_at: datetime, updated_at: datetime)
 
-* System dependencies
+//////////
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+UPLOAD LOCKERS:
+*THIS ACTION DELETES ALL CURRENT STUDENT REGISTRATIONS
+*excel file must be in the same format as the original provided
+*only 2 columns (locker number & locker uniq) and no headers 
+*pages of excel sheet must have the same names and follow the same order as the original
+*names are space-sensitive and case-sensitive (pay special attention to 1300_SINGLES)

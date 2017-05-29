@@ -17,8 +17,9 @@ class CvhsLockersController < ApplicationController
   # GET /cvhs_lockers/new
   def new
     @cvhs_locker = CvhsLocker.new
-    floors = Restriction.first.full_buildings.split(" ") if Restriction.first
-    session[:filled_floors] = floors
+    full = Restriction.first.full_buildings.split(",") if Restriction.first
+    restricted = Restriction.first[:floors].split(',') if Restriction.first
+    session[:restricted_floors] = full + restricted
   end
 
   def admin_login
@@ -82,16 +83,13 @@ class CvhsLockersController < ApplicationController
 
     # seed lockers
     workbook = RubyXL::Parser.parse(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx'))
-    worksheet = workbook[0]
-    worksheet.delete_row(0)
-    worksheet.each { |row|
-       if row && row[0]
-         if row[1].value == 1000 && (row[0].value).to_i > 1004048
-            LockersDb.create!(building: "1300_SINGLES", unique: row[0].value, locker_id: row[3].value)
-         else
-            LockersDb.create!(building: "#{row[1].value+(row[4].value*100)}", unique: row[0].value, locker_id: row[3].value) if row
+    workbook.each{ |worksheet|
+      worksheet.each { |row|
+         if row && row[0]
+           uniq = (0 if !row[1]) || row[1].value
+           LockersDb.create!(building: worksheet.sheet_name, unique: uniq, locker_id: row[0].value) if row
          end
-       end
+      }
     }
 
     redirect_to '/index', :notice => "Locker Guide successfully replaced"
@@ -105,17 +103,14 @@ class CvhsLockersController < ApplicationController
     end
 
     # seed lockers
-    workbook = RubyXL::Parser.parse(File.join(Rails.root, 'lib', 'Additional Locker Guide.xlsx'))
-    worksheet = workbook[0]
-    worksheet.delete_row(0)
-    worksheet.each { |row|
-       if row && row[0]
-         if row[1].value == 1000 && (row[0].value).to_i > 1004048
-            LockersDb.create!(building: "1300_SINGLES", unique: row[0].value, locker_id: row[3].value)
-         else
-            LockersDb.create!(building: "#{row[1].value+(row[4].value*100)}", unique: row[0].value, locker_id: row[3].value) if row
+    workbook = RubyXL::Parser.parse(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx'))
+    workbook.each{ |worksheet|
+      worksheet.each { |row|
+         if row && row[0]
+           uniq = (0 if !row[1]) || row[1].value
+           LockersDb.create!(building: worksheet.sheet_name, unique: uniq, locker_id: row[0].value) if row
          end
-       end
+      }
     }
 
     redirect_to '/index', :notice => "Lockers Added!"
@@ -153,11 +148,11 @@ class CvhsLockersController < ApplicationController
 
     if grade_restriction && (person1[1].to_i >= grade_restriction || (person2 && person2[1].to_i >= grade_restriction))
       if @cvhs_locker[:name2]  == "" 
-        if LockersDb.where(building: "1300_SINGLES").count > 0
-          number = getLockerNum("1300_SINGLES")
+        if LockersDb.where(building: "Single Locker (1300)").count > 0
+          number = getLockerNum("Single Locker (1300)")
           @cvhs_locker[:lockerNum] = number[0]
           @cvhs_locker[:locker_unique] = number[1]
-          @cvhs_locker[:buildingNum] = "1300-Singles"
+          @cvhs_locker[:buildingNum] = "Single Locker (1300)"
         else
           redirect_to '/new', notice: "There are no more single lockers remaining. If you cannot find a partner, you must talk to administration." and return
         end
@@ -181,7 +176,7 @@ class CvhsLockersController < ApplicationController
         session[:name2] = cvhs_locker_params[:name2]
         session[:lastName2] = cvhs_locker_params[:lastName2]
         session[:lockerNum] =  @cvhs_locker[:lockerNum]
-        session[:buildingNum] = @cvhs_locker
+        session[:buildingNum] = @cvhs_locker[:buildingNum]
         redirect_to '/success' and return
         format.json { render :new, status: :created, location: @cvhs_locker }
       end
@@ -212,11 +207,7 @@ class CvhsLockersController < ApplicationController
     LockersDb.create!(building: @cvhs_locker[:buildingNum], unique: @cvhs_locker[:locker_unique], locker_id: @cvhs_locker[:lockerNum])
 
     r = Restriction.first
-    if(@cvhs_locker[:buildingNum] == "1300-Singles")
-      r.full_buildings.slice!("1300_SINGLES") if r.full_buildings.slice!("1300_SINGLES")
-    else
-      r.full_buildings.slice!(@cvhs_locker[:buildingNum].to_s) if r.full_buildings.slice!(@cvhs_locker[:buildingNum].to_s)
-    end
+    r.full_buildings.slice!(@cvhs_locker[:buildingNum]) if r.full_buildings.slice!(@cvhs_locker[:buildingNum])
     r.save
 
     @cvhs_locker.destroy
@@ -298,16 +289,13 @@ class CvhsLockersController < ApplicationController
 
     # seed lockers
     workbook = RubyXL::Parser.parse(File.join(Rails.root, 'lib', 'CVHS Locker Template and Guide.xlsx'))
-    worksheet = workbook[0]
-    worksheet.delete_row(0)
-    worksheet.each { |row|
-       if row && row[0]
-         if row[1].value == 1000 && (row[0].value).to_i > 1004048
-            LockersDb.create!(building: "1300_SINGLES", unique: row[0].value, locker_id: row[3].value)
-         else
-            LockersDb.create!(building: "#{row[1].value+(row[4].value*100)}", unique: row[0].value, locker_id: row[3].value) if row
+    workbook.each{ |worksheet|
+      worksheet.each { |row|
+         if row && row[0]
+           uniq = (0 if !row[1]) || row[1].value
+           LockersDb.create!(building: worksheet.sheet_name, unique: uniq, locker_id: row[0].value) if row
          end
-       end
+      }
     }
 
     redirect_to '/index', notice: "Database Reset!" and return
@@ -350,9 +338,9 @@ class CvhsLockersController < ApplicationController
       return false, "#{firstName} #{lastName} (#{id}) is already registered for a locker." if student
 
       student = Student.find_by student_id: id
-      return false, "#{firstName} #{lastName} (#{id}) is not a student. If the problem persists and you are using a mobile device, please register with a computer." if !student
+      return false, "#{firstName} #{lastName} (#{id}) is not a student." if !student
 
-      return false, "#{firstName} #{lastName} (#{id}) is not a student. If the problem persists and you are using a mobile device, please register with a computer." if !(student[:first_name].casecmp(firstName) == 0 && student[:last_name].casecmp(lastName) == 0)
+      return false, "#{firstName} #{lastName} (#{id}) is not a student." if !(student[:first_name].squish.casecmp(firstName.squish) == 0 && student[:last_name].squish.casecmp(lastName.squish) == 0)
 
       return true, student[:grade]
     end
@@ -366,7 +354,7 @@ class CvhsLockersController < ApplicationController
     def getLockerNum(building)
       list = LockersDb.where(building: building)
       locker = list.first
-      if !list.second
+      if !list.third
         r = Restriction.first
         r.full_buildings = r.full_buildings.concat(" #{building}")
         r.save
