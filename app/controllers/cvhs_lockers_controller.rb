@@ -223,8 +223,6 @@ class CvhsLockersController < ApplicationController
       Dir.mkdir("complete_files");
     end
 
-    t= Time.new
-
     etis = RubyXL::Workbook.new
     etis_worksheet = etis[0]
     etis_worksheet.sheet_name = 'Uniqs'
@@ -272,8 +270,8 @@ class CvhsLockersController < ApplicationController
     end
 
 
-    etis.write("complete_files/ETIS Locker Sheet #{t.year}.xlsx")
-    cvhs.write("complete_files/CVHS Locker Sheet #{t.year}.xlsx")
+    etis.write("complete_files/ETIS Locker Sheet.xlsx")
+    cvhs.write("complete_files/CVHS Locker Sheet.xlsx")
 
     compress(File.join(Rails.root, "complete_files"))
     send_file File.join(Rails.root, "complete_files" , "complete_files.zip")
