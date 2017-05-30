@@ -154,7 +154,7 @@ class CvhsLockersController < ApplicationController
           @cvhs_locker[:locker_unique] = number[1]
           @cvhs_locker[:buildingNum] = "Single Locker (1300)"
         else
-          redirect_to '/new', notice: "There are no more single lockers remaining. If you cannot find a partner, you must talk to administration." and return
+          redirect_to '/new', notice: "There are no more single lockers remaining. If you cannot find a partner, please talk to administration." and return
         end
       else
         building = getAvailableBuilding(cvhs_locker_params[:pref1], cvhs_locker_params[:pref2], cvhs_locker_params[:pref3])
@@ -356,7 +356,7 @@ class CvhsLockersController < ApplicationController
       locker = list.first
       if !list.third
         r = Restriction.first
-        r.full_buildings = r.full_buildings.concat(" #{building}")
+        r.full_buildings = r.full_buildings.concat(",#{building}")
         r.save
       end
       number = locker[:locker_id]
