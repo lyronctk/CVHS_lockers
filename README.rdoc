@@ -13,4 +13,14 @@ UPLOAD LOCKERS:
 *excel file must be in the same format as the original provided
 *only 2 columns (locker number & locker uniq) and no headers 
 *pages of excel sheet must have the same names and follow the same order as the original
-*names are space-sensitive and case-sensitive (pay special attention to 1300_SINGLES)
+*IMPORTANT: names are space-sensitive and case-sensitive
+
+UPLOAD STUDENTS:
+*follow the same excel format as the orginal
+
+OVERRIDE SIGN UP FOR A LOCKER:
+*the locker you add must not be in the online database, or else the locker will be double-assigned
+
+RESET THE DATABASE:
+*remember to download the .zip file first
+*after clicking clear_all, remember to re-upload the student locator

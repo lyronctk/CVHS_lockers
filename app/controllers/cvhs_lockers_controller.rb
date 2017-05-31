@@ -189,7 +189,13 @@ class CvhsLockersController < ApplicationController
   def manual_form
     CvhsLocker.create(params.require(:locker).permit(:name1, :lastName1, :name2, :lastName2, :studentID1, :studentID2, :pref1, :pref2, :pref3, :lockerNum, :buildingNum, :locker_unique))
 
-    redirect_to '/override', notice: "Locker was assigned." and return
+    locker = LockersDb.find_by(locker_id: params[:locker][:lockerNum])
+    if(locker)
+      locker.destroy
+      redirect_to '/override', notice: "Locker assigned- previously in 'unused' database." and return
+    else
+      redirect_to '/override', notice: "Locker assigned- not found in 'unused' database." and return
+    end
   end
 
   def add_student
