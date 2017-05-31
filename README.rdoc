@@ -19,7 +19,8 @@ UPLOAD STUDENTS:
 *follow the same excel format as the orginal
 
 OVERRIDE SIGN UP FOR A LOCKER:
-*the locker you add must not be in the online database, or else the locker will be double-assigned
+*if the locker is in the unused database, it will delete it so the locker will not be double-assigned
+*if the locker is not in the database, then the system will only create a new assignment without deleting any unused locker
 
 RESET THE DATABASE:
 *remember to download the .zip file first
