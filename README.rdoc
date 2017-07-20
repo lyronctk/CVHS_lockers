@@ -1,3 +1,13 @@
+//////////
+Written by Lyron Co Ting Keh (2015 - Freshman Year) 
+
+Note: This project needs to be refactored due to lack of modularity
+and best-practices. There are no tests currently written, and should
+be done prior to writing or editing code.
+
+
+////////// Models
+
 CvhsLocker(id: integer, name1: string, name2: string, studentID1: integer, studentID2: integer, created_at: datetime, updated_at: datetime, pref1: integer, pref2: integer, pref3: integer, lastName1: string, lastName2: string, lockerNum: integer, buildingNum: string, locker_unique: string)
 
 LockersDb(id: integer, building: string, unique: integer, locker_id: integer, created_at: datetime, updated_at: datetime)
@@ -6,7 +16,7 @@ Restriction(id: integer, floors: string, grades: integer, created_at: datetime, 
 
 Student(id: integer, first_name: string, last_name: string, student_id: integer, grade: integer, created_at: datetime, updated_at: datetime)
 
-//////////
+////////// Instructions
 
 UPLOAD LOCKERS:
 *THIS ACTION DELETES ALL CURRENT STUDENT REGISTRATIONS
