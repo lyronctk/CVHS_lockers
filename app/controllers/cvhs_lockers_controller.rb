@@ -339,7 +339,7 @@ class CvhsLockersController < ApplicationController
 
       student = CvhsLocker.find_by studentID1: id
       student = CvhsLocker.find_by studentID2: id if !student  
-      return false, "#{firstName} #{lastName} (#{id}) is already registered for a locker." if student
+      return false, "#{firstName} #{lastName} (#{id}) is already registered for a locker. Use the 'Assigned Locker Search' on the page before to find the it." if student
 
       student = Student.find_by student_id: id
       return false, "#{firstName} #{lastName} (#{id}) is not a student." if !student

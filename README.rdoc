@@ -3,7 +3,7 @@ Written by Lyron Co Ting Keh (2015 - Freshman Year)
 
 Note: This project needs to be refactored due to lack of modularity
 and best-practices. There are no tests currently written, and should
-be done prior to writing or editing code.
+be done prior to writing or editing any code.
 
 
 ////////// Models
