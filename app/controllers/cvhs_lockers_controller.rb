@@ -34,7 +34,7 @@ class CvhsLockersController < ApplicationController
     locker = CvhsLocker.find_by studentID2: params[:student_id] if !locker
     if params[:student_id]
       if locker
-        redirect_to "/search", notice: "Your assigned locker is #{locker.lockerNum}" and return
+        redirect_to "/search", notice: "Location: #{locker.buildingNum} | Locker Number: #{locker.lockerNum}" and return
       else
         redirect_to "/search", notice: "No locker found under the inputed ID number." and return
       end
