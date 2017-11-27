@@ -1,5 +1,7 @@
 //////////
-Written by Lyron Co Ting Keh (2015 - Freshman Year - High School). This is a locker system for Crescenta Valley High School and has been used every year since 2015. 
+Written by Lyron Co Ting Keh (2015 - Freshman Year - High School). 
+
+-This is a fully functional locker registration system for Crescenta Valley High School and has been used every year since 2015. 
 -Languages: Ruby on Rails framework and with Javascript and HTML&CSS.
 
 Note: This project needs to be refactored due to lack of modularity
