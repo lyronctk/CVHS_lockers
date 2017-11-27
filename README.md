@@ -4,6 +4,7 @@
 
   *This is a locker registration system for Crescenta Valley High School and has been used every year since 2015. It is fully functional, able to track user info, validate students, and run administrative commands. 
   Languages: Ruby on Rails framework and with Javascript and HTML&CSS.
+  Deployed at: https://cvhslockers.herokuapp.com/
 
 ### Note: 
   *This project needs to be refactored due to lack of modularity
