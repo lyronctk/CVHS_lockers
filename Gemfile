@@ -11,7 +11,7 @@ gem 'jbuilder',     '2.2.3'
 gem 'sdoc',         '0.4.0', group: :doc
 gem 'faker', 		'1.4.2'
 gem 'will_paginate','3.0.7'
-gem 'rubyXL',       '3.3.15'
+gem 'rubyXL',       '3.3.29'
 gem 'pry'
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
 gem 'zip-zip' # will load compatibility for old rubyzip API.
