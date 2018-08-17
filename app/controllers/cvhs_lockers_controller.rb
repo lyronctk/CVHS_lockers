@@ -128,7 +128,7 @@ class CvhsLockersController < ApplicationController
       grade_restriction = 0
     end
 
-    if cvhs_locker_params[:name1] == cvhs_locker_params[:name2] && cvhs_locker_params[:lastName1] == cvhs_locker_params[:lastName2] && cvhs_locker_params[:studentID1] == cvhs_locker_params[:studentID2]
+    if cvhs_locker_params[:studentID1] == cvhs_locker_params[:studentID2]
         redirect_to '/new', notice: "There needs to be two different people to a locker." and return  
     end
 
