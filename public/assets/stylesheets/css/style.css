@@ -487,6 +487,8 @@ form select{
 .index{
     margin: 40px;
     color: white;
+    padding: 20px;
+    background-color: grey;
 }
 
 .index th{
